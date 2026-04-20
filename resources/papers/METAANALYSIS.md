@@ -1,0 +1,93 @@
+# Meta-Analysis: Skills, Composition, and Metacognition in LLMs
+
+A synthesis of four papers that, together, form a loose research program around what LLMs "know" and "know they know."
+
+## Papers Reviewed
+
+1. **Arora & Goyal (2023)** — *A Theory for Emergence of Complex Skills in Language Models.*
+2. **Yu, Kaur, Gupta, Brown-Cohen, Goyal & Arora (2023)** — *Skill-Mix: A Flexible and Expandable Family of Evaluations for AI Models.*
+3. **Ackerman (2026)** — *Evidence for Limited Metacognition in LLMs.* (ICLR 2026)
+4. **Kocijan, Lukasiewicz, Davis, Marcus & Morgenstern (2020)** — *A Review of Winograd Schema Challenge Datasets and Approaches.*
+
+## Individual Summaries
+
+### 1. Arora & Goyal (2023) — The Theory
+
+A mathematical account of **why scaling produces new behaviors**. The authors model language as a bipartite graph: a set `S` of ground-truth skills on one side, finite text-pieces on the other, with each text-piece connected to `k` skills sampled iid from a distribution `μ₁`. Comprehension of a text-piece is operationalized by cloze-question accuracy, and they assume (the "Cloze Sufficiency Assumption") that average cloze loss tracks the model's excess cross-entropy.
+
+Assuming scaling laws (Chinchilla-style), random graph theory yields the headline result: a 10× increase in model/data scale roughly doubles the number of skills the model can comprehend jointly in a text-piece. A *tensorization argument* extends this to competence on k′-tuples of skills — crucially, competence on combinations generalizes even though the training set is far too small to have contained most of those combinations (a "poverty of stimulus" effect for skill composition).
+
+### 2. Yu et al. (2023) — Skill-Mix
+
+The empirical companion to the theory. Given a list of `N` skills (each with a Wikipedia-style definition) and `T` topics, randomly draw `k` skills + 1 topic and ask the model to produce a short passage exhibiting all of them. Grade with GPT-4 / LLaMA-2 (spot-checked by humans) on a rubric: each skill illustrated, on topic, coherent, within sentence limit.
+
+Key findings:
+- GPT-4 handles k=5 with reasonable accuracy; most other models saturate by k=3.
+- A probability calculation (`pₛᵏ · p_t · L` vs. Skill-Mix success rate) argues GPT-4's k=5,6 successes cannot be explained by memorized training text — evidence of going *beyond* "stochastic parrots."
+- Open-model rankings on Skill-Mix diverge sharply from HuggingFace / AlpacaEval leaderboards, suggesting "cramming for the leaderboard."
+- Difficulty is tunable by raising `k`, filtering out common skills, or penalizing models for naming skills explicitly — so the evaluation survives model progress.
+
+### 3. Ackerman (2026) — Limited Metacognition
+
+An evaluation of **self-awareness** that explicitly avoids self-reports (which LLMs can fabricate convincingly). Inspired by animal-cognition paradigms, two games:
+
+- **Delegate Game**: the model sees a prior phase showing its own and a teammate's accuracy, then chooses per-question whether to answer or hand off. Success requires an *internal* confidence signal that tracks correctness.
+- **Second Chance Game**: the model is told its previous answer was wrong and asked to re-answer. Success requires self-modeling — predicting what it *would have said* — and controlling output accordingly.
+
+Across 17 frontier models (Anthropic, OpenAI, Google, xAI, DeepSeek, Alibaba), metacognitive signals exist but are **weak, context-dependent, and qualitatively different from humans**. Partial correlations between baseline correctness/entropy and delegation decisions top out around 0.3–0.5. Surface difficulty cues often dominate the introspective signal. Curiously, only OpenAI's GPT-4.1 / 4o / 4o-mini pass all alternate-strategy checks on the Second Chance Game, hinting that post-training regime — not just scale — matters.
+
+### 4. Kocijan et al. (2020) — Winograd Schema Challenge Survey
+
+A retrospective on the original benchmark for commonsense pronoun disambiguation. Covers the original WSC273, plus DPR, WNLI, WinoGender, WinoBias, WinoGrande, WinoFlexi; and approaches spanning feature-based reasoning, neural coreference, and language-model scoring. Concludes that Levesque's 2012 claim that "clever tricks involving word order will not work" was **falsified**: fine-tuned BERT/RoBERTa-class models now hit ~90% on WSC273 without any demonstrable commonsense reasoning module. The authors argue the field needs new evaluations that probe world-model tracking in narrative, not just pronoun disambiguation.
+
+## Cross-Cutting Similarities
+
+- **All four treat "skill" or "ability" as compositional** rather than monolithic. Arora & Goyal assume text requires `k`-tuples of skills; Skill-Mix operationalizes this; Ackerman's games require composing knowledge retrieval with self-assessment; WSC schemas require combining syntax, lexical knowledge, and world knowledge.
+- **All four are diagnostic about the "stochastic parrot" question** — they are trying to distinguish genuine capability from training-data recall. Arora & Goyal do it by counting combinations vs. corpus size; Skill-Mix by frequency calculations; Ackerman by avoiding self-reports that could be memorized; Kocijan's review traces how WSC failed at exactly this (models crammed without reasoning).
+- **All four use "can combine in ways not seen in training" as the signature of real capability** — the poverty-of-stimulus framing.
+- **All four treat scale as necessary but not sufficient.** Skill-Mix and Ackerman both show post-training regime (RLHF, Constitutional AI, family-specific finetuning) has effects comparable to scale.
+
+## Cross-Cutting Differences
+
+| Dimension | Arora & Goyal | Skill-Mix | Ackerman | Kocijan review |
+|-----------|---------------|-----------|----------|----------------|
+| Epistemic mode | Theoretical proof | Benchmark construction | Behavioral experiment | Survey / critique |
+| Unit of analysis | Latent skill tuples | Named skills from Wikipedia | Confidence & self-model signals | Pronoun referents + reasoning types |
+| Grading | Cloze accuracy (assumed) | LLM-as-judge + rubric | Behavioral choice (delegate / change) | Accuracy on twin pairs |
+| Scale-sensitivity claim | 10× → 2× more composable skills | Saturation-point rises with scale within a family | Introspection improves with scale + post-training | Scaling + fine-tuning solve the benchmark without solving the underlying problem |
+| Failure mode they worry about | Theory over-predicts emergence | Leaderboard cramming | Surface-cue shortcuts & memorized self-reports | Statistical tricks exploiting "Google-proof-ness" that wasn't actually Google-proof |
+
+## How Each Paper Defines "Skill"
+
+- **Arora & Goyal**: a **latent variable** — an element of an abstract set `S`, drawn iid into the `k`-tuple that generates a text-piece. Deliberately agnostic about what skills *are*; the theory only needs independence and a graph structure. Competence on skill `s` = expected cloze accuracy on text-pieces adjacent to `s`.
+- **Skill-Mix**: a **nameable, Wikipedia-definable unit** (e.g., "modus ponens," "red herring," "metaphor") with a definition and illustrative example. Operationally: "something a human grader can recognize in a short passage." Skills are *discretized condensations* of the continuous knowledge in the model's weights (which is exactly what Arora argues in the talk transcript).
+- **Ackerman**: doesn't define "skill" explicitly, but treats metacognition as a **second-order capability** — knowing whether one knows. The object-level skills (factual recall, scientific reasoning) are assumed to exist; the question is whether the model has calibrated internal access to their outputs.
+- **Kocijan review**: skill is **implicit** — it's whatever is needed to pick the correct pronoun referent. The WSC literature treats this as "commonsense reasoning" but, per the review, never succeeded in isolating it from statistical regularities.
+
+These definitions differ in abstraction level: Arora's is maximally abstract (any independent latent), Skill-Mix mid-level (named + definable but not formalized), Ackerman one level up (metacognition *over* skills), WSC lowest-level (task-defined).
+
+## Relation Between Skill and Metacognition
+
+The four papers sketch a layered picture:
+
+1. **Skills are procedural knowledge** implicit in the weights, acquired as a side-effect of next-token prediction (Arora's "theory-builder" view in the talk).
+2. **Composing skills** — applying several at once to a novel situation — is a distinct capability that lags raw skill acquisition but improves with scale and SFT (Arora & Goyal theory; Skill-Mix measurement).
+3. **Metacognition is, in effect, a skill about skills**: the ability to assess *which* skills one can apply reliably. Ackerman's Delegate Game directly measures this — does the model know when its object-level skills will fail?
+4. **WSC results suggest you can have apparent skill without either composition or metacognition**: models pass the test without building a world model, and they don't know they don't know.
+
+A consistent theme across the papers: **metacognition appears to be a late-emerging capability**, requiring both scale and specific post-training. Arora's talk elicits metacognition by *asking* the model ("give me a skill with no name"); Ackerman shows models *don't reliably use* that same self-knowledge when the task demands it. The gap between "can articulate introspection when prompted" and "can deploy introspection to improve decisions" is the empirical finding that unifies the program.
+
+A useful way to read these papers together:
+- Arora & Goyal explains **why** skills emerge compositionally.
+- Skill-Mix asks **whether** composition is actually happening, above chance.
+- Ackerman asks whether the model **knows** which compositions it can trust.
+- Kocijan reminds us that answering "yes" to the first three is harder than it looks, because benchmarks can be cracked without the underlying capability.
+
+## Suggestions for Further Reading / Research
+
+- **Mechanistic grounding.** Arora's "theory-builder" speculation — that LLMs build mini-theories of each text-piece — now has partial empirical support in Anthropic's circuit-level work (cited in the talk) and Ji-An et al.'s work on metacognitive monitoring cited by Ackerman. A mechanistic account of the skill-composition circuit would bridge Arora's statistical theory and Ackerman's behavioral findings.
+- **Skill-Mix + RL.** Arora notes the Skill-Mix composition experiments were SFT-only and predates reasoning models. Redoing them with RL-trained thinking models is the obvious next step.
+- **Metacognition × composition.** Ackerman tests metacognition on single-skill factual/reasoning items. Pairing the Delegate Game with Skill-Mix tasks would test whether models know when their *compositions* will fail — a more ecologically relevant signal.
+- **Safety framing.** The Skill-Mix paper explicitly notes that compositional generalization means models can combine skills in ways never demonstrated in training — which current safety evaluations, focused on observed behaviors, don't catch. This deserves its own benchmark.
+- **The WSC cautionary tale.** Kocijan's review is a useful prior: any evaluation that can be saturated by scale alone was probably measuring the wrong thing. Skill-Mix's built-in difficulty-tuning (raise `k`, swap skill sets) is a direct response; it's worth checking whether Ackerman's games admit an analogous knob.
+- **Cross-paper terminology drift.** "Skill" means different things in each paper. A unified taxonomy — separating latent capabilities, nameable techniques, and metacognitive awareness — would help downstream work avoid talking past itself.
