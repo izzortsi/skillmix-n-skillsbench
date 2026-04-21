@@ -267,7 +267,7 @@ def run_frontier_skillmix(
     tasks_path: Path,
     skills_path: Path,
     output_dir: Path,
-    subject_model: str = DEFAULT_SUBJECT_MODEL,
+    subject_models: List[str] = None,
     judge_model: str = DEFAULT_JUDGE_MODEL,
     thinking_budget: int = DEFAULT_THINKING_BUDGET,
     max_tokens: int = DEFAULT_MAX_TOKENS,
@@ -283,6 +283,9 @@ def run_frontier_skillmix(
     if limit > 0:
         tasks = tasks[:limit]
 
+    if not subject_models:
+        subject_models = [DEFAULT_SUBJECT_MODEL]
+
     output_dir.mkdir(parents=True, exist_ok=True)
     episodes_path = output_dir / "episodes.json"
     summary_path = output_dir / "summary.json"
@@ -290,37 +293,40 @@ def run_frontier_skillmix(
     judge_agent = _build_judge_agent(judge_model, thinking_budget, max_tokens)
 
     episodes: List[Dict[str, Any]] = []
-    for i, task in enumerate(tasks, 1):
-        ac = task.get("acceptance_criteria", {}) or {}
-        uids = ac.get("skill_uids") or (
-            [ac.get("skill_uid")] if ac.get("skill_uid") else []
-        )
-        uids = [u for u in uids if u]
-        skills_for_task = [skill_by_uid[u] for u in uids if u in skill_by_uid]
-
+    for subject_model in subject_models:
         if verbose:
-            names = [s["name"] for s in skills_for_task]
-            print(f"[{i}/{len(tasks)}] {task.get('title', '')!r:60s} skills={names}")
+            print(f"\n=== subject model: {subject_model} ===")
+        for i, task in enumerate(tasks, 1):
+            ac = task.get("acceptance_criteria", {}) or {}
+            uids = ac.get("skill_uids") or (
+                [ac.get("skill_uid")] if ac.get("skill_uid") else []
+            )
+            uids = [u for u in uids if u]
+            skills_for_task = [skill_by_uid[u] for u in uids if u in skill_by_uid]
 
-        for condition in ("baseline", "skill_injected"):
-            try:
-                ep = _run_episode(
-                    task, skills_for_task, condition,
-                    subject_model, judge_agent,
-                    thinking_budget, max_tokens,
-                )
-            except Exception as e:
-                if verbose:
-                    print(f"  {condition} ERROR: {e}")
-                continue
-
-            _attach_novelty(ep, skill_by_uid, corpus_examples, tokens_per_example)
-            episodes.append(ep)
             if verbose:
-                nov = ep.get("novelty") or {}
-                print(f"  {condition:14s} score={ep['score']:.2f}  "
-                      f"novelty_log10={nov.get('log10_expected_cooccurrences', '?')}  "
-                      f"likely_novel={nov.get('likely_novel', '?')}")
+                names = [s["name"] for s in skills_for_task]
+                print(f"[{i}/{len(tasks)}] {task.get('title', '')!r:60s} skills={names}")
+
+            for condition in ("baseline", "skill_injected"):
+                try:
+                    ep = _run_episode(
+                        task, skills_for_task, condition,
+                        subject_model, judge_agent,
+                        thinking_budget, max_tokens,
+                    )
+                except Exception as e:
+                    if verbose:
+                        print(f"  {condition} ERROR: {e}")
+                    continue
+
+                _attach_novelty(ep, skill_by_uid, corpus_examples, tokens_per_example)
+                episodes.append(ep)
+                if verbose:
+                    nov = ep.get("novelty") or {}
+                    print(f"  {condition:14s} score={ep['score']:.2f}  "
+                          f"novelty_log10={nov.get('log10_expected_cooccurrences', '?')}  "
+                          f"likely_novel={nov.get('likely_novel', '?')}")
 
     episodes_path.write_text(
         json.dumps(episodes, indent=2, ensure_ascii=False), encoding="utf-8",
@@ -342,7 +348,7 @@ def run_frontier_skillmix(
     final_summary = {
         "per_model": summary,
         "novelty": novelty_block,
-        "subject_model": subject_model,
+        "subject_models": subject_models,
         "judge_model": judge_model,
         "tasks_evaluated": len(tasks),
         "episodes": len(episodes),
@@ -374,7 +380,10 @@ def main() -> int:
     ap.add_argument("--tasks", required=True, type=Path)
     ap.add_argument("--skills", required=True, type=Path)
     ap.add_argument("--output-dir", required=True, type=Path)
-    ap.add_argument("--subject-model", default=DEFAULT_SUBJECT_MODEL)
+    ap.add_argument("--subject-model", default=DEFAULT_SUBJECT_MODEL,
+                    help="Single subject model (deprecated, use --subject-models).")
+    ap.add_argument("--subject-models", default="",
+                    help="Comma-separated list of subject models. Overrides --subject-model if set.")
     ap.add_argument("--judge-model", default=DEFAULT_JUDGE_MODEL)
     ap.add_argument("--thinking-budget", type=int, default=DEFAULT_THINKING_BUDGET)
     ap.add_argument("--max-tokens", type=int, default=DEFAULT_MAX_TOKENS)
@@ -384,10 +393,14 @@ def main() -> int:
     ap.add_argument("--quiet", action="store_true")
     args = ap.parse_args()
 
+    subject_models = [m.strip() for m in args.subject_models.split(",") if m.strip()]
+    if not subject_models:
+        subject_models = [args.subject_model]
+
     run_frontier_skillmix(
         tasks_path=args.tasks, skills_path=args.skills,
         output_dir=args.output_dir,
-        subject_model=args.subject_model,
+        subject_models=subject_models,
         judge_model=args.judge_model,
         thinking_budget=args.thinking_budget,
         max_tokens=args.max_tokens,
