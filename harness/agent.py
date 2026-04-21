@@ -59,11 +59,17 @@ CLAUDE_CODE_IDENTITY = "You are Claude Code, Anthropic's official CLI for Claude
 # ~/.config/anthropic-oauth/tokens.json. Subclass OAuthManager to read
 # Claude Code's format so we share the same active session tokens.
 def _build_oauth_client(token_ignored: str):
+    import inspect
+    import os
+
     import anthropic
     import httpx
 
+    # Prefer the in-tree anthropic-oauth checkout when present (dev
+    # container), otherwise fall back to the pip-installed package on
+    # the host.
     _anthropic_oauth_path = "/workspace/anthropic-oauth"
-    if _anthropic_oauth_path not in sys.path:
+    if os.path.isdir(_anthropic_oauth_path) and _anthropic_oauth_path not in sys.path:
         sys.path.insert(0, _anthropic_oauth_path)
 
     from anthropic_oauth import (  # noqa: E402
@@ -116,11 +122,10 @@ def _build_oauth_client(token_ignored: str):
             self._tokens = tokens
 
     manager = ClaudeCodeOAuthManager()
-    transport = OAuthTransport(
-        manager,
-        transformer=RequestTransformer(),
-        auto_auth=False,
-    )
+    transport_kwargs: Dict[str, Any] = {"transformer": RequestTransformer()}
+    if "auto_auth" in inspect.signature(OAuthTransport.__init__).parameters:
+        transport_kwargs["auto_auth"] = False
+    transport = OAuthTransport(manager, **transport_kwargs)
     return anthropic.Anthropic(
         api_key="placeholder",
         http_client=httpx.Client(transport=transport),
