@@ -226,12 +226,18 @@ def _run_episode(
     verdict = _parse_json(judge_text) or {}
     score = float(verdict.get("score", 0.0) or 0.0)
 
+    ac = task.get("acceptance_criteria", {}) or {}
+    k_from_ac = ac.get("k")
+    k_value = int(k_from_ac) if isinstance(k_from_ac, int) else len(skill_names)
+
     return {
         "task_uid": task.get("task_uid", ""),
         "task_title": task.get("title", ""),
         "skill_name": ",".join(skill_names) if skill_names else "(baseline)",
         "skill_uids": [s["skill_uid"] for s in skills_for_task],
         "skill_names": skill_names,
+        "k": k_value,
+        "operator": "atomic" if k_value == 1 else "par",
         "model": subject_model,
         "condition": condition,
         "answer": answer,
@@ -269,7 +275,7 @@ def _attach_novelty(
 
 
 def run_frontier_skillmix(
-    tasks_path: Path,
+    tasks_path,
     skills_path: Path,
     output_dir: Path,
     subject_models: List[str] = None,
@@ -281,7 +287,10 @@ def run_frontier_skillmix(
     tokens_per_example: float = 1000.0,
     verbose: bool = True,
 ) -> Dict[str, Any]:
-    tasks = json.loads(tasks_path.read_text(encoding="utf-8"))
+    tasks_paths = [tasks_path] if isinstance(tasks_path, Path) else list(tasks_path)
+    tasks: List[Dict[str, Any]] = []
+    for p in tasks_paths:
+        tasks.extend(json.loads(Path(p).read_text(encoding="utf-8")))
     skills = json.loads(skills_path.read_text(encoding="utf-8"))
     skill_by_uid = {s["skill_uid"]: s for s in skills}
 
@@ -382,7 +391,8 @@ def _median(values: List[float]) -> Optional[float]:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description="Frontier-native SkillMix runner (PROJECT_SPECS 2.M2).")
-    ap.add_argument("--tasks", required=True, type=Path)
+    ap.add_argument("--tasks", required=True, type=Path, nargs="+",
+                    help="One or more tasks.json files (concatenated).")
     ap.add_argument("--skills", required=True, type=Path)
     ap.add_argument("--output-dir", required=True, type=Path)
     ap.add_argument("--subject-model", default=DEFAULT_SUBJECT_MODEL,

@@ -83,6 +83,17 @@ def _parse_skill_name(skill_name: str) -> Tuple[str, int]:
     return ("atomic", 1)
 
 
+def _episode_operator_k(ep: Dict) -> Tuple[str, int]:
+    """Prefer ep['k'] / ep['operator'] if present (frontier runner),
+    otherwise fall back to parsing the skill_name string."""
+    operator_parsed, k_parsed = _parse_skill_name(ep.get("skill_name", ""))
+    k = ep.get("k")
+    operator = ep.get("operator")
+    if isinstance(k, int) and k >= 0:
+        return (operator or operator_parsed, k)
+    return (operator_parsed, k_parsed)
+
+
 def generate_score_by_k(
     episodes: List[Dict],
     output_path: Path,
@@ -95,7 +106,7 @@ def generate_score_by_k(
         if ep.get("condition") != "skill_injected":
             continue
         model = ep.get("model", "")
-        _, k = _parse_skill_name(ep.get("skill_name", ""))
+        _, k = _episode_operator_k(ep)
         score = ep.get("score", 1.0 if ep.get("passed") else 0.0)
         by_model_k[model][k].append(score)
 
@@ -158,7 +169,7 @@ def generate_operator_heatmap(
         if ep.get("condition") != "skill_injected":
             continue
         model = ep.get("model", "")
-        operator, _ = _parse_skill_name(ep.get("skill_name", ""))
+        operator, _ = _episode_operator_k(ep)
         score = ep.get("score", 1.0 if ep.get("passed") else 0.0)
         scores[operator][model].append(score)
         models_set.add(model)
@@ -571,7 +582,7 @@ def generate_k_operator_heatmap(
         if ep.get("condition") != "skill_injected":
             continue
         model = ep.get("model", "")
-        operator, k = _parse_skill_name(ep.get("skill_name", ""))
+        operator, k = _episode_operator_k(ep)
         score = ep.get("score", 1.0 if ep.get("passed") else 0.0)
         row_key = f"k={k} {operator}"
         scores[row_key][model].append(score)
