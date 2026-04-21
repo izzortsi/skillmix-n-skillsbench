@@ -60,3 +60,36 @@
 ### Method 3: Synthetic Construction Testing
 - Prompt: "Give me an example of a piece of text with two sentences, which could appear in a fiction about [topic] and has these two skills"
 - *Application*: Tested models' ability to compose skills in novel contexts (e.g., "sushi" and "ad_hominem_attack")
+
+### Method 4: Agentic Answer Verification
+- Generate questions using skill combinations
+- Use frontier LLMs in an agentic capacity to verify and refine answers
+- Ensure answers correctly demonstrate the required skills
+- *Application*: Created reliable evaluation sets for skill composition experiments
+
+## 4. Extracting Skill Usage Instances from Text
+
+### Method 1: Context-Enhanced Learning Framework
+- Provide "helpful information" in context during training (not at test time)
+  - Examples: phrasebooks, few-shot examples, URLs of data sources
+- Structure: [Helpful Context] [Question] [Answer]
+- Train with dropout on the helpful context portion (e.g., 20% dropout)
+- *Application*: Enabled models to internalize translation skills from synthetic multilayer tasks
+
+### Method 2: Curriculum-Based Internalization
+- Phase 1: Warm-up with random phrasebooks to teach pattern matching
+  - "Train the model to recognize it needs to look back in the context for patterns"
+- Phase 2: Train on target phrasebook with partial dropout
+  - "Teach the model: 'Don't rely on that information. Sometimes it's missing. So you better store it.'"
+- *Application*: Successfully transferred contextual knowledge to permanent model capabilities
+
+### Method 3: Mechanistic Analysis of Skill Storage
+- Analyze where in the model architecture skill knowledge gets internalized
+- Study how information moves from context-dependent processing to permanent storage
+- *Application*: Verified models weren't just memorizing but genuinely internalizing skills
+
+### Method 4: Skill Composition Testing
+- Create evaluation sets with held-out skill combinations
+- Measure performance on k' skills after training on k skills
+- Use exact-match verification for objective evaluation
+- *Application*: Demonstrated training on triples of skills (k=3) improved performance on combinations of 3-5 skills
