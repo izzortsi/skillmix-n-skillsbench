@@ -1,6 +1,7 @@
 """Linear streaming harness with thinking-block interception."""
 
 from .agent import DEFAULT_MODEL, LinearAgent
+from .ollama_agent import MODEL_PREFIX as OLLAMA_MODEL_PREFIX, OllamaAgent
 from .events import (
     Event,
     MessageStart,
@@ -33,6 +34,8 @@ __all__ = [
     "DEFAULT_MODEL",
     "Event",
     "LinearAgent",
+    "OLLAMA_MODEL_PREFIX",
+    "OllamaAgent",
     "MessageStart",
     "MessageStop",
     "TextBlock",

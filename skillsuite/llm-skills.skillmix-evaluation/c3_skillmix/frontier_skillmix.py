@@ -41,7 +41,8 @@ _REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
-from harness import LinearAgent, Transcript, record  # noqa: E402
+from harness import LinearAgent, OllamaAgent, Transcript, record  # noqa: E402
+from harness.ollama_agent import MODEL_PREFIX as OLLAMA_MODEL_PREFIX  # noqa: E402
 
 from c2_analytics.summary import compute_summary  # noqa: E402
 from c2_analytics.novelty import classify_tier, estimate_novelty  # noqa: E402
@@ -157,20 +158,24 @@ def _parse_json(text: str):
             return None
 
 
-def _build_judge_agent(model: str, thinking_budget: int, max_tokens: int) -> LinearAgent:
-    return LinearAgent(
-        model=model, system=JUDGE_SYSTEM, tools=[],
-        thinking_budget=thinking_budget, max_tokens=max_tokens, max_turns=1,
-    )
-
-
-def _build_subject_agent(
-    model: str, system: str, thinking_budget: int, max_tokens: int
-) -> LinearAgent:
+def _build_agent(model: str, system: str, thinking_budget: int, max_tokens: int):
+    if model.startswith(OLLAMA_MODEL_PREFIX):
+        return OllamaAgent(
+            model=model, system=system,
+            max_tokens=max_tokens, max_turns=1,
+        )
     return LinearAgent(
         model=model, system=system, tools=[],
         thinking_budget=thinking_budget, max_tokens=max_tokens, max_turns=1,
     )
+
+
+def _build_judge_agent(model: str, thinking_budget: int, max_tokens: int):
+    return _build_agent(model, JUDGE_SYSTEM, thinking_budget, max_tokens)
+
+
+def _build_subject_agent(model: str, system: str, thinking_budget: int, max_tokens: int):
+    return _build_agent(model, system, thinking_budget, max_tokens)
 
 
 def _run_episode(
