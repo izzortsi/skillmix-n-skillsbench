@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Environments
+.venv/
+venv/
+env/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Pipeline run outputs (generated; can be recreated from the modules)
+skillsuite/llm-skills.extraction-pipeline/data/pipeline-runs/
+skillsuite/llm-skills.extraction-pipeline/pipeline-runs/
+
+# Local credentials / tokens (never commit)
+*.credentials.json
+tokens.json
