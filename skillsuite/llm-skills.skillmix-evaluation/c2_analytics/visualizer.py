@@ -233,15 +233,21 @@ def _pair_by_task(episodes: List[Dict]) -> Dict[str, Dict[str, Any]]:
         cond = ep.get("condition", "")
         score = ep.get("score", 1.0 if ep.get("passed") else 0.0)
 
+        ep_k = ep.get("k")
+        if not isinstance(ep_k, int):
+            ep_k = ep.get("novelty", {}).get("k") if ep.get("novelty") else None
+
         entry = groups.setdefault(task_uid, {
             "title": ep.get("task_title", task_uid),
-            "k": ep.get("novelty", {}).get("k") if ep.get("novelty") else None,
+            "k": ep_k,
             "novelty": ep.get("novelty"),
             "by_model": {},
             "skill_name": "",
         })
         if not entry["title"]:
             entry["title"] = ep.get("task_title", task_uid)
+        if entry["k"] is None and isinstance(ep_k, int):
+            entry["k"] = ep_k
         if entry["novelty"] is None and ep.get("novelty"):
             entry["novelty"] = ep["novelty"]
         if cond == "skill_injected" and ep.get("skill_name"):
@@ -307,7 +313,10 @@ def generate_uplift_heatmap(
         vals = [entry["by_model"][m]["delta"] for m in entry["by_model"]]
         return sum(vals) / len(vals) if vals else 0.0
 
-    task_items = sorted(paired.items(), key=lambda kv: -mean_delta(kv[1]))
+    task_items = sorted(
+        paired.items(),
+        key=lambda kv: (kv[1].get("k") or 0, -mean_delta(kv[1])),
+    )
     task_uids = [tu for tu, _ in task_items]
 
     data = np.zeros((len(task_uids), len(models)))
@@ -411,7 +420,10 @@ def generate_comparison_matrix(
         vals = [entry["by_model"][m]["delta"] for m in entry["by_model"]]
         return sum(vals) / len(vals) if vals else 0.0
 
-    task_items = sorted(paired.items(), key=lambda kv: -mean_delta(kv[1]))
+    task_items = sorted(
+        paired.items(),
+        key=lambda kv: (kv[1].get("k") or 0, -mean_delta(kv[1])),
+    )
     task_uids = [tu for tu, _ in task_items]
 
     n_rows = len(task_uids)
