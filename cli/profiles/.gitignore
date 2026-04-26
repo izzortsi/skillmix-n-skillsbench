@@ -1,0 +1,4 @@
+# ignore user-created profiles, keep only default.yaml
+*
+!.gitignore
+!default.yaml

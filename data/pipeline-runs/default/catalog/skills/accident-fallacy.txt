@@ -1,0 +1,19 @@
+---
+name: accident-fallacy
+description: Use when producing text that illustrates accident (fallacy)
+skill_uid: c663-6a52-883c-c3ca
+category: rhetorical
+source: s2.m1.wikipedia-seed
+---
+
+# accident-fallacy
+
+an informal fallacy and a deductively valid but unsound argument occurring in a statistical syllogism (an argument based on a generalization) when an exception to a rule of thumb is ignored.
+
+## When to Use
+
+- producing text that illustrates accident (fallacy)
+
+## Example
+
+Cutting people with knives is a crime. Surgeons cut people with knives. Surgeons are criminals.

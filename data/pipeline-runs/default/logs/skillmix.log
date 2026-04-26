@@ -1,0 +1,14 @@
+[1/2] k=2 topic='Beekeeping' skills=(accident-fallacy, self-serving-bias)
+    score=5.0/5  full_points=True  The first sentence illustrates self-serving bias by attributing hive success to 
+[2/2] k=2 topic='The Ottoman Empire' skills=(red-herring, folk-physics-common-knowledge-physics)
+    score=5.0/5  full_points=True  The vizier deflects the naval question by praising land armies and sultans, a cl
+
+Wrote 2 trials -> /home/istrozzi/Documents/kk-digital-docker/llm-skills/data/pipeline-runs/default/skillmix/trials.json
+Summary: {
+  "trials": 2,
+  "k": 2,
+  "max_points_per_trial": 5,
+  "total_score_avg": 5.0,
+  "ratio_full_marks": 1.0,
+  "skill_fraction_avg": 1.0
+}

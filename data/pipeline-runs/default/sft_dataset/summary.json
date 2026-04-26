@@ -1,0 +1,39 @@
+{
+  "n_total_episodes": 200,
+  "n_after_filter": 81,
+  "n_after_dedup": 81,
+  "n_rows": 81,
+  "filter_kept_pct": 40.5,
+  "filters_applied": {
+    "require_passed": true,
+    "conditions": [
+      "curated"
+    ],
+    "min_score": 0.0,
+    "min_response_chars": 50,
+    "dedup": true
+  },
+  "rows_per_skill": {
+    "self-serving-bias": 10,
+    "accident-fallacy": 6,
+    "complex-question-loaded-question-with-implicit-assumption": 8,
+    "red-herring": 10,
+    "metaphor": 10,
+    "spatial-reasoning": 4,
+    "modus-ponens": 7,
+    "statistical-syllogism": 8,
+    "emotional-self-regulation": 9,
+    "folk-physics-common-knowledge-physics": 9
+  },
+  "rows_per_model": {
+    "claude-opus-4-7": 81
+  },
+  "rows_per_condition": {
+    "curated": 81
+  },
+  "rows_per_score_bucket": {
+    "[0.9, 1.0]": 78,
+    "[0.5, 0.7)": 1,
+    "[0.7, 0.9)": 2
+  }
+}

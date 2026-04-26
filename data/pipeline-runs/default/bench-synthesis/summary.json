@@ -1,0 +1,17 @@
+{
+  "total_trials": 800,
+  "curated_delta_pp": -1.5,
+  "curated_p_value": 0.9395,
+  "baseline_rate": 0.17,
+  "treatment_rate": 0.155,
+  "mode": "singlecall",
+  "cross_task": false,
+  "n_tasks": 100,
+  "n_skills": 10,
+  "students": [
+    "anthropic:claude-haiku-4-5-20251001",
+    "ollama:llama3.1:8b",
+    "ollama:qwen3.5:2b",
+    "ollama:qwen3.5:0.8b"
+  ]
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "example_uid": "a8e1-0fc1-b261-1085",
+    "skill_uids": [
+      "6b61-1f46-7da2-22a0",
+      "19ff-7eff-4c1e-4eaa"
+    ],
+    "topic_uid": "",
+    "question": "My therapist said: 'If I notice my heart rate spiking during arguments with my partner, then I should step away and do box breathing before responding.' Last night during a fight about finances, I felt my chest tightening and my pulse racing. I ended up yelling things I regret. Walk me through what I should have done according to her rule, and give me a concrete plan for next time.",
+    "answer": "Your therapist gave you a conditional: if you notice your heart rate spiking during an argument with your partner, then you should step away and do box breathing before responding. Last night, by your own account, you did notice exactly that — your chest tightened and your pulse raced mid-argument. The antecedent of her rule was clearly met, so the conclusion followed directly: at that moment, the indicated action was to step away and do box breathing before saying anything else. Instead, you stayed engaged while physiologically activated, which is why the yelling happened. For next time, make the rule easier to execute under stress: (1) agree in advance with your partner on a neutral 'pause' word either of you can use without it being read as dismissal; (2) the moment you register the somatic cue — tight chest, racing pulse — treat it as a non-negotiable trigger to leave the room for 10–15 minutes; (3) do four rounds of box breathing (inhale 4, hold 4, exhale 4, hold 4) to bring your nervous system down from fight-or-flight; (4) only then return and resume. The goal is to make the step-away automatic so the rational rule your therapist gave you actually fires before the anger does.",
+    "verified": false,
+    "source": "s3.m1.random-tuple"
+  },
+  {
+    "example_uid": "d76a-45b0-b908-935c",
+    "skill_uids": [
+      "a941-f289-cacf-6437",
+      "19ff-7eff-4c1e-4eaa"
+    ],
+    "topic_uid": "",
+    "question": "I just got passed over for a promotion at work and I'm furious. My manager said the person who got it had 'better stakeholder communication,' but honestly I think they just play golf with the VP. When I've been promoted before it was obviously because I earned it. I have a one-on-one with my manager tomorrow and I want to push back hard. How should I prepare for that conversation?",
+    "answer": "Before you prepare your talking points, it's worth noticing a pattern in how you're framing this: your past promotions read as earned on merit, while this setback reads as office politics. That asymmetry feels protective, but it will likely leak into tomorrow's meeting as defensiveness and make it harder to hear anything useful. So step one is to cool the system down before you walk in — try writing out the story in two columns (what you know vs. what you're inferring), sleep on it, and do a few minutes of paced breathing right before the meeting so you're not operating from a spike of anger. Step two is to go in with genuine curiosity rather than a rebuttal: ask your manager for concrete examples of the 'stakeholder communication' gap, what 'ready' would have looked like, and what a 6–12 month development plan toward the next opening would include. If, after that, the feedback still sounds like a pretext, you'll have real data to act on — but you'll also have protected the relationship and, more importantly, gotten an honest read on your own growth edges, which the golf-course narrative was quietly shielding you from.",
+    "verified": false,
+    "source": "s3.m1.random-tuple"
+  },
+  {
+    "example_uid": "1ad0-7f66-a0e8-3d05",
+    "skill_uids": [
+      "a941-f289-cacf-6437",
+      "7876-61dd-dc24-4c2e"
+    ],
+    "topic_uid": "",
+    "question": "My sister just got promoted and I didn't, and now everyone in the family keeps asking me things like 'Why can't you be as driven as she is?' I want to push back without starting a fight. How do I explain to them that her promotion was mostly luck — her team got a new VP who plays favorites, and the economy in her sector is booming — while mine was denied because my manager has it out for me and our department is underfunded? How should I word this at Sunday dinner?",
+    "answer": "Before drafting the script, it's worth flagging two traps in what you're preparing to do. First, the question your family keeps asking isn't really a question — it smuggles in the premise that you aren't driven and that your sister's success is explained by drive while yours would be too if you had it. If you answer it head-on, you've already conceded that framing; any rebuttal sounds like you're defending a deficiency you haven't actually agreed exists. A better move is to decline the premise: 'That question assumes a comparison I don't think is fair to either of us — can we talk about what's actually going on in each of our jobs?' Second, I'd gently note that the explanation you've drafted has an asymmetry that family members will spot instantly: her win is credited to external luck (favoritism, a hot sector) while your setback is credited to external obstacles (a hostile manager, underfunding) — and neither story leaves room for anything you or she did. Even if each individual claim is true, the pattern will read as score-keeping rather than analysis, and it will make the conversation worse. I'd suggest acknowledging one concrete thing your sister did well, one concrete thing you did well this year, and one specific structural factor (not a character claim about your manager) that affected the decision. That keeps you out of the loaded framing without handing your family fresh evidence for it.",
+    "verified": false,
+    "source": "s3.m1.random-tuple"
+  }
+]

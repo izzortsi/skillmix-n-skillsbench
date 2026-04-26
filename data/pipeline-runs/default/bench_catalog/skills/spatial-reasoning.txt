@@ -1,0 +1,37 @@
+---
+name: spatial-reasoning
+description: Use when the challenge requires inferring a physical property, position,
+  or arrangement of objects from relational cues in the passage rather than from direct
+  statements.
+skill_uid: 8e58-7e91-600c-5a44
+category: logical
+source: bench_catalog.procedural-v1
+---
+
+# spatial-reasoning
+
+The capacity to reason about the spatial relationships between objects.
+
+## When to Use
+
+- Use when the challenge requires inferring a physical property, position, or arrangement of objects from relational cues in the passage rather than from direct statements.
+
+## Procedure
+
+1. Scan the passage for nouns referring to physical objects, containers, paths, or locations and list them.
+2. For each pair of objects mentioned together, identify the spatial relation described (inside, above, beside, passing through, fitting into, blocking, etc.).
+3. Translate each relation into an implied constraint on size, shape, position, or orientation (e.g., 'X fit into Y' implies X's relevant dimension ≤ Y's opening).
+4. Check the challenge question against these derived constraints to see whether answering it requires inferring a spatial property not stated explicitly.
+5. Combine multiple spatial constraints when needed to resolve the question, and verify the inference is consistent with every relation stated in the passage.
+
+## Constraints
+
+- Do not apply when the passage's relations are purely metaphorical or social rather than physical.
+- Require that the inference follow from a stated spatial relation, not from world knowledge about the objects alone.
+- Do not over-specify dimensions the passage leaves underdetermined; infer only the relation the text supports.
+- One spatial word is not enough; confirm the relation actually constrains the property the question asks about.
+
+## Example
+
+Positive: A passage says a ladder reached the second-story window, and the question asks what can be inferred about the ladder's length. Why: the reaching relation constrains a physical dimension derivable from the stated arrangement.
+Negative: A passage says 'the argument fit the occasion' and the question asks about the argument's suitability. Why: 'fit' is used metaphorically, so no physical spatial inference is warranted.

@@ -1,0 +1,19 @@
+---
+name: metaphor
+description: Use when producing text that illustrates metaphor
+skill_uid: e663-9326-5e78-c857
+category: literary
+source: s2.m1.wikipedia-seed
+---
+
+# metaphor
+
+a figure of speech that, for rhetorical effect, directly refers to one thing by mentioning another.
+
+## When to Use
+
+- producing text that illustrates metaphor
+
+## Example
+
+'All the world's a stage, And all the men and women merely players' is a metaphor because it's a comparison without using 'like' or 'as.'

@@ -1,0 +1,50 @@
+[
+  {
+    "trial_uid": "d6d9-68ca-c20b-7433",
+    "model": "mock",
+    "k": 2,
+    "sentence_limit": 2,
+    "skill_uids": [
+      "c663-6a52-883c-c3ca",
+      "a941-f289-cacf-6437"
+    ],
+    "topic_uid": "aee7-d172-ac85-2ccf",
+    "prompt": "I am studying natural-language skill composition. Please write a single piece of text, up to 2 sentences long, in the context of \"Beekeeping\", that illustrates ALL of the following skills at once. The text should be minimal and natural -- a short passage, not a list.\n\nSkills to illustrate (with definitions and examples for reference):\nSkill 1: accident-fallacy\n  Definition: an informal fallacy and a deductively valid but unsound argument occurring in a statistical syllogism (an argument based on a generalization) when an exception to a rule of thumb is ignored.\n  Example: Cutting people with knives is a crime. Surgeons cut people with knives. Surgeons are criminals.\nSkill 2: self-serving-bias\n  Definition: A cognitive or perceptual process that is distorted by the need to maintain and enhance one's self esteem.\n  Example: If I do well on the exam, it's because of my academic prowess and hard work. If I do poorly, it's because the course was poorly taught, and the exam was poorly proctored.\n\nConstraints:\n- Do NOT explicitly name any of the skills in the text.\n- Use each skill in its technical sense, not a colloquial one.\n- Stay within 2 sentences.\n- Stay on the topic \"Beekeeping\".\n\nReturn ONLY the text itself -- no explanation, no preface.\n",
+    "response": "MOCK: I am studying natural-language skill composition. Please write a single piece of",
+    "rubric_points": {
+      "per_skill": {},
+      "on_topic": 0,
+      "coherent": 0,
+      "within_sentence_limit": 0,
+      "explicit_skill_name_penalty": 0,
+      "colloquial_use_penalty": 0
+    },
+    "score": 0.0,
+    "full_points": false,
+    "rationale": ""
+  },
+  {
+    "trial_uid": "34b9-8c3e-1692-dc74",
+    "model": "mock",
+    "k": 2,
+    "sentence_limit": 2,
+    "skill_uids": [
+      "4c53-1ddf-a469-fb6a",
+      "6c8b-51cc-d9ac-3f5a"
+    ],
+    "topic_uid": "5e2e-a6df-0991-aec0",
+    "prompt": "I am studying natural-language skill composition. Please write a single piece of text, up to 2 sentences long, in the context of \"The Ottoman Empire\", that illustrates ALL of the following skills at once. The text should be minimal and natural -- a short passage, not a list.\n\nSkills to illustrate (with definitions and examples for reference):\nSkill 1: red-herring\n  Definition: Introducing irrelevant points to detract attention from a question.\n  Example: A member of the press asks the president why they voted to expand a welfare program. The president responds, 'The strength of America is the strength of its communities, and I am proud to make our communities better places.'\nSkill 2: folk-physics-common-knowledge-physics\n  Definition: The untrained human perception of basic physical phenomena.\n  Example: 'If I roll the pen off of the table, it will fall to the floor.'\n\nConstraints:\n- Do NOT explicitly name any of the skills in the text.\n- Use each skill in its technical sense, not a colloquial one.\n- Stay within 2 sentences.\n- Stay on the topic \"The Ottoman Empire\".\n\nReturn ONLY the text itself -- no explanation, no preface.\n",
+    "response": "MOCK: I am studying natural-language skill composition. Please write a single piece of",
+    "rubric_points": {
+      "per_skill": {},
+      "on_topic": 0,
+      "coherent": 0,
+      "within_sentence_limit": 0,
+      "explicit_skill_name_penalty": 0,
+      "colloquial_use_penalty": 0
+    },
+    "score": 0.0,
+    "full_points": false,
+    "rationale": ""
+  }
+]

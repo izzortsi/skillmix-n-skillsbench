@@ -1,0 +1,38 @@
+---
+name: self-serving-bias
+description: Use when When asked to detect asymmetric causal attribution in which
+  a speaker credits themselves for positive outcomes while blaming external factors
+  for negative ones.
+skill_uid: a941-f289-cacf-6437
+category: reasoning
+source: bench_catalog.procedural-v1
+---
+
+# self-serving-bias
+
+A cognitive or perceptual process that is distorted by the need to maintain and enhance one's self esteem.
+
+## When to Use
+
+- When asked to detect asymmetric causal attribution in which a speaker credits themselves for positive outcomes while blaming external factors for negative ones.
+
+## Procedure
+
+1. Locate each statement in the passage where a person or group explains the cause of an outcome involving themselves.
+2. Classify each outcome as favorable (success, praise, gain) or unfavorable (failure, blame, loss) for the speaker.
+3. For each attribution, note whether the cause cited is internal (ability, effort, character) or external (luck, others, environment, conditions).
+4. Flag the pattern only when favorable outcomes are paired with internal causes AND unfavorable outcomes are paired with external causes by the same subject.
+5. Verify the pattern serves self-esteem protection or enhancement, rather than being justified by evidence presented in the passage.
+6. Confirm at least one success-internal and one failure-external pairing coexist before marking the pattern as present.
+
+## Constraints
+
+- Do not flag cases where only successes or only failures are discussed; both polarities must appear.
+- Do not flag attributions that the passage independently supports with evidence, even if they favor the speaker.
+- Do not flag third-party attributions; the speaker and the subject of the outcome must be the same.
+- A single self-congratulatory or blame-shifting statement alone is insufficient without the contrasting pair.
+
+## Example
+
+Positive: A manager says her team's successful quarter reflects her leadership, but the failed quarter was due to market conditions beyond her control. Why: Success is attributed internally and failure externally by the same subject, protecting self-image.
+Negative: A student says he passed because he studied hard and failed another exam because he didn't study enough. Why: Both outcomes receive internal attributions, so there is no self-protective asymmetry.

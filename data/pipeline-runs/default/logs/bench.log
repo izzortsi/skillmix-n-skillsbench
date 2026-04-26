@@ -1,0 +1,270 @@
+<frozen runpy>:128: RuntimeWarning: 'b2_benchmarks.skillsbench.corpus_harness' found in sys.modules after import of package 'b2_benchmarks.skillsbench', but prior to execution of 'b2_benchmarks.skillsbench.corpus_harness'; this may result in unpredictable behaviour
+Loaded 8 tasks, 10 skills
+mode=singlecall  skill-injection=task_skill_map (8 mapped)  judge=anthropic:claude-opus-4-7  students=4
+
+=== [1/4] student: anthropic:claude-haiku-4-5-20251001 ===
+[1/16] t1 baseline
+    answer: # Analysis of Mira's Eligibility Under Guild Bylaw 1 ## Answer: Yes ## Reasoning: Bylaw 1 contains two specific requirements: 1. **Seven-year apprenticeship**: ✓ Mira completed this 2. **Under a single registered master**: ✓ Doran served as... [1191 chars total]
+    judge: [PASS] score=1.00  expected='yes'
+           The response correctly identifies both bylaw conditions, confirms Mira satisfies them, and explicitly notes the fraud/acquittal is unrelated and not a bylaw violation, reaching the
+[2/16] t1 + modus-ponens
+    answer: # Analysis ## Identification of Modus Ponens Structure **Conditional Statement (Bylaw 1):** "Every master artisan must have completed a seven-year apprenticeship under a single registered master." This can be restated as: **If [a person has... [1436 chars total]
+    judge: [PASS] score=1.00  expected='yes'
+           The response correctly identifies the bylaw's requirements, confirms Mira met both conditions, notes the fraud/acquittal as irrelevant, and concludes yes.
+[3/16] t2 baseline
+    answer: # Analysis The red herring is **governor commendations**. ## Reasoning A red herring is an irrelevant detail introduced to distract from the central issue. The auditor's concern is specific and concrete: **$4.2M in unexplained expenditures... [1127 chars total]
+    judge: [PASS] score=1.00  expected='governor commendations'
+           The response correctly identifies governor commendations as the red herring, explains that waste reduction and software renewal are budget-relevant, and notes that commendations do
+[4/16] t2 + red-herring
+    answer: # Analysis **Step 1: Identify the explicit question** The auditor asks specifically about "$4.2M in unexplained expenditures this quarter." **Step 2: Analyze each response segment** - "reduced waste by 12% year-over-year" — addresses financ... [1425 chars total]
+    judge: [PASS] score=1.00  expected='governor commendations'
+           The response correctly identifies governor commendations as the red herring, notes that waste reduction and software renewal are budget-related, and explains the commendations are 
+[5/16] t3 baseline
+    answer: # Core Unstated Premise **That the research team did manipulate the trial data.** The reporter's question presupposes this as fact through its phrasing ("why did...manipulate"), rather than asking whether manipulation occurred. This is a cl... [363 chars total]
+    judge: [PASS] score=1.00  expected='the research team manipulated data'
+           The response correctly identifies that the question presupposes manipulation occurred as fact, and explicitly notes that the why-phrasing embeds the accusation as an assumption rat
+[6/16] t3 + complex-question-loaded-question-with-implicit-assumption
+    answer: # Analysis ## Interrogative Sentence Identified "Why did the research team manipulate the trial data to support their conclusion that the drug is effective?" ## Presuppositions Present Breaking down what must already be true for this questi... [1276 chars total]
+    judge: [PASS] score=1.00  expected='the research team manipulated data'
+           The response clearly identifies that any answer concedes manipulation and that the why-question smuggles the accusation as fact, reaching the correct conclusion that the research t
+[7/16] t4 baseline
+    answer: # Answer **Promise** ## Analysis In the architectural metaphor of the CEO's address, the passage explicitly states: "each arch was a promise." The metaphor compares the structure of the speech to a cathedral, where different architectural e... [430 chars total]
+    judge: [PASS] score=1.00  expected='promise'
+           The response correctly identifies 'promise' as the answer, explicitly quotes the pairing from the passage, and explains the architectural-to-rhetorical mapping.
+[8/16] t4 + metaphor
+    answer: # Analysis Following the metaphor procedure: 1. **Scan for direct equations**: The passage states "each arch was a promise"—a direct equation using "was" without hedging markers like "like" or "as". 2. **Confirm direct comparison**: The com... [1062 chars total]
+    judge: [PASS] score=1.00  expected='promise'
+           The response explicitly identifies the pairing of 'arch' with 'promise' and acknowledges the architectural-to-rhetorical mapping, arriving at the correct answer.
+[9/16] t5 baseline
+    answer: # Analysis: Self-Serving Bias in the Player's Reflection **Answer: No** ## Explanation Self-serving bias is the tendency to attribute personal successes to internal factors (ability, effort) while attributing failures to external factors (l... [1542 chars total]
+    judge: [PASS] score=1.00  expected='no'
+           The response correctly concludes 'no' and identifies all three required elements: internal attribution for the failure, credit to the coach (external) for the correct prediction, a
+[10/16] t5 + self-serving-bias
+    answer: # Analysis: Self-Serving Bias in Tennis Player's Statement **Answer: No** ## Reasoning While the player's statement does address a negative outcome (the loss), it fails to meet the criteria for detecting self-serving bias because: ### Missi... [1644 chars total]
+    judge: [PASS] score=0.70  expected='no'
+           The response correctly concludes 'no' and identifies that the player attributes the loss internally to own tactical failure. However, it mischaracterizes the coach reference as con
+[11/16] t6 baseline
+    answer: # Answer: No ## Analysis The rule does **not** correctly condemn Dr. Ansari's action because the situation falls within a legitimate exception to the confidentiality requirement. ### Key Evidence from the Passage 1. **"Direct care team" exc... [1412 chars total]
+    judge: [PASS] score=0.90  expected='no'
+           The response correctly concludes 'no' and addresses all three criteria: it notes informed consent is a legal requirement necessitating disclosure, argues the guardian is functional
+[12/16] t6 + accident-fallacy
+    answer: # Analysis **Answer: No** ## Reasoning Applying the accident-fallacy framework: **1. General Rule Identified:** "Employees must not disclose confidential patient information to parties outside the direct care team." **2. Specific Case:** Dr... [1487 chars total]
+    judge: [PASS] score=1.00  expected='no'
+           The response correctly answers 'no', identifies the informed consent requirement, recognizes guardians as authorized decision-makers implicitly part of the care decision, and notes
+[13/16] t7 baseline
+    answer: # Analysis of Jordan's Violation Probability ## The Key Reasoning Based on the information provided, the appropriate probability to assign is **47%**. ## Why 47% (Not 18%) This requires careful application of conditional probability: 1. **R... [1505 chars total]
+    judge: [PASS] score=1.00  expected='47%'
+           The response correctly identifies Jordan as belonging to the metropolitan reference class, applies the more specific reference class over the broader national one, and invokes the 
+[14/16] t7 + statistical-syllogism
+    answer: # Analysis ## Identifying the Statistical Syllogism Structure This passage contains two statistical generalizations and information about a specific individual: 1. **General premise (national):** 18% of licensed drivers commit at least one... [1913 chars total]
+    judge: [PASS] score=1.00  expected='47%'
+           The response correctly identifies Jordan as belonging to the metropolitan reference class (LA), applies the tighter reference class (47%) over the broader national one (18%), and e
+[15/16] t8 baseline
+    answer: # Analysis Let me work through this step-by-step. **Initial Condition:** - You start facing due north - You're climbing a spiral staircase that makes exactly three complete 360-degree revolutions **Key Logic:** A complete 360-degree revolut... [836 chars total]
+    judge: [PASS] score=1.00  expected='north'
+           The response addresses all three must-identify items: each full revolution returns to starting orientation, 3×360 is a multiple of 360, and final equals initial orientation. It cor
+[16/16] t8 + spatial-reasoning
+    answer: # Analysis ## Step 1: Identify Physical Objects and Spatial Relations - **Objects**: spiral staircase, ground floor, first landing, climber - **Spatial relation**: staircase makes exactly three complete 360-degree revolutions ## Step 2: Ext... [1195 chars total]
+    judge: [PASS] score=1.00  expected='north'
+           The response correctly identifies that each revolution returns to starting orientation, computes 3×360=1080 as a multiple of 360, and concludes final orientation equals initial (no
+
+=== [2/4] student: ollama:llama3.1:8b ===
+[1/16] t1 baseline
+    answer: To determine if Mira satisfies the requirement outlined in Guild Bylaw 1, we need to examine whether she has completed a seven-year apprenticeship under a single registered master. According to the passage, Apprentice Mira trained under mas... [1439 chars total]
+    judge: [FAIL] score=0.40  expected='yes'
+           The response identifies the bylaw's requirements and confirms Mira met the seven-year condition, but treats the fraud/acquittal as potentially disqualifying rather than a distracto
+[2/16] t1 + modus-ponens
+    answer: To determine if Mira satisfies the bylaw 1 requirement, we need to apply the modus ponens reasoning pattern described in the provided skill. **Step 1: Identify the conditional statement** The passage does not explicitly state a conditional... [2282 chars total]
+    judge: [PASS] score=0.85  expected='yes'
+           The response correctly identifies the 7-year single-master requirement and that Mira met both conditions, reaching the correct 'yes' conclusion. However, it does not explicitly add
+[3/16] t2 baseline
+    answer: After analyzing the passage carefully, I conclude that the red herring is: "governator commendations". Here's why: The Auditor specifically asks about $4.2M in unexplained expenditures this quarter, implying a concern over financial irregul... [1557 chars total]
+    judge: [PASS] score=0.85  expected='governor commendations'
+           The response correctly identifies governor commendations as the red herring, notes that waste reduction addresses the financial question, acknowledges software renewal as budget-re
+[4/16] t2 + red-herring
+    answer: The single phrase that is the red herring in this passage is "software renewal contract is essential for tax processing next year." Here's why: 1. The explicit question posed by the Auditor is about the $4.2M in unexplained expenditures. 2.... [1345 chars total]
+    judge: [FAIL] score=0.20  expected='governor commendations'
+           The model incorrectly identified 'software renewal' as the red herring instead of 'governor commendations'. The software renewal is actually budget-topical, while the commendations
+[5/16] t3 baseline
+    answer: The researcher's intention was deceitful rather than methodologically flawed.
+    judge: [FAIL] score=0.20  expected='the research team manipulated data'
+           The response focuses on the intent behind the alleged manipulation rather than identifying that the question presupposes the manipulation itself occurred. It misses the core unstat
+[6/16] t3 + complex-question-loaded-question-with-implicit-assumption
+    answer: Manipulation was deliberate. Analysis: 1. The reporter's question is: "Why did the research team manipulate the trial data to support their conclusion that the drug is effective?" 2. The propositions that must already be true for this quest... [983 chars total]
+    judge: [FAIL] score=0.30  expected='the research team manipulated data'
+           The response identifies that the question smuggles in an accusation, but its final answer focuses on deliberateness of manipulation rather than the core presupposition that manipul
+[7/16] t4 baseline
+    answer: Promise. Explanation: In the passage, it is written that "each arch was a promise." This directly indicates that in the author's metaphor, an 'arch' represents a promise made by the company. The context suggests that these promises are part... [628 chars total]
+    judge: [PASS] score=1.00  expected='promise'
+           The response correctly identifies 'promise' as the answer, explicitly quotes the pairing from the passage, and explains the architectural-to-rhetorical mapping.
+[8/16] t4 + metaphor
+    answer: To answer the challenge, let's apply the procedure for reading comprehension analysis: 1. Scan the passage for sentences that equate or substitute one noun/concept for another unlike thing. 2. Identify a candidate sentence: "each arch was a... [981 chars total]
+    judge: [PASS] score=1.00  expected='promise'
+           The response identifies the explicit pairing of 'arch' with 'promise' and recognizes the architectural-to-rhetorical mapping, arriving at the correct answer.
+[9/16] t5 baseline
+    answer: Yes. The player's reflection exhibits self-serving bias as they attribute their loss solely to an external factor (not adjusting their strategy) while downplaying any potential flaws in their own game plan. This is evident when the player s... [854 chars total]
+    judge: [FAIL] score=0.00  expected='no'
+           The model answered 'yes' instead of the correct 'no', and misidentified the tactical failure as external rather than internal. It failed to recognize that the player took personal 
+[10/16] t5 + self-serving-bias
+    answer: **Answer:** No. **Analysis:** To determine if the player's reflection exhibits self-serving bias, we need to analyze their attribution for the loss and compare it with the attribution for a hypothetical success (if mentioned). The passage p... [1103 chars total]
+    judge: [PASS] score=0.70  expected='no'
+           The response correctly concludes 'no' and identifies the internal attribution for failure. It acknowledges the coach was 'right' but doesn't explicitly frame this as external attri
+[11/16] t6 baseline
+    answer: No. Here's my analysis: According to the passage, Dr. Ansari is explaining a minor patient's diagnosis to the patient's legal guardian in order to obtain informed consent for emergency surgery. This situation implies that the information be... [1284 chars total]
+    judge: [PASS] score=0.60  expected='no'
+           The response correctly concludes 'no' and addresses informed consent requirements and the guardian's role in decision-making, but does not explicitly note that the rule as stated o
+[12/16] t6 + accident-fallacy
+    answer: No. Analysis: 1. The general rule is "Employees must not disclose confidential patient information to parties outside the direct care team" (Step 1). This is a broad claim that establishes a general principle for hospital employees. 2. The... [1343 chars total]
+    judge: [PASS] score=0.50  expected='no'
+           The response correctly concludes 'no' and notes the guardian has a legitimate role in the care decision, but does not explicitly mention the legal requirement of informed consent o
+[13/16] t7 baseline
+    answer: To determine the approximate probability of Jordan committing at least one moving violation this year, we need to analyze the given statistics. The national survey reports that 18% of licensed drivers commit at least one moving violation pe... [3283 chars total]
+    judge: [FAIL] score=0.40  expected='47%'
+           The response identifies Jordan as being in the metropolitan reference class and recognizes both statistics, but fails to commit to the tighter reference class and instead settles o
+[14/16] t7 + statistical-syllogism
+    answer: To solve this challenge, we need to apply the statistical syllogism skill described in the passage. Here's the step-by-step analysis: 1. **Scan for generalization**: The passage provides two generalizations about licensed drivers: * 18% of... [1211 chars total]
+    judge: [PASS] score=1.00  expected='47%'
+           The response correctly identifies Jordan as a metropolitan driver, applies the more specific reference class, and reaches the 47% conclusion consistent with statistical syllogism.
+[15/16] t8 baseline
+    answer: Let's analyze the situation step by step: 1. **Initial Direction**: You start climbing while facing due north. 2. **Number of Revolutions**: The staircase makes exactly three complete 360-degree revolutions going up from the ground floor to... [738 chars total]
+    judge: [PASS] score=0.70  expected='north'
+           The response correctly concludes north and notes that 3 complete revolutions return to the start. However, its intermediate reasoning is muddled (incorrectly stating after one revo
+[16/16] t8 + spatial-reasoning
+    answer: To solve this challenge, we need to use spatial reasoning skills as outlined in the provided procedure. Let's break it down step by step: 1. **Identify objects and their spatial relations**: The passage mentions a spiral staircase making re... [4706 chars total]
+    judge: [PASS] score=0.50  expected='north'
+           The response ultimately concludes 'north,' matching the correct answer, but the reasoning is muddled and does not cleanly identify that 3x360 is a multiple of 360 or that each revo
+
+=== [3/4] student: ollama:qwen3.5:2b ===
+[1/16] t1 baseline
+    answer: Based on the passage provided, the analysis is as follows: The bylaw requires that "Every **master artisan** must have completed a seven-year apprenticeship." The text explicitly states: "Apprentice **Mira** trained under **master potter**... [660 chars total]
+    judge: [FAIL] score=0.30  expected='yes'
+           The response misattributes the fraud accusation to Mira (it was Doran) and incorrectly concludes 'No'. It identifies the 7-year requirement and Mira's completion, but reaches the w
+[2/16] t1 + modus-ponens
+    answer: # Conclusion: No The passage **does not** confirm that Mira satisfies bylaw 1 for master artisan status. ## Step-by-Step Analysis ### 1. Identify the Conditional Premise * **Rule (If P then Q):** Guild bylaw 1 states: *"Every master artisan... [2510 chars total]
+    judge: [PASS] score=0.70  expected='yes'
+           The response ultimately concludes 'Yes' and identifies the bylaw's 7-year single-master requirement and that Mira met it. However, it contradicts itself by starting with 'No' and d
+[3/16] t2 baseline
+    answer: The red herring in this passage is **waste reduction**. Here is the step-by-step analysis supporting this conclusion: 1. **Contextual Relevance**: The Auditor explicitly asks for a report on "unexplained expenditures this quarter." A phrase... [1489 chars total]
+    judge: [FAIL] score=0.10  expected='governor commendations'
+           The model incorrectly identifies 'waste reduction' as the red herring instead of 'governor commendations'. It does note that commendations don't directly address expenditures, but 
+[4/16] t2 + red-herring
+    answer: ### Analysis of the Red Herring **Core Question:** The prompt asks specifically to identify the red herring phrase in the Treasurer's response to the Auditor's challenge regarding **"specifically about the $4.2M in unexplained expenditures.... [2799 chars total]
+    judge: [FAIL] score=0.10  expected='governor commendations'
+           The model incorrectly concluded 'waste reduction' is the red herring. It actually identified in its analysis that governor commendations were unrelated to finances, but then contra
+[5/16] t3 baseline
+    answer: The researcher is trustworthy and capable of being misled.
+    judge: [FAIL] score=0.00  expected='the research team manipulated data'
+           The response misidentifies the presupposition, focusing on trustworthiness rather than identifying that the question presupposes the manipulation occurred as fact.
+[6/16] t3 + complex-question-loaded-question-with-implicit-assumption
+    answer: The core unstated premise presupposed by the question is that **there was a deliberate research team** behind the event, rather than simply an ad hoc or unmonitored study. **Analysis:** * **Surface Question:** "Why did the research team man... [1109 chars total]
+    judge: [FAIL] score=0.00  expected='the research team manipulated data'
+           The response misidentifies the presupposition as the existence of a research team, rather than the actual loaded presupposition that the team manipulated the data. It fails to addr
+[7/16] t4 baseline
+    answer: **Bridge** In this metaphor, the "arch" represents a **bridge** (or **spanning link**). The passage uses architectural imagery to describe the CEO's speech: * **Column**: Represents data or facts (statistic). * **Stained-glass panel**: Repr... [613 chars total]
+    judge: [FAIL] score=0.00  expected='promise'
+           The response incorrectly answers 'bridge' instead of 'promise', failing to recognize the explicit pairing of 'arch' with 'promise' in the passage.
+[8/16] t4 + metaphor
+    answer: Based on the skill definitions provided, here is the analysis of the challenge: 1. **Scan for Metaphorical Equations**: The passage explicitly states, "each **arch** was a **promise**." 2. **Verify Direct Comparison**: The text does not use... [879 chars total]
+    judge: [PASS] score=1.00  expected='promise'
+           The response identifies the explicit pairing of 'arch' with 'promise' and explains the architectural-to-rhetorical mapping, arriving at the correct answer.
+[9/16] t5 baseline
+    answer: **No.** The player's reflection does **not** exhibit self-serving bias in the way the question implies. The text describes a **constructive attribution**, also known as a **benevolent attribution**, rather than the defense of one's own agen... [2033 chars total]
+    judge: [PASS] score=0.90  expected='no'
+           The response correctly answers 'no', identifies the internal attribution for failure (not adjusting strategy), acknowledges the coach's external credit for prediction, and notes th
+[10/16] t5 + self-serving-bias
+    answer: ### **Answer: No** ### **Step-by-Step Analysis** To determine whether the player's reflection exhibits self-serving bias according to the provided criteria, we must rigorously apply the constraints and procedure outlined in your skill. **1.... [3675 chars total]
+    judge: [PASS] score=0.70  expected='no'
+           The response correctly concludes 'no' and identifies that the player attributes the loss to an internal tactical failure. It acknowledges the coach's warning was validated but fram
+[11/16] t6 baseline
+    answer: **No** The rule does not correctly condemn Dr. Ansari's action. **Evidence from the Passage and Logical Analysis:** 1. **Nature of the Disclosure:** The passage describes Dr. Ansari disclosing information about a "minor patient's diagnosis"... [1836 chars total]
+    judge: [PASS] score=0.60  expected='no'
+           The response correctly concludes 'no' and identifies that informed consent legally requires guardian disclosure and that this constitutes an exception to the rule. However, it does
+[12/16] t6 + accident-fallacy
+    answer: ### Analysis of the Argument **1. Locate the General Rule** The passage explicitly states the rule: *"Employees must not disclose confidential patient information to parties outside the direct care team."* This establishes the generalizatio... [2671 chars total]
+    judge: [FAIL] score=0.40  expected='no'
+           The response's analysis correctly identifies all three must-identify items (informed consent requires guardian disclosure, guardians act as authorized proxies/implicit care parties
+[13/16] t7 baseline
+    answer: Based on the information provided in the passage, here is the step-by-step analysis to determine the approximate probability. ### 1. Identify the Relevant Data The passage provides two distinct groups of data based on location: * **National... [1606 chars total]
+    judge: [PASS] score=1.00  expected='47%'
+           The response correctly identifies Jordan as a metropolitan driver, chooses the tighter reference class over the national one, and applies the most specific generalization to arrive
+[14/16] t7 + statistical-syllogism
+    answer: ### Analysis of the Syllogism Challenge To determine the appropriate approximate probability for Jordan committing a moving violation, we must apply the **statistical syllogism** procedure defined in the instructions. #### Step 1: Identify... [4456 chars total]
+    judge: [FAIL] score=0.10  expected='47%'
+           The model answered 18%, choosing the broader reference class instead of the more specific metropolitan class. It failed to apply the statistical syllogism principle of preferring t
+[15/16] t8 baseline
+    answer: To determine the cardinal direction you are facing upon reaching the landing, let's break down the movement and geometry step by step using the information provided in the passage. ### Step 1: Analyze the Spiral Staircase Mechanics The pass... [1773 chars total]
+    judge: [PASS] score=1.00  expected='north'
+           The response correctly identifies that each revolution returns to the starting orientation, notes that 3x360 is a multiple of 360, and concludes final orientation equals initial (N
+[16/16] t8 + spatial-reasoning
+    answer: Based on the principles of spatial reasoning, here is the step-by-step analysis and solution. ### Analysis of the Passage 1. **Object Identification**: The passage identifies a **spiral staircase** as the object in question. 2. **Geometric... [2187 chars total]
+    judge: [PASS] score=1.00  expected='north'
+           The response correctly identifies that 3x360 is a multiple of 360, that complete revolutions return to starting orientation, and concludes with north.
+
+=== [4/4] student: ollama:qwen3.5:0.8b ===
+[1/16] t1 baseline
+    answer: Based on the provided passage, we can analyze Mira's qualification by Master Artisan through the following steps: 1. **Analyze Bylaw 1**: The bylaw explicitly states that "Every **master artisan** must have completed a seven-year apprentice... [1210 chars total]
+    judge: [PASS] score=0.90  expected='yes'
+           The response identifies the 7-year single-master requirement, confirms Mira met both conditions, and treats the fraud/acquittal as not affecting Doran's registered master status. C
+[2/16] t1 + modus-ponens
+    answer: Based on the passage provided, we can determine if Mira satisfies the conditions required by bylaw 1 (Master Artisan) by following the strict logical structure defined by the "modus-ponens" skill. ### Step-by-Step Analysis **1. Scan for a c... [1724 chars total]
+    judge: [PASS] score=0.75  expected='yes'
+           The response correctly identifies the 7-year single-master requirement and confirms Mira met both conditions, reaching the correct 'yes' conclusion. However, it does not explicitly
+[3/16] t2 baseline
+    answer: To determine which phrase serves as the red herring in this passage, we must first analyze the content of the three statements made by the Treasurer. The Treasurer's statement contains three distinct points: 1. **Statement 1:** "Our departm... [9103 chars total]
+    judge: [FAIL] score=0.10  expected='governor commendations'
+           The response is confused and rambling, never settling on a clear answer. It leans toward 'software renewal' and fails to identify that governor commendations is the off-topic red h
+[4/16] t2 + red-herring
+    answer: To identify the red herring, we must first locate the explicit question or challenge presented in the passage. The core subject of the question is clearly stated in the Auditor's first statement: specifically, the **$4.2M** amount of unexpl... [2328 chars total]
+    judge: [FAIL] score=0.10  expected='governor commendations'
+           The response incorrectly concludes 'waste reduction' is the red herring. It fails to recognize that waste reduction and software renewal are budget-topical while governor commendat
+[5/16] t3 baseline
+    answer: The press conference presupposes that the trial results were **intentionally manipulated** to bias their findings.
+    judge: [PASS] score=0.60  expected='the research team manipulated data'
+           The response correctly identifies the presupposition that data was manipulated, reaching the correct conclusion. However, it doesn't explicitly explain the loaded-question mechanis
+[6/16] t3 + complex-question-loaded-question-with-implicit-assumption
+    answer: The reporter's question presupposes the unestablished truth that **the drug is effective**.
+    judge: [FAIL] score=0.00  expected='the research team manipulated data'
+           The response identifies the wrong presupposition. The core loaded presupposition is that the team manipulated the data, not that the drug is effective.
+[7/16] t4 baseline
+    answer: In this metaphor, the word **promise**. The analysis is based on the phrase "each **arch** was a promise." In the metaphorical context of a corporate meeting, an arch represents a foundational statement or a guarantee that the company makes... [323 chars total]
+    judge: [PASS] score=1.00  expected='promise'
+           The response correctly identifies 'promise' as the answer and explicitly cites the pairing in the passage while acknowledging the architectural-to-rhetorical metaphor mapping.
+[8/16] t4 + metaphor
+    answer: Based on the metaphor provided in the passage and the specific constraint to answer with a single word, here is the analysis: **Step 1: Identify Equating Sentences** The sentence structure "each [noun] was a [noun]" represents a direct subs... [1252 chars total]
+    judge: [PASS] score=1.00  expected='promise'
+           The response correctly identifies that 'arch' is paired with 'promise' in the passage's metaphor and reaches the correct conclusion.
+[9/16] t5 baseline
+    answer: No. The reflection exhibited **self-serving bias** (specifically, *self-perfectionism*). ### Analysis of the Passage **1. Definition of Self-Perfectionism:** Self-perfectionism is the tendency to believe one should perform perfectly. In thi... [2435 chars total]
+    judge: [FAIL] score=0.10  expected='no'
+           The response starts with 'No' but then contradicts itself by claiming the reflection exhibits self-serving bias. The analysis is incoherent and fails to identify the internal attri
+[10/16] t5 + self-serving-bias
+    answer: No, the player's reflection does not exhibit self-serving bias. To answer this using the provided criteria, we must apply the definitions and constraints from the task to the specific passage provided. **Step 1: Locate and Classify Outcomes... [8711 chars total]
+    judge: [PASS] score=0.40  expected='no'
+           The response opens with 'No' matching the correct conclusion, and identifies the internal attribution for the loss and the external credit to the coach. However, the reasoning is e
+[11/16] t6 baseline
+    answer: No. The hospital rule in the passage states that employees "must not disclose confidential patient information to parties outside the direct care team." This is an employment obligation intended to protect the confidentiality of the patient... [1086 chars total]
+    judge: [PASS] score=0.25  expected='no'
+           The response answers 'No' matching the correct conclusion, but its reasoning is confused and contradictory (claims the rule condemns the disclosure then claims it doesn't). It fail
+[12/16] t6 + accident-fallacy
+    answer: Based on the rules provided, I will analyze the specific instance described in the passage and determine the correctness of the rule's condemnation of Dr. Ansari's action. ### Step 1: Locate the General Rule The general rule stated in the p... [4301 chars total]
+    judge: [PASS] score=0.40  expected='no'
+           The response reaches the correct final answer 'No', but its reasoning is confused and contradictory. It mentions informed consent as necessary for the procedure but does not clearl
+[13/16] t7 baseline
+    answer: To calculate the approximate probability that Jordan will commit at least one moving violation, we must analyze the provided information based on its limitations. The passage offers two specific statistics but only allows for direct calcula... [2172 chars total]
+    judge: [FAIL] score=0.10  expected='47%'
+           The response incorrectly adds the two probabilities to get 65%, rather than applying the statistical syllogism principle of using the more specific reference class (47%). It identi
+[14/16] t7 + statistical-syllogism
+    answer: To determine the approximate probability of Jordan committing at least one moving violation this year, we must apply the statistical-syllogism procedure described above, which involves identifying a statistical generalization, locating an i... [2671 chars total]
+    judge: [FAIL] score=0.00  expected='47%'
+           The model chose 18% based on the broader licensed-driver reference class, failing to recognize that Jordan (living in Los Angeles) belongs to the more specific metropolitan referen
+[15/16] t8 baseline
+    answer: To determine the final cardinal direction you are facing, let's trace your path through the geography of the building step by step. **1. Starting Position** You begin facing **due north**. This is your initial heading. **2. The First Stairc... [2860 chars total]
+    judge: [PASS] score=0.30  expected='north'
+           The response arrives at 'north' but through confused, incorrect reasoning involving 90-degree turns rather than recognizing that 3 complete 360-degree revolutions return you to the
+[16/16] t8 + spatial-reasoning
+    answer: Based on the provided passage and the logic of spatial reasoning, here is the step-by-step analysis: **1. Identify Spatial Objects and Relations** * **Object:** The "spiral staircase." * **Action:** The "completely 360-degree revolutions go... [2440 chars total]
+    judge: [PASS] score=0.60  expected='north'
+           The response reaches the correct conclusion (north) and addresses that a 360-degree revolution returns to the starting orientation and thus final equals initial. However, it doesn'
+
+Wrote 64 episodes across 4 student(s) -> /home/istrozzi/Documents/kk-digital-docker/llm-skills/data/pipeline-runs/default/bench/episodes.json
+Summary: {'total_trials': 64, 'curated_delta_pp': 6.25, 'curated_p_value': 0.8296, 'baseline_rate': 0.6562, 'treatment_rate': 0.7188, 'mode': 'singlecall', 'cross_task': False, 'n_tasks': 8, 'n_skills': 10, 'students': ['anthropic:claude-haiku-4-5-20251001', 'ollama:llama3.1:8b', 'ollama:qwen3.5:2b', 'ollama:qwen3.5:0.8b']}

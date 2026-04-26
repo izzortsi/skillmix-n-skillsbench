@@ -1,0 +1,37 @@
+---
+name: complex-question-loaded-question-with-implicit-assumption
+description: Use when Apply when asked to identify, analyze, or flag questions whose
+  phrasing forces the answerer to accept an unstated or disputed claim.
+skill_uid: 7876-61dd-dc24-4c2e
+category: rhetorical
+source: bench_catalog.procedural-v1
+---
+
+# complex-question-loaded-question-with-implicit-assumption
+
+A question that is loaded with an implicit assumption.
+
+## When to Use
+
+- Apply when asked to identify, analyze, or flag questions whose phrasing forces the answerer to accept an unstated or disputed claim.
+
+## Procedure
+
+1. Locate every interrogative sentence in the passage or challenge.
+2. For each question, list the propositions that must already be true for the question to make sense (its presuppositions).
+3. Test each presupposition by asking whether a direct answer ('yes' or explanation) would force the respondent to concede that proposition.
+4. Check whether the presupposition is contested, unestablished, or unfavorable to the respondent rather than mutually accepted background.
+5. Mark the question as carrying an implicit assumption only if at least one presupposition is both non-trivial and not conceded elsewhere in the passage.
+6. Record which specific proposition is being smuggled in, distinct from the surface question being asked.
+
+## Constraints
+
+- Do not flag a question merely because it is pointed, accusatory, or emotionally charged if its presuppositions are already established facts.
+- Do not flag open-ended questions (who/what/why) that have no hidden claim beyond the topic itself.
+- Require that a direct answer logically entails agreement with the contested proposition; mere topical relevance is not enough.
+- Do not conflate a factual error inside a question with an embedded presupposition smuggled past the answerer.
+
+## Example
+
+Positive: A question asks 'When did you stop cheating on the exams?' in a context where cheating has not been established. Why: Any dated answer concedes prior cheating, which was never agreed to.
+Negative: A question asks 'Why did the suspect confess?' in a passage that has already stated the suspect confessed. Why: The presupposition is an established fact in the passage, not a smuggled assumption.

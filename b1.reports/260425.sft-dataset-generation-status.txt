@@ -1,0 +1,521 @@
+================================================================================
+REPORT: SFT DATASET GENERATION PIPELINE — STATUS
+================================================================================
+
+Date:   2026-04-25
+Status: IN_PROGRESS
+
+================================================================================
+OVERVIEW
+================================================================================
+
+This report covers the build-out of an end-to-end SFT (supervised fine-tuning)
+data generation pipeline on top of the existing skillmix-n-skillsbench stack.
+
+The atomic SFT row we are producing:
+
+    INPUT  : task passage + question, with a procedural Skill block injected
+             into the system prompt.
+    OUTPUT : the model's full chain-of-thought ending in an "ANSWER:" line.
+    LABEL  : judge verdict (passed / score / conclusion_reached).
+
+The training contract is "apply-given-skill": teach the student model to
+follow a procedural skill block when one appears in its system prompt, and
+to make its application of each procedure step visible in the response text.
+
+End-to-end pipeline (procedural-skill SFT path):
+
+    catalog        s2.m1 wikipedia_seeder       (declarative skills)
+    bench_catalog  procedural_catalog rewrite   (procedure / constraints / example)
+    s3.m5          extracted_task_synthesis     (NEW — skill -> ExtractedTask[N])
+    bench_traced   s4.m4 --mode inject          (Gap A — solver + judge per condition)
+    sft_dataset    sft_dataset.build_dataset    (NEW — filter -> JSONL chat format)
+
+================================================================================
+PIPELINE STAGES — WHAT EACH PRODUCES
+================================================================================
+
+Stage 1: catalog
+  Input:   data/wikipedia-seed/source.json (10 named language skills)
+  Output:  catalog/skills.json (declarative Skill records)
+  Status:  PRE-EXISTING — unchanged this session.
+
+Stage 2: bench_catalog
+  Input:   catalog/skills.json
+  Output:  bench_catalog/skills.json (procedural Skills)
+  Procedure: Opus rewrites each declarative Skill into procedural form
+             with When-to-use / numbered Procedure / Constraints / dual
+             positive+negative Example.
+  Status:  PRE-EXISTING — generated 2026-04-24 at $1.32 cost.
+
+Stage 3: s3.m5 (NEW MODULE — added this session)
+  File:    s3_generating_skill_examples/m5_extracted_task_synthesis.py
+  Why it exists: closes the schema gap between s3.m1 (which produces
+             SkillExample) and bench_traced (which consumes ExtractedTask).
+             Without s3.m5, the only way to scale tasks was hand-writing.
+  Input:   bench_catalog/skills.json + N (tasks per skill)
+  Output:  synthesis/tasks.json + synthesis/task_skill_map.json sidecar
+  Behavior: For each Skill, single Opus call returns N ExtractedTask records
+             matching the bench_traced schema, tagged with skill_uid in
+             acceptance_criteria. The prompt enforces:
+               - skill must be necessary (no surface-readable answer)
+               - include a TRAP for procedure-skipping models
+               - exact-match-grade-able correct_conclusion
+               - varied scenarios across the N tasks
+               - one-shot schema anchor using t1 (modus-ponens)
+  Status:  IMPLEMENTED + tested. Run on 2026-04-25 produced 100/100 valid
+           tasks across 10 skills (0 malformed, 0 failures).
+
+Stage 4: bench_traced (Gap A — added in earlier session)
+  File:    s4_extracting_skill_usage_instances/m4_skill_composition_testing.py
+  Mode:    --mode inject (the SFT-emission path)
+  Per task: runs baseline (no skill in system) AND curated (procedural Skill
+             injected via format_skill_as_system) episodes.
+             Each episode: LinearAgent with thinking enabled, native CoT
+             captured in response text, judge attached.
+  Output:  bench_traced/episodes.jsonl (one record per (task, condition))
+           bench_traced/summary.json (per-condition pass rates)
+           Each record carries solution + trace + judge verdict.
+  Status:  Currently RUNNING in background on the 100 synthesized tasks.
+           Estimated ~2.5 hours walltime, ~$13 cost.
+
+Stage 5: sft_dataset (NEW MODULE — added this session)
+  File:    b2_benchmarks/skillsbench/sft_dataset.py
+  Input:   bench_traced/episodes.jsonl
+  Output:  sft_dataset/dataset.jsonl + sft_dataset/summary.json
+  Filter (default v1):
+             condition = curated
+             judge_passed = True
+             min_response_chars = 50  (drop one-line "ANSWER: yes" rows)
+             dedup by (task_uid, condition, model)
+  Format:  HuggingFace SFTTrainer / axolotl / unsloth chat schema.
+             Each row: {messages: [system, user, assistant], metadata: {...}}
+             system  = exact prompt sent during generation (incl. skill block)
+             user    = exact user prompt sent (passage + question)
+             assistant = full CoT response (reasoning + ANSWER: line)
+             metadata = task_uid, skill_uid, skill_name, condition,
+                        judge_score, judge_passed, judge_conclusion_reached,
+                        judge_rationale, model_source, extraction_method
+  Status:  IMPLEMENTED + tested on existing smoke episodes. Awaiting
+           bench_traced output to run at scale.
+
+================================================================================
+WORK COMPLETED THIS SESSION
+================================================================================
+
+NEW MODULES
+
+  s3_generating_skill_examples/m5_extracted_task_synthesis.py    ~280 LOC
+    - synthesize_tasks_for_skill(skill, provider, n) -> tasks
+    - synthesize_all(catalog, ...) -> {tasks, malformed, failures}
+    - build_task_skill_map(tasks) -> {task_uid: skill_name} sidecar
+    - CLI: --catalog --out --n --provider --difficulty --skills
+
+  b2_benchmarks/skillsbench/sft_dataset.py                       ~250 LOC
+    - filter_episodes(...) - condition + judge + length filters
+    - dedupe_by_keys(...) - keep highest-scoring per dedup key
+    - build_dataset(...) - filter -> dedup -> format -> write JSONL
+    - CLI: --episodes --out --conditions --include-failed --min-score
+           --min-response-chars --no-dedup
+
+REGISTRATIONS
+
+  cli.py: registered s3.m5 in the METHODS dispatcher.
+
+BUG FIXES
+
+  s4.m4 _rebuild_user_prompt mismatch (introduced when synthesized tasks
+  populate acceptance_criteria.skill_names):
+    - Before: trace.user_prompt rebuilt from task; could include "Required
+      skill(s):" line that the curated solver actually omits. Mismatched
+      from the prompt actually sent.
+    - Fix: solve_one now records the actual prompt sent on the solution
+      dict; adapt_solution_to_trace prefers that over the rebuild.
+    - Backward-compatible: legacy solutions without "user_prompt" still
+      get the rebuild fallback.
+
+PROMPT IMPROVEMENT (s4.m4 SOLVER_SYSTEM_PROMPT)
+
+  - Before: "Think carefully... give your final answer as one concise
+    conclusion." Opus interpreted "concise" as "be terse, skip thinking."
+    Native thinking blocks were empty; response text was 11-13 tokens.
+  - After: "Work through the task step by step in writing — explain your
+    reasoning explicitly, then state your conclusion. If a SKILL block
+    appears in the system prompt, follow its procedure explicitly: as
+    you apply each step, name the step from the procedure you are
+    applying. End your response with a line beginning exactly 'ANSWER: '..."
+  - Result: 32x increase in trace richness. Curated responses now narrate
+    each procedure step verbatim. Judge scores lifted from 0.40 -> 1.00
+    on the test tasks.
+
+PROCEDURAL_STEPS SPLITTER FIX
+
+  - Before: only split native thinking_text into steps; if thinking was
+    empty, fell back to a single 500-char chunk of the response.
+  - After: if no native thinking, split the response text instead (after
+    stripping the trailing ANSWER: line). Confirms 6+ procedural steps
+    extracted from response-text CoT.
+
+TASK CORPUS UPGRADE
+
+  - Replaced t8 in data/mini-tasks.json: Spiral staircase (Opus solved
+    instantly, no spatial machinery exercised) -> Three pots on the counter
+    (perspective transformation + multi-constraint combination).
+  - New t8 successfully exercises the 5-step spatial-reasoning procedure
+    when curated; baseline solves it with intuition.
+
+CATALOG VALIDATION (PRE-STAGE)
+
+  - Re-ran original `bench` with new t8 across 4 students.
+  - Per-student deltas confirm procedural-rewrite catalog is viable:
+        haiku:        +0.000 pass / +0.037 score   (flat)
+        llama3.1:8b:  +0.125 pass / +0.075 score   (lift)
+        qwen3.5:0.8b: +0.125 pass / +0.162 score   (strong lift)
+        qwen3.5:2b:   -0.125 pass / -0.106 score   (regression on hardest task)
+  - Per-task deltas show the catalog splits into two clusters:
+        WIN cleanly:    modus-ponens, self-serving-bias  (+0.50 pass)
+        FLAT/HURT:      metaphor, statistical-syllogism, accident-fallacy,
+                        spatial-reasoning  (interpretive skills more prone
+                        to leading the model down a particular reading)
+  - Conclusion: Wikipedia-seed-rewritten catalog is viable as SFT skill
+    source. SFT v1 will filter aggressively on judge-passing curated rows,
+    so the failed-curated examples do not pollute training data.
+
+================================================================================
+SYNTHESIS RUN — RESULTS (2026-04-25)
+================================================================================
+
+Command:
+  python3 cli.py s3.m5 \
+    --catalog data/pipeline-runs/default/bench_catalog/skills.json \
+    --out data/pipeline-runs/default/synthesis/tasks.json \
+    --n 10 --provider anthropic:claude-opus-4-7 -v
+
+Outcome:
+  100 tasks synthesized across 10 skills (10 per skill, perfectly balanced)
+  0 malformed
+  0 skill failures
+  Cost: ~$2 in Opus
+  Walltime: ~7 minutes
+
+Distribution by query_type:
+  YES_NO:       52
+  SINGLE_WORD:  22
+  FREE_FORM:    20
+  RANKING:       6
+
+SPOT-CHECK FINDINGS
+
+  Cross-skill diversity (4 skills sampled): each task has a distinct
+  scenario; traps and distractors named in must_identify; exact-match
+  outputs are clean.
+
+  Within-skill diversity (10 spatial-reasoning tasks examined):
+        Crate through doorway     (constraint inference)
+        Shelf above cabinet       (height comparison)
+        Pipe through wall         (diameter inference)
+        Boxes stacked in closet   (geometric calculation)
+        Ladder against barn       (Pythagoras)
+        Marble through funnel     (inverse constraint)
+        Train under bridge        (clearance inference)
+        Garden plots beside river (compass relations)
+        Painting and doorway      (constraint inference)
+        Books on shelf            (positional ordering)
+  Conclusion: no repetition. Skill prompt successfully induces varied
+  scenarios across the 10 generations.
+
+  ONE MINOR FLAG: one task output reads "approximately 12.67 inches".
+  May grade as near-miss against bench's exact-match comparator. Watch
+  for judging anomalies in the bench_traced output; if pattern repeats,
+  add a regex-strip pass over synthesized outputs.
+
+================================================================================
+BENCH_TRACED RUN — RESULTS
+================================================================================
+
+Command:
+  python3 cli.py s4.m4 --mode inject \
+    --tasks          synthesis/tasks.json \
+    --catalog        bench_catalog/skills.json \
+    --task-skill-map synthesis/task_skill_map.json \
+    --out-dir        bench_traced/ \
+    --judge          anthropic:claude-opus-4-7 \
+    --model          claude-opus-4-7 \
+    --thinking-budget 4096 -v
+
+Scope:
+  100 tasks x 2 conditions = 200 episodes
+  400 Opus calls (200 solve + 200 judge)
+
+Outcome:
+  200 episodes produced, 0 API failures
+  Walltime: ~21 minutes (much faster than 2.5h estimate; Opus throughput
+            higher than projected)
+  Cost: ~$5
+
+Aggregate after judge bug fix (see next section):
+  baseline pass_rate = 0.83  mean_score = 0.811
+  curated  pass_rate = 0.81  mean_score = 0.810
+  delta = -0.02 (essentially flat for Opus on Opus-designed tasks — expected)
+
+================================================================================
+JUDGE BUG DISCOVERY + FIX
+================================================================================
+
+PROBLEM 1: deterministic-judge first-line extraction
+
+  Pre-fix bench_traced reported baseline 21% / curated 19% — alarmingly low
+  for Opus on Opus-designed tasks. Investigation showed the deterministic
+  judge in b2_benchmarks/skillsbench/llm_judge.py was extracting the FIRST
+  LINE of the response and comparing to expected. With the new step-by-step
+  prompt, the first line is reasoning ('Step 1 (Scan for conditional): ...'),
+  not the answer.
+
+  Affected: 80% of synthesized tasks (52 YES_NO + 22 SINGLE_WORD + 6 RANKING).
+  The 20 FREE_FORM tasks went through the LLM judge and were unaffected.
+
+  FIX: Added _extract_answer_line() helper that:
+    1. Looks for the last 'ANSWER:' line (the s4.m4 solver prompt format).
+    2. Falls back to last 'Final answer:' / 'Conclusion:' / 'Verdict:' marker.
+    3. Falls back to the last non-empty line, stripped of markdown formatting.
+
+  Re-grading the existing bench_traced output flipped 124 of 200 verdicts.
+  True baseline: 0.83 / curated: 0.81. Saved ~$13 by re-using existing
+  episode data instead of re-running.
+
+PROBLEM 2: markdown contamination on extracted answer
+
+  Discovered when the multi-student bench run (corpus_harness, see next
+  section) showed haiku at 30% baseline — implausibly low. Inspection of
+  failures: judge rationales like "no match: expected 'yes', got 'yes**'"
+  or "expected 'cooler', got '**'". corpus_harness uses a verbose-encouraging
+  default reading-comprehension prompt; students wrote markdown-rich
+  responses; my extractor returned '**yes**' or stray '**' tokens.
+
+  This systematically PENALIZED larger models (which produce richer markdown).
+  Effect was opposite of what student characterization needs.
+
+  FIX: Extended _extract_answer_line() to:
+    - Match marker patterns 'answer is X', 'conclusion: X', etc. (not just
+      'ANSWER: X').
+    - Aggressively strip leading/trailing markdown chars (* _ ` # > -)
+      and trailing punctuation (. , ' ").
+
+  Re-grading the existing bench-synthesis output flipped 124 of 800 verdicts
+  (15.5%); haiku jumped from 30% baseline to 56% baseline; the relative
+  ordering of students became coherent.
+
+LEARNING
+
+  Both bugs share a root cause: the deterministic judge was designed for
+  TERSE answer-only responses (the original SkillsBench harness), not for
+  step-by-step CoT or markdown-formatted reading-comprehension responses.
+  Modern prompting styles broke its assumptions silently — verdicts looked
+  like "model failed" rather than "judge couldn't find the answer."
+
+  The fix landed in llm_judge.py and applies to ALL future bench/bench_traced
+  runs automatically. Both bugs would have polluted SFT v1 if not caught.
+
+================================================================================
+SFT V1 CORPUS — RESULTS
+================================================================================
+
+Run: python3 -m b2_benchmarks.skillsbench.sft_dataset \
+       --episodes bench_traced/episodes.jsonl --out sft_dataset/dataset.jsonl
+
+Filter: passed=True, condition=curated, dedup, min_response_chars=50.
+
+Output:
+  81 SFT rows (from 200 episodes; 81% of curated episodes were passing)
+  Distributed across all 10 skills:
+        self-serving-bias        10/10
+        red-herring              10/10
+        metaphor                 10/10
+        emotional-self-regulation 9/10
+        folk-physics              9/10
+        complex-question          8/10
+        statistical-syllogism     8/10
+        modus-ponens              7/10
+        accident-fallacy          6/10
+        spatial-reasoning         4/10  (hardest synthesized tasks)
+  Score quality: 78/81 in top bucket [0.9, 1.0]; 2 in [0.7, 0.9); 1 in [0.5, 0.7)
+  Format: HuggingFace SFTTrainer / axolotl chat schema
+  Model source: claude-opus-4-7 (single frontier student)
+
+Files:
+  data/pipeline-runs/default/sft_dataset/dataset.jsonl
+  data/pipeline-runs/default/sft_dataset/summary.json
+
+================================================================================
+MULTI-STUDENT BENCH RUN — STUDENT CHARACTERIZATION
+================================================================================
+
+PURPOSE
+
+  Independent of the SFT corpus generation, characterize how 4 student
+  models behave under skill injection on the SAME 100 synthesized tasks.
+  This answers: "for which (student, skill) cells does the procedural
+  skill help vs hurt?" — the prerequisite question for deciding which
+  skills to prioritize in SFT v2.
+
+COMMAND
+
+  python3 -m b2_benchmarks.skillsbench.corpus_harness \
+    --tasks          synthesis/tasks.json \
+    --catalog        bench_catalog/skills.json \
+    --task-skill-map synthesis/task_skill_map.json \
+    --out-dir        bench-synthesis/ \
+    --judge          anthropic:claude-opus-4-7 \
+    --mode           singlecall \
+    --models         "anthropic:claude-haiku-4-5-20251001,
+                      ollama:llama3.1:8b,
+                      ollama:qwen3.5:2b,
+                      ollama:qwen3.5:0.8b"
+
+SCOPE
+
+  100 tasks x 4 students x 2 conditions = 800 episodes
+  Cost: ~$30 (judge calls dominate; haiku ~$1, ollama free)
+  Walltime: ~3 hours
+
+PER-STUDENT AGGREGATE (post-rejudge)
+
+      student                           BL pass   CU pass    Δ pass
+      claude-haiku-4-5                    0.56      0.40     -0.16
+      llama3.1:8b                         0.16      0.19     +0.03
+      qwen3.5:0.8b                        0.20      0.28     +0.08
+      qwen3.5:2b                          0.37      0.36     -0.01
+
+CENTRAL FINDING — CAPABILITY INVERSION
+
+  Skill injection helps WEAK models and distracts STRONG models. The
+  strongest student (haiku) was hurt the most (-0.16); the weakest
+  (qwen-0.8b) gained the most (+0.08). This is the dominant signal.
+
+  The cleanest examples: red-herring and self-serving-bias. Both
+  HURT haiku by -0.40 to -0.50, and both HELP qwen-0.8b by +0.20.
+  Same skill, opposite effect, depending on capability.
+
+PER-(SKILL, STUDENT) HEATMAP
+
+  See data/pipeline-runs/default/bench-synthesis/heatmaps/per_skill_student.png
+  for the 4-student x 10-skill matrix of:
+        baseline pass rate
+        curated pass rate
+        delta pass rate (with green/red coloring)
+
+  The auto-generated heatmaps in the same directory (uplift_heatmap.png,
+  combined_heatmap.png, etc.) are at TASK granularity (100 rows) and
+  hard to read for student characterization.
+
+  Notable per-skill patterns:
+    - red-herring:        haiku -0.40, qwen-0.8b +0.20 (large gradient)
+    - self-serving-bias:  haiku -0.50, qwen-0.8b +0.20 (largest gradient)
+    - modus-ponens:       qwen-0.8b +0.20, others flat
+    - complex-question:   qwen-0.8b +0.30 (largest single lift)
+    - metaphor:           Opus-only success; doesn't transfer to any student
+    - spatial-reasoning:  universally weak (0.20-0.30 baseline); may indicate
+                          task-quality issues, not student-skill issues
+
+IMPLICATIONS FOR SFT V2
+
+  Skills with a large lift gradient between weak and strong students are
+  the highest-value SFT targets — the SFT corpus from Opus shows the
+  procedure done right; the smaller student should learn to follow it.
+
+  Best v2 targets: red-herring, self-serving-bias, modus-ponens, complex-question
+  Worst v2 targets (for now): metaphor (no transfer), spatial-reasoning
+                              (universal weakness; fix tasks first)
+
+================================================================================
+WORK REMAINING
+================================================================================
+
+Open decisions (need user input):
+
+  1. Whether to drop weak-yield skills from the SFT v1 corpus:
+        - metaphor: Opus passed 10/10 but no student in the multi-student
+          run benefited from injection (effect doesn't transfer)
+        - spatial-reasoning: Opus passed only 4/10; universally weak across
+          students; suspect synthesized task quality issues for this skill
+       Re-running sft_dataset --skills with a filter is one shell command.
+
+  2. Whether to scale up before v1 training:
+        - Grow catalog 10 -> 50 skills (hand-curate 30 more entries)
+        - Re-run s3.m5 on the larger catalog
+        - Re-run bench_traced + sft_dataset
+       Cost: ~$15 catalog/synth + ~$50 bench_traced = ~$65 for v1.5
+       OR proceed to actually SFT a small student on the current 81 rows
+       and measure lift before committing more compute.
+
+Optional v1.1 enhancements (independent of decisions above):
+
+  - Multi-student bench_traced (currently single Opus student). Multi-student
+    gives the SFT corpus diverse demonstrations of the same (task, skill).
+    Could fold the bench-synthesis episodes (multi-student, no thinking)
+    in as additional SFT rows, but those rows are lower quality (no
+    step-by-step CoT capture).
+  - Cross-task injection in bench_traced (yields skill-doesn't-apply
+    negatives for DPO/RLHF later).
+  - Train/val/test split in sft_dataset (currently one file).
+  - Convert bench_traced into a full orchestrator stage with profile
+    fields (currently invoked directly via CLI flags).
+
+Future (Pass 2+):
+
+  - Port passage_extractor + task_extractor from llm-skills-extraction-evaluation
+    to enable naturalistic tasks from real corpora (instead of synthesized
+    via s3.m5). Would require auto-tagging tasks against the skill catalog.
+  - Mining-then-rewrite skill provenance: mine procedural patterns from
+    frontier CoT in solve traces, rewrite as procedural Skills. Provides
+    a third skill source that is provably model-realizable. Most likely
+    the right answer for the interpretive-skill cluster (metaphor,
+    statistical-syllogism) where Wikipedia-seed-rewritten misleads.
+  - Retrofit deterministic-judge fixes into the bench's older episodes
+    (the original bench/ output predates the markdown fix; not yet
+    re-judged but probably has similar undercounts on its 4 students).
+
+================================================================================
+KEY FILES TOUCHED THIS SESSION
+================================================================================
+
+CODE
+
+  s4_extracting_skill_usage_instances/m4_skill_composition_testing.py
+      - SOLVER_SYSTEM_PROMPT: rewrite to elicit step-by-step CoT
+      - solve_one: record actual user_prompt; tag condition + skill metadata
+      - adapt_solution_to_trace: prefer recorded user_prompt over rebuild;
+        response-text fallback for procedural_steps splitter
+
+  b2_benchmarks/skillsbench/llm_judge.py
+      - NEW: _extract_answer_line() — robust answer extraction from CoT or
+        markdown responses (ANSWER: line, then marker patterns, then
+        last-line with markdown stripped)
+      - _score_deterministic: now uses _extract_answer_line instead of
+        first-line-only
+
+  s3_generating_skill_examples/m5_extracted_task_synthesis.py        NEW
+  b2_benchmarks/skillsbench/sft_dataset.py                           NEW
+
+  cli.py                                                             registered s3.m5
+
+DATA
+
+  data/mini-tasks.json                                               t8 replacement
+  data/pipeline-runs/default/synthesis/tasks.json                    100 synthesized tasks
+  data/pipeline-runs/default/synthesis/task_skill_map.json           sidecar map
+  data/pipeline-runs/default/bench_traced/episodes.jsonl             200 episodes (Opus solo)
+  data/pipeline-runs/default/bench_traced/episodes.buggy-judge.jsonl.bak
+                                                                     pre-rejudge backup
+  data/pipeline-runs/default/sft_dataset/dataset.jsonl               81 SFT rows
+  data/pipeline-runs/default/sft_dataset/summary.json                stats
+  data/pipeline-runs/default/bench-synthesis/episodes.json           800 episodes (4 students)
+  data/pipeline-runs/default/bench-synthesis/episodes.buggy-judge.json.bak
+                                                                     pre-rejudge backup
+  data/pipeline-runs/default/bench-synthesis/heatmaps/per_skill_student.png
+                                                                     central characterization chart
+  data/pipeline-runs/default/bench-synthesis/heatmaps/*.png          10 auto-generated charts
+
+================================================================================
+END REPORT
+================================================================================

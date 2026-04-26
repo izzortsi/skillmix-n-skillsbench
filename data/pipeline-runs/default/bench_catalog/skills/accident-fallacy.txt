@@ -1,0 +1,37 @@
+---
+name: accident-fallacy
+description: Use when when asked to detect or diagnose an argument that applies a
+  general rule to a specific case while overlooking a legitimate exception to that
+  rule.
+skill_uid: c663-6a52-883c-c3ca
+category: rhetorical
+source: bench_catalog.procedural-v1
+---
+
+# accident-fallacy
+
+an informal fallacy and a deductively valid but unsound argument occurring in a statistical syllogism (an argument based on a generalization) when an exception to a rule of thumb is ignored.
+
+## When to Use
+
+- when asked to detect or diagnose an argument that applies a general rule to a specific case while overlooking a legitimate exception to that rule.
+
+## Procedure
+
+1. Locate the general rule or generalization stated in the passage (often a broad claim like 'X is always Y' or 'all X are Y').
+2. Identify the specific case or instance the argument applies the rule to.
+3. Check whether the specific case has features that plausibly qualify as a recognized exception to the general rule (context, role, intent, legal permission, etc.).
+4. Determine whether the argument ignores or suppresses that exception when drawing its conclusion about the specific case.
+5. Confirm the argument's form is a statistical or rule-of-thumb syllogism rather than a universally true premise, and flag it only if an overlooked exception is what drives the faulty conclusion.
+
+## Constraints
+
+- Do not flag arguments whose major premise is genuinely exceptionless rather than a generalization.
+- Do not flag arguments where the specific case does not actually fall under a recognized exception.
+- Require that both a generalization and an ignored qualifying exception be identifiable; missing either element disqualifies the match.
+- Do not confuse this with hasty generalization, which moves from cases to a rule rather than from a rule to a case.
+
+## Example
+
+Positive: An argument claims 'Taking others' property is theft; tax collectors take others' property; therefore tax collectors are thieves.' Why: It applies a rule-of-thumb to a case while ignoring the legal-authorization exception.
+Negative: An argument claims 'All triangles have three sides; this figure is a triangle; therefore it has three sides.' Why: The major premise is universally true with no exceptions, so no exception is being overlooked.

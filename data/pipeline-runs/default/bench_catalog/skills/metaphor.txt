@@ -1,0 +1,38 @@
+---
+name: metaphor
+description: Use when When asked to identify, interpret, or construct an implicit
+  comparison where one thing is described as being another unlike thing without 'like'
+  or 'as'.
+skill_uid: e663-9326-5e78-c857
+category: literary
+source: bench_catalog.procedural-v1
+---
+
+# metaphor
+
+a figure of speech that, for rhetorical effect, directly refers to one thing by mentioning another.
+
+## When to Use
+
+- When asked to identify, interpret, or construct an implicit comparison where one thing is described as being another unlike thing without 'like' or 'as'.
+
+## Procedure
+
+1. Scan the passage for sentences that equate or substitute one noun/concept for another unlike thing.
+2. For each candidate, confirm the comparison is direct (uses 'is', 'are', 'becomes', or renaming) rather than hedged with 'like' or 'as'.
+3. Check that the two things compared belong to different categories or domains, so the statement is not literally true.
+4. Infer the shared attribute the author wants transferred from the vehicle to the tenor (role, quality, function).
+5. Match that inference to the challenge's question (identify, interpret, or apply) and select or construct the response accordingly.
+6. Reject candidates whose comparison is literal, idiomatic-but-dead, or uses explicit comparison markers.
+
+## Constraints
+
+- Do not flag comparisons that use explicit markers such as 'like', 'as', 'resembles', or 'similar to'.
+- Do not flag statements that are literally true even if vivid; the two terms must belong to distinct categories.
+- Require a non-literal equation of two entities; mere descriptive adjectives or personification alone do not qualify.
+- Do not treat fixed idioms whose figurative sense has faded as instances of this device.
+
+## Example
+
+Positive: A passage states 'Her voice was a warm blanket on a cold night' when discussing how a speaker comforted listeners. Why: A voice (auditory) is directly equated with a blanket (tactile object) to transfer the quality of comfort without 'like' or 'as'.
+Negative: A passage states 'Her voice was like a warm blanket on a cold night.' Why: The explicit comparison marker 'like' makes this a simile rather than a direct substitution of one thing for another.

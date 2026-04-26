@@ -1,0 +1,19 @@
+---
+name: self-serving-bias
+description: Use when producing text that illustrates self serving bias
+skill_uid: a941-f289-cacf-6437
+category: reasoning
+source: s2.m1.wikipedia-seed
+---
+
+# self-serving-bias
+
+A cognitive or perceptual process that is distorted by the need to maintain and enhance one's self esteem.
+
+## When to Use
+
+- producing text that illustrates self serving bias
+
+## Example
+
+If I do well on the exam, it's because of my academic prowess and hard work. If I do poorly, it's because the course was poorly taught, and the exam was poorly proctored.

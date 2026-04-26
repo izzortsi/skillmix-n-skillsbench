@@ -1,0 +1,20 @@
+---
+name: complex-question-loaded-question-with-implicit-assumption
+description: Use when producing text that illustrates complex question (loaded question
+  with implicit assumption)
+skill_uid: 7876-61dd-dc24-4c2e
+category: rhetorical
+source: s2.m1.wikipedia-seed
+---
+
+# complex-question-loaded-question-with-implicit-assumption
+
+A question that is loaded with an implicit assumption.
+
+## When to Use
+
+- producing text that illustrates complex question (loaded question with implicit assumption)
+
+## Example
+
+'Why are you lying to me?' is a question that presupposes you are lying to me. Any answer you give will force you to agree you are lying.

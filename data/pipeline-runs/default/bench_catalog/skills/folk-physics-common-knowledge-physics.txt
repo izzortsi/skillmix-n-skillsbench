@@ -1,0 +1,36 @@
+---
+name: folk-physics-common-knowledge-physics
+description: Use when when the challenge hinges on predicting or interpreting an everyday
+  physical outcome that an average person would infer without formal training
+skill_uid: 6c8b-51cc-d9ac-3f5a
+category: physical knowledge
+source: bench_catalog.procedural-v1
+---
+
+# folk-physics-common-knowledge-physics
+
+The untrained human perception of basic physical phenomena.
+
+## When to Use
+
+- when the challenge hinges on predicting or interpreting an everyday physical outcome that an average person would infer without formal training
+
+## Procedure
+
+1. Scan the passage and challenge for references to everyday physical events (falling, rolling, floating, breaking, pouring, collisions, temperature changes).
+2. For each referenced event, predict the outcome a typical untrained observer would expect based on gravity, inertia, buoyancy, or contact forces.
+3. Compare that intuitive prediction against what the passage states or asks; note any gaps the challenge expects you to fill with common-sense physical reasoning.
+4. Apply the intuitive prediction only to resolve the specific question posed, avoiding elaboration into formal physics equations or edge cases.
+5. Confirm the physical claim involved is one an average person would accept without instruments or calculation before relying on this reasoning.
+
+## Constraints
+
+- Do not invoke this reasoning for scenarios requiring quantitative calculation, specialized equipment, or expert-level physics.
+- Do not apply it when the passage explicitly overrides normal physical intuition (e.g., zero-gravity, fictional physics).
+- Require that the predicted outcome be one virtually any adult would agree on; uncertain or contested outcomes do not qualify.
+- Do not extend intuitive reasoning to microscopic, relativistic, or quantum phenomena where naive expectations fail.
+
+## Example
+
+Positive: The challenge asks what happens to an unsupported cup nudged off a counter. Why: Gravity-driven falling is a universally expected everyday outcome resolvable by untrained intuition.
+Negative: The challenge asks the terminal velocity of a feather in a specified air density. Why: It demands quantitative physics beyond common perception, so naive intuition is insufficient.

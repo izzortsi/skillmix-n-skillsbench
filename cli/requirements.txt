@@ -1,0 +1,24 @@
+# llm-skills pipeline dependencies
+# install: pip install -r requirements.txt
+
+# core (all stages)
+PyYAML>=6.0
+requests>=2.25.0
+openai>=1.0.0
+litellm>=1.0.0
+
+# data loading (stage 1a)
+datasets>=2.14.0
+
+# visualization (stages 6, 9)
+matplotlib>=3.3.0
+numpy>=1.20.0
+
+# interactive setup arrow-key prompts (falls back to input() if absent)
+InquirerPy>=0.3.4
+
+# colored terminal output (falls back to plain text if absent)
+rich>=10.0.0
+
+# testing
+pytest>=7.0.0

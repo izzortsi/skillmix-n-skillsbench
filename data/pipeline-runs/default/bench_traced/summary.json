@@ -1,0 +1,23 @@
+{
+  "tasks_attempted": 100,
+  "episodes_produced": 200,
+  "api_failures": 0,
+  "per_condition": {
+    "baseline": {
+      "n": 100,
+      "passed": 83,
+      "pass_rate": 0.83,
+      "mean_score": 0.811
+    },
+    "curated": {
+      "n": 100,
+      "passed": 81,
+      "pass_rate": 0.81,
+      "mean_score": 0.8095
+    }
+  },
+  "model": "claude-opus-4-7",
+  "thinking_budget": 4096,
+  "extraction_method": "s4.m4.skill-injection-trace-v1",
+  "rejudge_note": "verdicts re-derived from response text after _score_deterministic bug fix"
+}

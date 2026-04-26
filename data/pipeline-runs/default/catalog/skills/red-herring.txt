@@ -1,0 +1,19 @@
+---
+name: red-herring
+description: Use when producing text that illustrates red herring
+skill_uid: 4c53-1ddf-a469-fb6a
+category: rhetorical
+source: s2.m1.wikipedia-seed
+---
+
+# red-herring
+
+Introducing irrelevant points to detract attention from a question.
+
+## When to Use
+
+- producing text that illustrates red herring
+
+## Example
+
+A member of the press asks the president why they voted to expand a welfare program. The president responds, 'The strength of America is the strength of its communities, and I am proud to make our communities better places.'

@@ -1,0 +1,165 @@
+================================================================================
+REPORT: LLM-SKILLS PIPELINE STATUS
+================================================================================
+
+Date:   2026-04-25
+Status: IN_PROGRESS
+
+================================================================================
+OVERVIEW
+================================================================================
+
+llm-skills/ realizes the PROJECT_SPECS 14-method grid as a single CLI-driven
+pipeline. Two evaluation modes coexist:
+
+  Skill-Mix (Yu et al.):  student writes text exhibiting k named skills;
+                          rubric judge scores on k+3 dimensions. Skill is
+                          a NAMED HANDLE -- catalog entries are declarative
+                          (definition + examples).
+
+  SkillsBench (Li et al.): skill is a PROCEDURE injected into the system
+                          prompt; baseline-vs-curated pass-rate measures
+                          whether the injection helps the student solve a
+                          held-out task.
+
+Both modes share the catalog-build step but consume different catalog shapes,
+hence the dual-catalog architecture (catalog/ vs bench_catalog/).
+
+Driver:    cli/orchestrator.py  (subprocess-isolated stages, crash recovery
+           via output_files existence check)
+Profile:   cli/profiles/default.yaml  (every stage_id_* field + provider specs)
+Stages:    cli/config/stage_registry.py:23-115  (8 stages)
+Run dir:   data/pipeline-runs/<profile>/<stage>/...
+
+================================================================================
+STAGE CHAIN
+================================================================================
+
+  catalog       -> build declarative Skill catalog
+                   default: s2.m1 (wikipedia_seeder); also s1.m1/m2/m3
+                   out: catalog/skills.json + catalog/skills/*.txt
+
+  compose       -> generate (question, answer) examples exhibiting k-tuples
+                   default: s3.m1 (frontier composer)
+                   out: compose/examples.json
+
+  verify        -> agentic verify+refine of example answers
+                   s3.m4; verifier + refiner roles
+                   out: verify/verified-examples.json
+
+  skillmix      -> Yu et al. evaluation against the declarative catalog
+                   s2.m2; student writes; judge scores k+3 rubric
+                   out: skillmix/trials.json
+
+  solve         -> solve ExtractedTasks with native thinking + exact-match
+                   s4.m4; LinearAgent captures thinking blocks
+                   out: solve/{solutions.jsonl, traces.jsonl, summary.json}
+
+  bench_catalog -> rewrite declarative catalog into procedural Skills
+                   b2_benchmarks/skillsbench/procedural_catalog.py via Opus
+                   each skill: when_to_use + procedure + constraints +
+                   dual positive/negative example
+                   out: bench_catalog/skills.json + bench_catalog/skills/*.txt
+
+  bench         -> SkillsBench corpus eval; multi-student sweep
+                   baseline (no skill) vs curated (skill in system prompt)
+                   per-task injection via bench_task_skill_map
+                   out: bench/{episodes.json, summary.json}
+
+  bench_viz     -> 10 heatmaps + summary charts
+                   out: bench/heatmaps/*.png
+
+================================================================================
+ACHIEVED
+================================================================================
+
+EXTRACTION (s1, s2)
+  - s1.m1 task_based_labeling: snake_case label per task + clustering
+  - s1.m2 direct_elicitation: hierarchical roots + subskills (parent_skill_uid)
+  - s1.m3 catalog_generation: category-driven batched generation
+  - s2.m1 wikipedia_seeder: Wikipedia source as ground-truth catalog
+  - Stable Skill.skill_uid identifier preserved across stages
+
+GENERATION + VERIFICATION (s3)
+  - s3.m1 frontier composer (default), s3.m2 domain-scoped, s3.m3 fiction
+  - s3.m4 verify+refine loop (max_rounds configurable)
+
+EVALUATION (s2.m2, s4.m4, b2)
+  - SkillMix harness with k+3 rubric (skillmix_student vs skillmix_judge)
+  - s4.m4 solver: LinearAgent + thinking_budget=4096, native thinking blocks
+    aggregated into ReasoningTrace.procedural_steps (traces.jsonl)
+  - SkillsBench corpus harness: singlecall + guided modes
+  - Per-task skill injection via bench_task_skill_map (t1-t8 mapped 1:1
+    to wikipedia-seed skills in default.yaml:75-83)
+  - Multi-student sweep (bench_models list) -- one episodes.json tagged
+    with .model
+  - Judge field separation: score (rubric thoroughness) vs conclusion_reached
+    (final answer correctness); passed := conclusion_reached
+  - Post-hoc rescore tool (b2_benchmarks/skillsbench/rescore.py)
+
+DUAL-CATALOG (regression fix)
+  - DIAGNOSED: declarative wikipedia-seed catalog used as bench injection
+    HURT mid-tier students (qwen3.5:2b -0.22, llama3.1:8b -0.11)
+  - ROOT CAUSE: Wikipedia "when_to_use" framed for text generation, not
+    skill detection; positive-only example primed false positives
+  - FIX: procedural_catalog.py rewrites each Skill via Opus with
+    detection-framed when_to_use + 3-6 numbered procedure steps + 4
+    anti-overmatch constraints + dual positive/negative example
+  - Cost: ~$1.32 in Opus to rewrite the 10-skill seed catalog
+  - Catalogs dumped as .txt under bench_catalog/skills/ and catalog/skills/
+
+INFRASTRUCTURE
+  - OAuth bridge for Anthropic Opus/Sonnet (RequestTransformer; system-array
+    format fixes 429 errors)
+  - Ollama support: think=False, keep_alive="0" for sweep memory eviction,
+    temperature-deprecated retry path
+  - Interactive setup with provider+model discovery (frontier vs student)
+  - Visualization: 10 chart variants including NaN-masked sparse-cell heatmaps
+  - 8 advanced tasks (t1-t8) with stratified difficulty + correct-conclusion
+    answers for exact-match grading
+
+================================================================================
+REMAINING
+================================================================================
+
+GAP A: SKILL-INJECTED COT TRACE CAPTURE
+  The two halves exist but do not cross.
+
+  s4.m4 captures native thinking blocks but only mentions skills by NAME in
+  the prompt (s4_extracting_skill_usage_instances/m4_skill_composition_testing.py:148
+  "Required skills: {skills}").
+
+  bench/corpus_harness.py injects the procedural Skill into the system prompt
+  but singlecall mode stores only the response text (no thinking blocks);
+  guided mode externalizes the procedure as turn prompts rather than letting
+  the model reason natively.
+
+  CLOSURE: new module (e.g. s4.m5_skill_traces) wiring format_skill_as_system
+  around the LinearAgent solver; emits one record per (task, model, condition,
+  skill) carrying both injected_skill and procedural_steps. ~100-150 LOC.
+
+GAP B: SFT DATASET STAGE
+  Next phase per user direction. Raw material on disk:
+    - bench/episodes.json:    (task x model x condition x skill) -> response + judge
+    - bench_catalog/skills.json: skill -> procedure/constraints/example
+    - solve/traces.jsonl:     task -> native CoT (frontier model)
+
+  DESIGN FORK (pending decision):
+    1. Apply-given-skill: system has Skill, learn to follow procedure
+       Demonstrations from passing curated episodes.
+    2. Select-then-apply: learn to identify the right skill, then apply
+       Needs negatives + skill-routing labels.
+    3. Multi-task of 1+2.
+
+  Format and training framework (HF SFTTrainer? axolotl? raw JSONL?) also
+  pending. Should land as a new pipeline stage emitting sft/dataset.jsonl.
+
+OPTIONAL VALIDATION
+  Re-run bench with the new procedural catalog to confirm the regression
+  fix on the affected mid-tier students. Estimated cost: $0.30-0.50 in Opus
+  judge calls. Not required to proceed; the procedural rewrite is a
+  defensible fix on its own merits per the SkillsBench paper definition.
+
+================================================================================
+END REPORT
+================================================================================

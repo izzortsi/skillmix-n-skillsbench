@@ -1,0 +1,237 @@
+[
+  {
+    "skill_uid": "a941-f289-cacf-6437",
+    "name": "self-serving-bias",
+    "description": "A cognitive or perceptual process that is distorted by the need to maintain and enhance one's self esteem.",
+    "category": "reasoning",
+    "example": "Positive: A manager says her team's successful quarter reflects her leadership, but the failed quarter was due to market conditions beyond her control. Why: Success is attributed internally and failure externally by the same subject, protecting self-image.\nNegative: A student says he passed because he studied hard and failed another exam because he didn't study enough. Why: Both outcomes receive internal attributions, so there is no self-protective asymmetry.",
+    "procedure": [
+      "Locate each statement in the passage where a person or group explains the cause of an outcome involving themselves.",
+      "Classify each outcome as favorable (success, praise, gain) or unfavorable (failure, blame, loss) for the speaker.",
+      "For each attribution, note whether the cause cited is internal (ability, effort, character) or external (luck, others, environment, conditions).",
+      "Flag the pattern only when favorable outcomes are paired with internal causes AND unfavorable outcomes are paired with external causes by the same subject.",
+      "Verify the pattern serves self-esteem protection or enhancement, rather than being justified by evidence presented in the passage.",
+      "Confirm at least one success-internal and one failure-external pairing coexist before marking the pattern as present."
+    ],
+    "when_to_use": "When asked to detect asymmetric causal attribution in which a speaker credits themselves for positive outcomes while blaming external factors for negative ones.",
+    "constraints": [
+      "Do not flag cases where only successes or only failures are discussed; both polarities must appear.",
+      "Do not flag attributions that the passage independently supports with evidence, even if they favor the speaker.",
+      "Do not flag third-party attributions; the speaker and the subject of the outcome must be the same.",
+      "A single self-congratulatory or blame-shifting statement alone is insufficient without the contrasting pair."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "c663-6a52-883c-c3ca",
+    "name": "accident-fallacy",
+    "description": "an informal fallacy and a deductively valid but unsound argument occurring in a statistical syllogism (an argument based on a generalization) when an exception to a rule of thumb is ignored.",
+    "category": "rhetorical",
+    "example": "Positive: An argument claims 'Taking others' property is theft; tax collectors take others' property; therefore tax collectors are thieves.' Why: It applies a rule-of-thumb to a case while ignoring the legal-authorization exception.\nNegative: An argument claims 'All triangles have three sides; this figure is a triangle; therefore it has three sides.' Why: The major premise is universally true with no exceptions, so no exception is being overlooked.",
+    "procedure": [
+      "Locate the general rule or generalization stated in the passage (often a broad claim like 'X is always Y' or 'all X are Y').",
+      "Identify the specific case or instance the argument applies the rule to.",
+      "Check whether the specific case has features that plausibly qualify as a recognized exception to the general rule (context, role, intent, legal permission, etc.).",
+      "Determine whether the argument ignores or suppresses that exception when drawing its conclusion about the specific case.",
+      "Confirm the argument's form is a statistical or rule-of-thumb syllogism rather than a universally true premise, and flag it only if an overlooked exception is what drives the faulty conclusion."
+    ],
+    "when_to_use": "when asked to detect or diagnose an argument that applies a general rule to a specific case while overlooking a legitimate exception to that rule.",
+    "constraints": [
+      "Do not flag arguments whose major premise is genuinely exceptionless rather than a generalization.",
+      "Do not flag arguments where the specific case does not actually fall under a recognized exception.",
+      "Require that both a generalization and an ignored qualifying exception be identifiable; missing either element disqualifies the match.",
+      "Do not confuse this with hasty generalization, which moves from cases to a rule rather than from a rule to a case."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "7876-61dd-dc24-4c2e",
+    "name": "complex-question-loaded-question-with-implicit-assumption",
+    "description": "A question that is loaded with an implicit assumption.",
+    "category": "rhetorical",
+    "example": "Positive: A question asks 'When did you stop cheating on the exams?' in a context where cheating has not been established. Why: Any dated answer concedes prior cheating, which was never agreed to.\nNegative: A question asks 'Why did the suspect confess?' in a passage that has already stated the suspect confessed. Why: The presupposition is an established fact in the passage, not a smuggled assumption.",
+    "procedure": [
+      "Locate every interrogative sentence in the passage or challenge.",
+      "For each question, list the propositions that must already be true for the question to make sense (its presuppositions).",
+      "Test each presupposition by asking whether a direct answer ('yes' or explanation) would force the respondent to concede that proposition.",
+      "Check whether the presupposition is contested, unestablished, or unfavorable to the respondent rather than mutually accepted background.",
+      "Mark the question as carrying an implicit assumption only if at least one presupposition is both non-trivial and not conceded elsewhere in the passage.",
+      "Record which specific proposition is being smuggled in, distinct from the surface question being asked."
+    ],
+    "when_to_use": "Apply when asked to identify, analyze, or flag questions whose phrasing forces the answerer to accept an unstated or disputed claim.",
+    "constraints": [
+      "Do not flag a question merely because it is pointed, accusatory, or emotionally charged if its presuppositions are already established facts.",
+      "Do not flag open-ended questions (who/what/why) that have no hidden claim beyond the topic itself.",
+      "Require that a direct answer logically entails agreement with the contested proposition; mere topical relevance is not enough.",
+      "Do not conflate a factual error inside a question with an embedded presupposition smuggled past the answerer."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "4c53-1ddf-a469-fb6a",
+    "name": "red-herring",
+    "description": "Introducing irrelevant points to detract attention from a question.",
+    "category": "rhetorical",
+    "example": "Positive: A reporter asks a CEO why quarterly profits dropped, and the CEO replies that the company is deeply committed to innovation and employee wellbeing. Why: the reply swaps the specific profit question for unrelated positive themes without addressing it.\nNegative: A reporter asks a CEO why quarterly profits dropped, and the CEO explains supply-chain delays before adding that the company remains committed to innovation. Why: the core question is directly answered, with the positive remark as supplement rather than substitution.",
+    "procedure": [
+      "Locate the explicit question or challenge posed in the passage and write down its core subject.",
+      "For each response sentence, identify its actual topic and compare it to the question's subject.",
+      "Mark any response segment that shifts to a broadly appealing or tangential topic without answering the core subject.",
+      "Check whether the shift uses positive or emotionally resonant language to make the diversion seem like a natural reply.",
+      "Confirm that the original question remains unaddressed after the diversion before concluding the pattern applies."
+    ],
+    "when_to_use": "when asked to detect a diversion in which a responder substitutes an irrelevant but appealing topic for a direct answer to a posed question.",
+    "constraints": [
+      "Do not flag a response that genuinely addresses the question even if it includes additional praise or context.",
+      "Require both a clear question and a clear topic shift; a vague or partial answer alone is not sufficient.",
+      "Do not flag off-topic remarks that occur without any prior question prompting them.",
+      "Do not rely on tone alone; the response must fail to engage the question's actual subject."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "e663-9326-5e78-c857",
+    "name": "metaphor",
+    "description": "a figure of speech that, for rhetorical effect, directly refers to one thing by mentioning another.",
+    "category": "literary",
+    "example": "Positive: A passage states 'Her voice was a warm blanket on a cold night' when discussing how a speaker comforted listeners. Why: A voice (auditory) is directly equated with a blanket (tactile object) to transfer the quality of comfort without 'like' or 'as'.\nNegative: A passage states 'Her voice was like a warm blanket on a cold night.' Why: The explicit comparison marker 'like' makes this a simile rather than a direct substitution of one thing for another.",
+    "procedure": [
+      "Scan the passage for sentences that equate or substitute one noun/concept for another unlike thing.",
+      "For each candidate, confirm the comparison is direct (uses 'is', 'are', 'becomes', or renaming) rather than hedged with 'like' or 'as'.",
+      "Check that the two things compared belong to different categories or domains, so the statement is not literally true.",
+      "Infer the shared attribute the author wants transferred from the vehicle to the tenor (role, quality, function).",
+      "Match that inference to the challenge's question (identify, interpret, or apply) and select or construct the response accordingly.",
+      "Reject candidates whose comparison is literal, idiomatic-but-dead, or uses explicit comparison markers."
+    ],
+    "when_to_use": "When asked to identify, interpret, or construct an implicit comparison where one thing is described as being another unlike thing without 'like' or 'as'.",
+    "constraints": [
+      "Do not flag comparisons that use explicit markers such as 'like', 'as', 'resembles', or 'similar to'.",
+      "Do not flag statements that are literally true even if vivid; the two terms must belong to distinct categories.",
+      "Require a non-literal equation of two entities; mere descriptive adjectives or personification alone do not qualify.",
+      "Do not treat fixed idioms whose figurative sense has faded as instances of this device."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "8e58-7e91-600c-5a44",
+    "name": "spatial-reasoning",
+    "description": "The capacity to reason about the spatial relationships between objects.",
+    "category": "logical",
+    "example": "Positive: A passage says a ladder reached the second-story window, and the question asks what can be inferred about the ladder's length. Why: the reaching relation constrains a physical dimension derivable from the stated arrangement.\nNegative: A passage says 'the argument fit the occasion' and the question asks about the argument's suitability. Why: 'fit' is used metaphorically, so no physical spatial inference is warranted.",
+    "procedure": [
+      "Scan the passage for nouns referring to physical objects, containers, paths, or locations and list them.",
+      "For each pair of objects mentioned together, identify the spatial relation described (inside, above, beside, passing through, fitting into, blocking, etc.).",
+      "Translate each relation into an implied constraint on size, shape, position, or orientation (e.g., 'X fit into Y' implies X's relevant dimension ≤ Y's opening).",
+      "Check the challenge question against these derived constraints to see whether answering it requires inferring a spatial property not stated explicitly.",
+      "Combine multiple spatial constraints when needed to resolve the question, and verify the inference is consistent with every relation stated in the passage."
+    ],
+    "when_to_use": "Use when the challenge requires inferring a physical property, position, or arrangement of objects from relational cues in the passage rather than from direct statements.",
+    "constraints": [
+      "Do not apply when the passage's relations are purely metaphorical or social rather than physical.",
+      "Require that the inference follow from a stated spatial relation, not from world knowledge about the objects alone.",
+      "Do not over-specify dimensions the passage leaves underdetermined; infer only the relation the text supports.",
+      "One spatial word is not enough; confirm the relation actually constrains the property the question asks about."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "6b61-1f46-7da2-22a0",
+    "name": "modus-ponens",
+    "description": "A syllogism that is of the form 'If P then Q. P. Hence Q.'",
+    "category": "logical",
+    "example": "Positive: A passage states 'If it rains, the match is canceled' and separately asserts 'It is raining,' prompting the student to infer the match is canceled. Why: the conditional and its affirmed antecedent are both present, yielding a valid consequent.\nNegative: A passage states 'If it rains, the match is canceled' and separately asserts 'The match was canceled,' prompting an inference that it rained. Why: only the consequent is affirmed, which does not license concluding the antecedent.",
+    "procedure": [
+      "Scan the passage for a conditional statement of the form 'if X then Y' (or equivalent phrasings like 'whenever X, Y' or 'X implies Y').",
+      "Identify the antecedent (the 'if' part) and the consequent (the 'then' part) of that conditional.",
+      "Search the passage for a separate assertion that the antecedent is true or has occurred.",
+      "Confirm the asserted fact matches the antecedent exactly, not a related or weaker claim.",
+      "If both the conditional and its affirmed antecedent are present, derive or select the consequent as the valid conclusion.",
+      "Reject the inference if the passage affirms the consequent, denies the antecedent, or introduces a different conditional structure."
+    ],
+    "when_to_use": "when asked to evaluate whether a conclusion validly follows from a conditional premise paired with an affirmed antecedent.",
+    "constraints": [
+      "Do not apply this pattern if only the consequent is asserted as true; that is a different and invalid inference.",
+      "Require both a conditional statement and an explicit affirmation of its antecedent before concluding.",
+      "Do not treat probabilistic or causal-sounding sentences as conditionals unless they establish a strict 'if-then' relationship.",
+      "Do not substitute a paraphrased or broader claim for the antecedent; the match must be exact in meaning."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "d544-fae1-7f2f-0941",
+    "name": "statistical-syllogism",
+    "description": "A syllogism that argues, using inductive reasoning, from a generalization true for the most part to a particular case.",
+    "category": "logical",
+    "example": "Positive: 'Most commuters in this city own a transit pass. Lena is a commuter here, so she likely has a transit pass.' Why: a majority premise plus individual membership yields a probabilistic conclusion about that individual.\nNegative: 'All mammals have lungs. A whale is a mammal, so a whale has lungs.' Why: the major premise is universal, making this a deductive categorical syllogism rather than an inductive inference from a statistical majority.",
+    "procedure": [
+      "Scan the passage for a generalization that holds for most (but not all) members of a group, using quantifiers like 'almost all', 'the majority', 'usually', or 'most'.",
+      "Locate a statement asserting that a specific individual or instance is a member of that group.",
+      "Check whether a conclusion is drawn (or is being asked) that applies the general trait to that specific member.",
+      "Verify the inference is inductive (probabilistic) rather than deductive: the premise must allow exceptions, not claim universality.",
+      "Confirm the three pieces align: the group in the generalization, the group in the membership claim, and the trait attributed to the individual must all match.",
+      "Flag or apply the pattern only when all three components (majority premise, membership premise, individual conclusion) are present and connected."
+    ],
+    "when_to_use": "Use when asked to detect, classify, or evaluate an argument that moves from a 'most members have property P' premise plus an individual's group membership to a conclusion about that individual.",
+    "constraints": [
+      "Do not flag arguments whose major premise is universal ('all' or 'none') rather than statistical.",
+      "Do not flag a standalone generalization that lacks an individual-case conclusion.",
+      "Require the group referenced in the generalization to be the same group the individual is said to belong to.",
+      "Do not treat a conclusion stated with certainty as equivalent when the premise is only probabilistic; note the inductive gap."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "19ff-7eff-4c1e-4eaa",
+    "name": "emotional-self-regulation",
+    "description": "a complex process that involves initiating, inhibiting, or modulating one's state or behavior in a given situation.",
+    "category": "theory of the mind",
+    "example": "Positive: A character feels a surge of anger during an argument, takes a deep breath, and counts to ten before responding. Why: there is a clear trigger and a deliberate self-directed action to modulate the reaction.\nNegative: A character speaks calmly throughout a pleasant conversation with a friend. Why: no emotional trigger is present and no modulation is occurring, so surface calmness does not qualify.",
+    "procedure": [
+      "Locate the character or agent in the passage experiencing an emotional trigger or internal state shift.",
+      "Scan for explicit actions taken by that agent to initiate, inhibit, or modulate that state (pausing, breathing, reframing, delaying response, seeking calm).",
+      "Verify the action is self-directed and aimed at managing one's own emotion or behavior, not at changing the situation or another person.",
+      "Check that the modulation occurs in response to a specific emotional stimulus present in the passage.",
+      "Match the identified behavior against the challenge's question or acceptance criteria before selecting or labeling it."
+    ],
+    "when_to_use": "when asked to detect or identify instances where a character consciously manages their own emotional state or behavioral response to a triggering situation.",
+    "constraints": [
+      "Do not flag routine calm behavior that is not preceded by an emotional trigger.",
+      "Do not flag actions aimed at regulating another person's emotions rather than one's own.",
+      "Require both a triggering state and a deliberate modulating action; one alone is not sufficient.",
+      "Do not flag mere suppression that is involuntary or externally coerced."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "6c8b-51cc-d9ac-3f5a",
+    "name": "folk-physics-common-knowledge-physics",
+    "description": "The untrained human perception of basic physical phenomena.",
+    "category": "physical knowledge",
+    "example": "Positive: The challenge asks what happens to an unsupported cup nudged off a counter. Why: Gravity-driven falling is a universally expected everyday outcome resolvable by untrained intuition.\nNegative: The challenge asks the terminal velocity of a feather in a specified air density. Why: It demands quantitative physics beyond common perception, so naive intuition is insufficient.",
+    "procedure": [
+      "Scan the passage and challenge for references to everyday physical events (falling, rolling, floating, breaking, pouring, collisions, temperature changes).",
+      "For each referenced event, predict the outcome a typical untrained observer would expect based on gravity, inertia, buoyancy, or contact forces.",
+      "Compare that intuitive prediction against what the passage states or asks; note any gaps the challenge expects you to fill with common-sense physical reasoning.",
+      "Apply the intuitive prediction only to resolve the specific question posed, avoiding elaboration into formal physics equations or edge cases.",
+      "Confirm the physical claim involved is one an average person would accept without instruments or calculation before relying on this reasoning."
+    ],
+    "when_to_use": "when the challenge hinges on predicting or interpreting an everyday physical outcome that an average person would infer without formal training",
+    "constraints": [
+      "Do not invoke this reasoning for scenarios requiring quantitative calculation, specialized equipment, or expert-level physics.",
+      "Do not apply it when the passage explicitly overrides normal physical intuition (e.g., zero-gravity, fictional physics).",
+      "Require that the predicted outcome be one virtually any adult would agree on; uncertain or contested outcomes do not qualify.",
+      "Do not extend intuitive reasoning to microscopic, relativistic, or quantum phenomena where naive expectations fail."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  }
+]

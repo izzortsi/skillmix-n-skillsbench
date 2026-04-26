@@ -1,0 +1,19 @@
+---
+name: spatial-reasoning
+description: Use when producing text that illustrates spatial reasoning
+skill_uid: 8e58-7e91-600c-5a44
+category: logical
+source: s2.m1.wikipedia-seed
+---
+
+# spatial-reasoning
+
+The capacity to reason about the spatial relationships between objects.
+
+## When to Use
+
+- producing text that illustrates spatial reasoning
+
+## Example
+
+The key fit into the box. Using spatial reasoning, one can deduce that the width of the key was smaller than the width of the box.

@@ -1,0 +1,26 @@
+[
+  {
+    "example_uid": "a8e1-0fc1-b261-1085",
+    "skill_uids": [
+      "6b61-1f46-7da2-22a0",
+      "19ff-7eff-4c1e-4eaa"
+    ],
+    "topic_uid": "",
+    "question": "My therapist said: 'If I notice my heart rate spiking during arguments with my partner, then I should step away and do box breathing before responding.' Last night during a fight about finances, I felt my chest tightening and my pulse racing. I ended up yelling things I regret. Walk me through what I should have done according to her rule, and give me a concrete plan for next time.",
+    "answer": "Your therapist gave you a conditional: if you notice your heart rate spiking during an argument with your partner, then you should step away and do box breathing before responding. Last night, by your own account, you did notice exactly that — your chest tightened and your pulse raced mid-argument. The antecedent of her rule was clearly met, so the conclusion followed directly: at that moment, the indicated action was to step away and do box breathing before saying anything else. Instead, you stayed engaged while physiologically activated, which is why the yelling happened. For next time, make the rule easier to execute under stress: (1) agree in advance with your partner on a neutral 'pause' word either of you can use without it being read as dismissal; (2) the moment you register the somatic cue — tight chest, racing pulse — treat it as a non-negotiable trigger to leave the room for 10–15 minutes; (3) do four rounds of box breathing (inhale 4, hold 4, exhale 4, hold 4) to bring your nervous system down from fight-or-flight; (4) only then return and resume. The goal is to make the step-away automatic so the rational rule your therapist gave you actually fires before the anger does.",
+    "verified": true,
+    "source": "s3.m4.agentic-verified"
+  },
+  {
+    "example_uid": "d76a-45b0-b908-935c",
+    "skill_uids": [
+      "a941-f289-cacf-6437",
+      "19ff-7eff-4c1e-4eaa"
+    ],
+    "topic_uid": "",
+    "question": "I just got passed over for a promotion at work and I'm furious. My manager said the person who got it had 'better stakeholder communication,' but honestly I think they just play golf with the VP. When I've been promoted before it was obviously because I earned it. I have a one-on-one with my manager tomorrow and I want to push back hard. How should I prepare for that conversation?",
+    "answer": "Before you prepare your talking points, it's worth noticing a pattern in how you're framing this: your past promotions read as earned on merit, while this setback reads as office politics. That asymmetry feels protective, but it will likely leak into tomorrow's meeting as defensiveness and make it harder to hear anything useful. So step one is to cool the system down before you walk in — try writing out the story in two columns (what you know vs. what you're inferring), sleep on it, and do a few minutes of paced breathing right before the meeting so you're not operating from a spike of anger. Step two is to go in with genuine curiosity rather than a rebuttal: ask your manager for concrete examples of the 'stakeholder communication' gap, what 'ready' would have looked like, and what a 6–12 month development plan toward the next opening would include. If, after that, the feedback still sounds like a pretext, you'll have real data to act on — but you'll also have protected the relationship and, more importantly, gotten an honest read on your own growth edges, which the golf-course narrative was quietly shielding you from.",
+    "verified": true,
+    "source": "s3.m4.agentic-verified"
+  }
+]

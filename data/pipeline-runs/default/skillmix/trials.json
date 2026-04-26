@@ -1,0 +1,56 @@
+[
+  {
+    "trial_uid": "77bb-2c52-ae6e-c6eb",
+    "model": "claude-sonnet-4-6",
+    "k": 2,
+    "sentence_limit": 2,
+    "skill_uids": [
+      "c663-6a52-883c-c3ca",
+      "a941-f289-cacf-6437"
+    ],
+    "topic_uid": "aee7-d172-ac85-2ccf",
+    "prompt": "I am studying natural-language skill composition. Please write a single piece of text, up to 2 sentences long, in the context of \"Beekeeping\", that illustrates ALL of the following skills at once. The text should be minimal and natural -- a short passage, not a list.\n\nSkills to illustrate (with definitions and examples for reference):\nSkill 1: accident-fallacy\n  Definition: an informal fallacy and a deductively valid but unsound argument occurring in a statistical syllogism (an argument based on a generalization) when an exception to a rule of thumb is ignored.\n  Example: Cutting people with knives is a crime. Surgeons cut people with knives. Surgeons are criminals.\nSkill 2: self-serving-bias\n  Definition: A cognitive or perceptual process that is distorted by the need to maintain and enhance one's self esteem.\n  Example: If I do well on the exam, it's because of my academic prowess and hard work. If I do poorly, it's because the course was poorly taught, and the exam was poorly proctored.\n\nConstraints:\n- Do NOT explicitly name any of the skills in the text.\n- Use each skill in its technical sense, not a colloquial one.\n- Stay within 2 sentences.\n- Stay on the topic \"Beekeeping\".\n\nReturn ONLY the text itself -- no explanation, no preface.\n",
+    "response": "When my hive thrives, it's clearly due to my expert handling and deep knowledge of bee behavior; when colonies collapse, it must be because bees are inherently unpredictable and impossible to manage reliably. After all, since beekeepers are supposed to protect their bees, any keeper whose hive dies must simply be a negligent beekeeper—overlooking, of course, that even the most skilled apiarists lose colonies to disease and harsh winters.",
+    "rubric_points": {
+      "per_skill": {
+        "skill_1": 1,
+        "skill_2": 1
+      },
+      "on_topic": 1,
+      "coherent": 1,
+      "within_sentence_limit": 1,
+      "explicit_skill_name_penalty": 0,
+      "colloquial_use_penalty": 0
+    },
+    "score": 5.0,
+    "full_points": true,
+    "rationale": "The first sentence illustrates self-serving bias by attributing hive success to personal skill and failure to external factors (unpredictable bees). The second sentence illustrates accident fallacy by applying the general rule that beekeepers protect bees without accounting for legitimate exceptions like disease and harsh winters."
+  },
+  {
+    "trial_uid": "a94c-2df4-5950-9cf7",
+    "model": "claude-sonnet-4-6",
+    "k": 2,
+    "sentence_limit": 2,
+    "skill_uids": [
+      "4c53-1ddf-a469-fb6a",
+      "6c8b-51cc-d9ac-3f5a"
+    ],
+    "topic_uid": "5e2e-a6df-0991-aec0",
+    "prompt": "I am studying natural-language skill composition. Please write a single piece of text, up to 2 sentences long, in the context of \"The Ottoman Empire\", that illustrates ALL of the following skills at once. The text should be minimal and natural -- a short passage, not a list.\n\nSkills to illustrate (with definitions and examples for reference):\nSkill 1: red-herring\n  Definition: Introducing irrelevant points to detract attention from a question.\n  Example: A member of the press asks the president why they voted to expand a welfare program. The president responds, 'The strength of America is the strength of its communities, and I am proud to make our communities better places.'\nSkill 2: folk-physics-common-knowledge-physics\n  Definition: The untrained human perception of basic physical phenomena.\n  Example: 'If I roll the pen off of the table, it will fall to the floor.'\n\nConstraints:\n- Do NOT explicitly name any of the skills in the text.\n- Use each skill in its technical sense, not a colloquial one.\n- Stay within 2 sentences.\n- Stay on the topic \"The Ottoman Empire\".\n\nReturn ONLY the text itself -- no explanation, no preface.\n",
+    "response": "When asked why the Ottoman Empire's navy struggled despite controlling vast coastlines, a vizier replied that the empire's true greatness lay in its unmatched land armies and the glory of its sultans. Of course, everyone knew that a cannonball dropped from a minaret would always fall straight to the ground, just as the empire's maritime ambitions inevitably sank under their own neglect.",
+    "rubric_points": {
+      "per_skill": {
+        "skill_1": 1,
+        "skill_2": 1
+      },
+      "on_topic": 1,
+      "coherent": 1,
+      "within_sentence_limit": 1,
+      "explicit_skill_name_penalty": 0,
+      "colloquial_use_penalty": 0
+    },
+    "score": 5.0,
+    "full_points": true,
+    "rationale": "The vizier deflects the naval question by praising land armies and sultans, a clear red herring, and the cannonball-falling-from-a-minaret observation illustrates folk physics. The text is coherent, on topic, within two sentences, and does not name either skill."
+  }
+]

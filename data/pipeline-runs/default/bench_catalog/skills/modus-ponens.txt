@@ -1,0 +1,37 @@
+---
+name: modus-ponens
+description: Use when when asked to evaluate whether a conclusion validly follows
+  from a conditional premise paired with an affirmed antecedent.
+skill_uid: 6b61-1f46-7da2-22a0
+category: logical
+source: bench_catalog.procedural-v1
+---
+
+# modus-ponens
+
+A syllogism that is of the form 'If P then Q. P. Hence Q.'
+
+## When to Use
+
+- when asked to evaluate whether a conclusion validly follows from a conditional premise paired with an affirmed antecedent.
+
+## Procedure
+
+1. Scan the passage for a conditional statement of the form 'if X then Y' (or equivalent phrasings like 'whenever X, Y' or 'X implies Y').
+2. Identify the antecedent (the 'if' part) and the consequent (the 'then' part) of that conditional.
+3. Search the passage for a separate assertion that the antecedent is true or has occurred.
+4. Confirm the asserted fact matches the antecedent exactly, not a related or weaker claim.
+5. If both the conditional and its affirmed antecedent are present, derive or select the consequent as the valid conclusion.
+6. Reject the inference if the passage affirms the consequent, denies the antecedent, or introduces a different conditional structure.
+
+## Constraints
+
+- Do not apply this pattern if only the consequent is asserted as true; that is a different and invalid inference.
+- Require both a conditional statement and an explicit affirmation of its antecedent before concluding.
+- Do not treat probabilistic or causal-sounding sentences as conditionals unless they establish a strict 'if-then' relationship.
+- Do not substitute a paraphrased or broader claim for the antecedent; the match must be exact in meaning.
+
+## Example
+
+Positive: A passage states 'If it rains, the match is canceled' and separately asserts 'It is raining,' prompting the student to infer the match is canceled. Why: the conditional and its affirmed antecedent are both present, yielding a valid consequent.
+Negative: A passage states 'If it rains, the match is canceled' and separately asserts 'The match was canceled,' prompting an inference that it rained. Why: only the consequent is affirmed, which does not license concluding the antecedent.

@@ -1,0 +1,9 @@
+Loaded 3 examples and 10 catalog skills
+[1/3] a8e1-0fc1-b261-1085 k=2 skills=['modus-ponens', 'emotional-self-regulation']
+  PASS in 1 round(s)
+[2/3] d76a-45b0-b908-935c k=2 skills=['self-serving-bias', 'emotional-self-regulation']
+  PASS in 1 round(s)
+[3/3] 1ad0-7f66-a0e8-3d05 k=2 skills=['self-serving-bias', 'complex-question-loaded-question-with-implicit-assumption']
+  REJECT after 1 round(s): The response discusses both skills meta-analytically but does not exhibit either in its technical sense.
+
+verified=2  rejected=1  -> /home/istrozzi/Documents/kk-digital-docker/llm-skills/data/pipeline-runs/default/verify/

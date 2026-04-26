@@ -1,0 +1,37 @@
+---
+name: emotional-self-regulation
+description: Use when when asked to detect or identify instances where a character
+  consciously manages their own emotional state or behavioral response to a triggering
+  situation.
+skill_uid: 19ff-7eff-4c1e-4eaa
+category: theory of the mind
+source: bench_catalog.procedural-v1
+---
+
+# emotional-self-regulation
+
+a complex process that involves initiating, inhibiting, or modulating one's state or behavior in a given situation.
+
+## When to Use
+
+- when asked to detect or identify instances where a character consciously manages their own emotional state or behavioral response to a triggering situation.
+
+## Procedure
+
+1. Locate the character or agent in the passage experiencing an emotional trigger or internal state shift.
+2. Scan for explicit actions taken by that agent to initiate, inhibit, or modulate that state (pausing, breathing, reframing, delaying response, seeking calm).
+3. Verify the action is self-directed and aimed at managing one's own emotion or behavior, not at changing the situation or another person.
+4. Check that the modulation occurs in response to a specific emotional stimulus present in the passage.
+5. Match the identified behavior against the challenge's question or acceptance criteria before selecting or labeling it.
+
+## Constraints
+
+- Do not flag routine calm behavior that is not preceded by an emotional trigger.
+- Do not flag actions aimed at regulating another person's emotions rather than one's own.
+- Require both a triggering state and a deliberate modulating action; one alone is not sufficient.
+- Do not flag mere suppression that is involuntary or externally coerced.
+
+## Example
+
+Positive: A character feels a surge of anger during an argument, takes a deep breath, and counts to ten before responding. Why: there is a clear trigger and a deliberate self-directed action to modulate the reaction.
+Negative: A character speaks calmly throughout a pleasant conversation with a friend. Why: no emotional trigger is present and no modulation is occurring, so surface calmness does not qualify.

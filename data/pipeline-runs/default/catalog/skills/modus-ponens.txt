@@ -1,0 +1,19 @@
+---
+name: modus-ponens
+description: Use when producing text that illustrates modus ponens
+skill_uid: 6b61-1f46-7da2-22a0
+category: logical
+source: s2.m1.wikipedia-seed
+---
+
+# modus-ponens
+
+A syllogism that is of the form 'If P then Q. P. Hence Q.'
+
+## When to Use
+
+- producing text that illustrates modus ponens
+
+## Example
+
+'If today is Tuesday, then John will go to work. Today is Tuesday. Therefore, John will go to work.'

@@ -1,0 +1,122 @@
+[
+  {
+    "skill_uid": "a941-f289-cacf-6437",
+    "name": "self-serving-bias",
+    "description": "A cognitive or perceptual process that is distorted by the need to maintain and enhance one's self esteem.",
+    "category": "reasoning",
+    "example": "If I do well on the exam, it's because of my academic prowess and hard work. If I do poorly, it's because the course was poorly taught, and the exam was poorly proctored.",
+    "procedure": [],
+    "when_to_use": "producing text that illustrates self serving bias",
+    "constraints": [],
+    "source": "s2.m1.wikipedia-seed",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "c663-6a52-883c-c3ca",
+    "name": "accident-fallacy",
+    "description": "an informal fallacy and a deductively valid but unsound argument occurring in a statistical syllogism (an argument based on a generalization) when an exception to a rule of thumb is ignored.",
+    "category": "rhetorical",
+    "example": "Cutting people with knives is a crime. Surgeons cut people with knives. Surgeons are criminals.",
+    "procedure": [],
+    "when_to_use": "producing text that illustrates accident (fallacy)",
+    "constraints": [],
+    "source": "s2.m1.wikipedia-seed",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "7876-61dd-dc24-4c2e",
+    "name": "complex-question-loaded-question-with-implicit-assumption",
+    "description": "A question that is loaded with an implicit assumption.",
+    "category": "rhetorical",
+    "example": "'Why are you lying to me?' is a question that presupposes you are lying to me. Any answer you give will force you to agree you are lying.",
+    "procedure": [],
+    "when_to_use": "producing text that illustrates complex question (loaded question with implicit assumption)",
+    "constraints": [],
+    "source": "s2.m1.wikipedia-seed",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "4c53-1ddf-a469-fb6a",
+    "name": "red-herring",
+    "description": "Introducing irrelevant points to detract attention from a question.",
+    "category": "rhetorical",
+    "example": "A member of the press asks the president why they voted to expand a welfare program. The president responds, 'The strength of America is the strength of its communities, and I am proud to make our communities better places.'",
+    "procedure": [],
+    "when_to_use": "producing text that illustrates red herring",
+    "constraints": [],
+    "source": "s2.m1.wikipedia-seed",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "e663-9326-5e78-c857",
+    "name": "metaphor",
+    "description": "a figure of speech that, for rhetorical effect, directly refers to one thing by mentioning another.",
+    "category": "literary",
+    "example": "'All the world's a stage, And all the men and women merely players' is a metaphor because it's a comparison without using 'like' or 'as.'",
+    "procedure": [],
+    "when_to_use": "producing text that illustrates metaphor",
+    "constraints": [],
+    "source": "s2.m1.wikipedia-seed",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "8e58-7e91-600c-5a44",
+    "name": "spatial-reasoning",
+    "description": "The capacity to reason about the spatial relationships between objects.",
+    "category": "logical",
+    "example": "The key fit into the box. Using spatial reasoning, one can deduce that the width of the key was smaller than the width of the box.",
+    "procedure": [],
+    "when_to_use": "producing text that illustrates spatial reasoning",
+    "constraints": [],
+    "source": "s2.m1.wikipedia-seed",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "6b61-1f46-7da2-22a0",
+    "name": "modus-ponens",
+    "description": "A syllogism that is of the form 'If P then Q. P. Hence Q.'",
+    "category": "logical",
+    "example": "'If today is Tuesday, then John will go to work. Today is Tuesday. Therefore, John will go to work.'",
+    "procedure": [],
+    "when_to_use": "producing text that illustrates modus ponens",
+    "constraints": [],
+    "source": "s2.m1.wikipedia-seed",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "d544-fae1-7f2f-0941",
+    "name": "statistical-syllogism",
+    "description": "A syllogism that argues, using inductive reasoning, from a generalization true for the most part to a particular case.",
+    "category": "logical",
+    "example": "'Almost all people are taller than 26 inches. Gareth is a person. Therefore, Gareth is taller than 26 inches.'",
+    "procedure": [],
+    "when_to_use": "producing text that illustrates statistical syllogism",
+    "constraints": [],
+    "source": "s2.m1.wikipedia-seed",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "19ff-7eff-4c1e-4eaa",
+    "name": "emotional-self-regulation",
+    "description": "a complex process that involves initiating, inhibiting, or modulating one's state or behavior in a given situation.",
+    "category": "theory of the mind",
+    "example": "Examples of emotional self regulation include meditating, pausing to collect oneself before speaking, and practicing stress management.",
+    "procedure": [],
+    "when_to_use": "producing text that illustrates emotional self regulation",
+    "constraints": [],
+    "source": "s2.m1.wikipedia-seed",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "6c8b-51cc-d9ac-3f5a",
+    "name": "folk-physics-common-knowledge-physics",
+    "description": "The untrained human perception of basic physical phenomena.",
+    "category": "physical knowledge",
+    "example": "'If I roll the pen off of the table, it will fall to the floor.'",
+    "procedure": [],
+    "when_to_use": "producing text that illustrates folk physics (common knowledge physics)",
+    "constraints": [],
+    "source": "s2.m1.wikipedia-seed",
+    "parent_skill_uid": ""
+  }
+]

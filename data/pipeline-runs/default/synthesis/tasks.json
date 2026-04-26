@@ -1,0 +1,3107 @@
+[
+  {
+    "task_uid": "4bf1-d184-3b4b-c93f",
+    "title": "Startup founder pitch night",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:self-serving-bias",
+    "source_document_uid": "a941-f289-cacf-6437",
+    "question": "Is the self-serving bias pattern present? Answer yes or no.",
+    "input": "At a pitch night, founder Lena says: 'Our app's viral growth last year happened because of the brilliant onboarding flow my team and I designed from scratch. We knew exactly what users needed. As for the slowdown this quarter, well, the entire ad market collapsed, Apple changed its tracking rules, and a competitor got bought by Google. Honestly, no one in our space could have grown through that. We're still the best team in the category.'",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "viral growth attributed internally to team's design ability",
+        "slowdown attributed externally to ad market, Apple, competitor",
+        "same speaker is subject of both outcomes",
+        "both polarities (success and failure) are present",
+        "asymmetry serves self-image protection"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "a941-f289-cacf-6437"
+      ],
+      "skill_names": [
+        "self-serving-bias"
+      ],
+      "skill_categories": [
+        "reasoning"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "3b55-f862-caf8-03b7",
+    "title": "Surgeon outcomes review",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:self-serving-bias",
+    "source_document_uid": "a941-f289-cacf-6437",
+    "question": "Is the self-serving bias pattern present? Answer yes or no.",
+    "input": "Dr. Patel reviews her year: 'My survival rate on the Whipple procedures was the highest in the department because I refined a new clamping technique through hundreds of practice hours. The three post-op infections we saw were unfortunate, but the hospital's HVAC system was under repair those weeks and the infection-control logs from facilities confirm airborne particulates spiked 400% above baseline during exactly those cases. The CDC investigator agreed the cluster was facility-driven.'",
+    "output": "no",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "success attributed internally to refined technique",
+        "failure attributed externally to HVAC/particulates",
+        "the external attribution is independently corroborated by logs and CDC",
+        "evidence-supported attributions should not be flagged",
+        "pattern is not self-protective when justified"
+      ],
+      "correct_conclusion": "no",
+      "skill_uids": [
+        "a941-f289-cacf-6437"
+      ],
+      "skill_names": [
+        "self-serving-bias"
+      ],
+      "skill_categories": [
+        "reasoning"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "8aaf-3551-f7ec-7855",
+    "title": "Coach postgame remarks",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:self-serving-bias",
+    "source_document_uid": "a941-f289-cacf-6437",
+    "question": "Is the self-serving bias pattern present? Answer yes or no.",
+    "input": "Coach Ruiz, after a split doubleheader: 'We won game one because I drilled the bunt-defense rotation all spring and the players executed my system perfectly. Game two we lost, but the umpire's strike zone was a joke, the field was waterlogged from yesterday's storm, and the scheduler stuck us with a 30-minute turnaround. Take any of those away and we sweep.'",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "win attributed internally to coach's drilling and system",
+        "loss attributed externally to umpire, field, schedule",
+        "same subject (coach/team) for both outcomes",
+        "no independent evidence supports the external attributions",
+        "asymmetric pattern protects self-image"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "a941-f289-cacf-6437"
+      ],
+      "skill_names": [
+        "self-serving-bias"
+      ],
+      "skill_categories": [
+        "reasoning"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "8656-fb5e-52e7-e64f",
+    "title": "Novelist on two books",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:self-serving-bias",
+    "source_document_uid": "a941-f289-cacf-6437",
+    "question": "Is the self-serving bias pattern present? Answer yes or no.",
+    "input": "Novelist Aaron in an interview: 'My debut bombed. I'll own it — I rushed the second act, my dialogue was wooden, and I ignored my editor's structural notes. I just wasn't ready as a craftsman. The new book is doing well because I spent four years studying scene construction and I finally learned how to revise. Both outcomes are on me.'",
+    "output": "no",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "failure attributed internally to rushed work and weak craft",
+        "success attributed internally to study and revision",
+        "both outcomes receive internal attributions",
+        "no asymmetry exists",
+        "pattern requires success-internal AND failure-external pairing"
+      ],
+      "correct_conclusion": "no",
+      "skill_uids": [
+        "a941-f289-cacf-6437"
+      ],
+      "skill_names": [
+        "self-serving-bias"
+      ],
+      "skill_categories": [
+        "reasoning"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "80ec-49e2-8d13-4df2",
+    "title": "Politician campaign debrief",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:self-serving-bias",
+    "source_document_uid": "a941-f289-cacf-6437",
+    "question": "Is the self-serving bias pattern present? Answer yes or no.",
+    "input": "Senator Hollis: 'We carried the suburban district because my ground game was unmatched and my message on taxes resonated with the values I've championed for twenty years. The rural counties we lost? Voter suppression by the secretary of state, a hostile local press owned by my opponent's donor, and a freak ice storm on election day that hit our turnout zones hardest. The map would look very different on a fair playing field.'",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "suburban win credited internally to ground game and message",
+        "rural loss blamed externally on suppression, press, weather",
+        "same speaker is subject of both outcomes",
+        "both polarities present",
+        "no evidence in passage justifies the external claims"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "a941-f289-cacf-6437"
+      ],
+      "skill_names": [
+        "self-serving-bias"
+      ],
+      "skill_categories": [
+        "reasoning"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "ed11-419d-9d85-5b2c",
+    "title": "Restaurant owner Yelp response",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:self-serving-bias",
+    "source_document_uid": "a941-f289-cacf-6437",
+    "question": "Is the self-serving bias pattern present? Answer yes or no.",
+    "input": "Owner Marisol writes: 'The rave reviews about our tasting menu are flattering — that menu reflects my fifteen years of training in Lyon and my obsessive sourcing standards. As for the recent one-star reviews about slow service, our POS vendor pushed a buggy update on Friday that froze terminals for 90 minutes; the vendor has since issued a public apology and refunded our subscription, which I've posted below.'",
+    "output": "no",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "praise attributed internally to training and sourcing",
+        "complaints attributed externally to POS vendor",
+        "external attribution corroborated by vendor apology and refund",
+        "evidence-justified attributions are not flagged",
+        "absence of self-protective asymmetry once evidence considered"
+      ],
+      "correct_conclusion": "no",
+      "skill_uids": [
+        "a941-f289-cacf-6437"
+      ],
+      "skill_names": [
+        "self-serving-bias"
+      ],
+      "skill_categories": [
+        "reasoning"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "6ba9-5233-e5cc-b3dd",
+    "title": "Two students compared",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:self-serving-bias",
+    "source_document_uid": "a941-f289-cacf-6437",
+    "question": "Considering only Jamal's own attributions, is the self-serving bias pattern present? Answer yes or no.",
+    "input": "Two roommates discuss midterms. Jamal says: 'I aced chem because I memorized every reaction mechanism. I tanked the history exam because the professor writes unfair trick questions and grades on a brutal curve nobody warned us about.' Priya says: 'Jamal always blames professors. Honestly, his chem grade was lucky — half the class got As because of an answer key leak that's now under investigation.'",
+    "output": "yes",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "chem success attributed internally to memorization by Jamal",
+        "history failure attributed externally to professor and curve by Jamal",
+        "Priya's third-party attribution is excluded per skill constraints",
+        "both polarities by same subject (Jamal) present",
+        "asymmetric self-protective pattern in Jamal's own statements"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "a941-f289-cacf-6437"
+      ],
+      "skill_names": [
+        "self-serving-bias"
+      ],
+      "skill_categories": [
+        "reasoning"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "0749-12e6-753a-1b5c",
+    "title": "Quarterly board memo",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:self-serving-bias",
+    "source_document_uid": "a941-f289-cacf-6437",
+    "question": "Is the self-serving bias pattern present? Answer yes or no.",
+    "input": "CEO memo excerpt: 'Revenue beat guidance by 12%, a direct result of the pricing strategy I personally championed against internal skepticism. Margins compressed in the same period, but only because steel input costs rose 40% on tariffs announced mid-quarter and the dock strike delayed our highest-margin SKUs. Our underlying execution was flawless.'",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "revenue beat credited internally to CEO's pricing strategy",
+        "margin compression blamed externally on tariffs and strike",
+        "same speaker (CEO) is subject of both outcomes",
+        "both success and failure polarities present",
+        "no independent evidence cited to justify externalization"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "a941-f289-cacf-6437"
+      ],
+      "skill_names": [
+        "self-serving-bias"
+      ],
+      "skill_categories": [
+        "reasoning"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "f585-d12f-3a0c-d440",
+    "title": "Researcher grant report",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:self-serving-bias",
+    "source_document_uid": "a941-f289-cacf-6437",
+    "question": "Is the self-serving bias pattern present? Answer yes or no.",
+    "input": "Dr. Okafor's report: 'Aim 1 succeeded — we identified the binding pocket. I attribute this to the cryo-EM facility upgrade the university funded last year and to my postdoc Wei's exceptional sample prep. Aim 2 failed; I underestimated the protein's instability and chose the wrong buffer system. That was my mistake and I've redesigned the protocol accordingly.'",
+    "output": "no",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "success attributed externally to facility and postdoc",
+        "failure attributed internally to PI's own choices",
+        "pattern is the inverse of self-serving bias",
+        "required success-internal pairing is absent",
+        "both polarities present but not asymmetrically self-protective"
+      ],
+      "correct_conclusion": "no",
+      "skill_uids": [
+        "a941-f289-cacf-6437"
+      ],
+      "skill_names": [
+        "self-serving-bias"
+      ],
+      "skill_categories": [
+        "reasoning"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "5398-ac06-a32e-6b10",
+    "title": "Two managers, which biased",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:self-serving-bias",
+    "source_document_uid": "a941-f289-cacf-6437",
+    "question": "Which manager exhibits the self-serving bias pattern? Answer A or B.",
+    "input": "Manager A (Tess): 'Our team hit Q3 targets because I restructured the workflow. We missed Q4 because procurement keeps fumbling vendor contracts and HR can't fill the two open roles I requested in July.' Manager B (Owen): 'We hit Q3 because the new CRM rollout — which IT, not I, drove — gave us better leads. We missed Q4 because I prioritized the wrong accounts and didn't coach the junior reps enough.'",
+    "output": "A",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "Tess credits success internally (restructuring) and blames failure externally (procurement, HR)",
+        "Owen credits success externally (IT/CRM) and blames failure internally (own prioritization)",
+        "only Tess shows the success-internal + failure-external asymmetry",
+        "Owen shows the inverse pattern",
+        "answer is A"
+      ],
+      "correct_conclusion": "A",
+      "skill_uids": [
+        "a941-f289-cacf-6437"
+      ],
+      "skill_names": [
+        "self-serving-bias"
+      ],
+      "skill_categories": [
+        "reasoning"
+      ]
+    },
+    "query_type": "SINGLE_WORD",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "0bff-a68c-a7f5-310a",
+    "title": "Surgeon and the cutting rule",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:accident-fallacy",
+    "source_document_uid": "c663-6a52-883c-c3ca",
+    "question": "Does this argument commit the fallacy of accident? Answer yes or no.",
+    "input": "Consider this argument: 'Cutting into another person's body without their consent is assault. Dr. Patel cut into Mr. Chen's abdomen yesterday at Mercy Hospital. Therefore, Dr. Patel committed assault and should be prosecuted.' The speaker notes that Mr. Chen had been brought in unconscious after a car accident with massive internal bleeding, and that Dr. Patel performed emergency surgery under the hospital's standing protocols for unconscious trauma patients.",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the general rule about cutting without consent being assault",
+        "the specific case of emergency surgery on an unconscious patient",
+        "the recognized exception for emergency medical care / implied consent",
+        "the argument ignores this exception when drawing its conclusion"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "c663-6a52-883c-c3ca"
+      ],
+      "skill_names": [
+        "accident-fallacy"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "6948-d449-310c-11fa",
+    "title": "Triangle interior angles",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:accident-fallacy",
+    "source_document_uid": "c663-6a52-883c-c3ca",
+    "question": "Does this argument commit the fallacy of accident? Answer yes or no.",
+    "input": "Consider this argument: 'The interior angles of any Euclidean triangle sum to 180 degrees. Triangle ABC, drawn on this flat sheet of paper using straight line segments, is a Euclidean triangle. Therefore, the interior angles of triangle ABC sum to 180 degrees.' A critic objects that this argument applies a general rule to a specific case and must therefore commit the fallacy of accident.",
+    "output": "no",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the major premise about Euclidean triangles is exceptionless, not a generalization",
+        "no recognized exception applies to triangle ABC",
+        "applying a rule to a case is not by itself the fallacy",
+        "the fallacy requires an overlooked legitimate exception"
+      ],
+      "correct_conclusion": "no",
+      "skill_uids": [
+        "c663-6a52-883c-c3ca"
+      ],
+      "skill_names": [
+        "accident-fallacy"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "f49c-85f0-09a9-723e",
+    "title": "Shouting in public spaces",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:accident-fallacy",
+    "source_document_uid": "c663-6a52-883c-c3ca",
+    "question": "What fallacy does the pundit's argument commit?",
+    "input": "A pundit argues: 'Shouting loudly in crowded public buildings causes panic and is therefore wrong. Marcus shouted loudly in a crowded train station last Tuesday. Therefore, Marcus acted wrongly and should be fined for disturbing the peace.' Witnesses confirm that Marcus shouted because he had spotted smoke pouring from a maintenance closet and was warning travelers to evacuate before the fire alarm system activated.",
+    "output": "accident",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the generalization that shouting in crowded buildings is wrong",
+        "the specific case of Marcus shouting at the station",
+        "the legitimate exception for warning others of imminent danger",
+        "the argument ignores the warning-of-danger exception"
+      ],
+      "correct_conclusion": "accident",
+      "skill_uids": [
+        "c663-6a52-883c-c3ca"
+      ],
+      "skill_names": [
+        "accident-fallacy"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "SINGLE_WORD",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "4335-8e71-479b-faf8",
+    "title": "Lying is wrong premise",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:accident-fallacy",
+    "source_document_uid": "c663-6a52-883c-c3ca",
+    "question": "Which informal fallacy best describes the blogger's reasoning?",
+    "input": "An ethics blogger writes: 'Lying is wrong. When the secret police came to Anna's door asking whether she was hiding refugees, Anna told them no, even though refugees were hidden in her cellar. Therefore, Anna acted wrongly and her conduct deserves moral condemnation.' The blogger acknowledges the circumstances but insists the rule against lying admits no qualifications when applied to particular acts.",
+    "output": "accident",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the rule-of-thumb that lying is wrong",
+        "the specific case of Anna lying to the secret police",
+        "the recognized exception for protecting innocent life from grave harm",
+        "the argument suppresses this exception"
+      ],
+      "correct_conclusion": "accident",
+      "skill_uids": [
+        "c663-6a52-883c-c3ca"
+      ],
+      "skill_names": [
+        "accident-fallacy"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "SINGLE_WORD",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "1281-bc30-7668-241a",
+    "title": "Bachelor and unmarried man",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:accident-fallacy",
+    "source_document_uid": "c663-6a52-883c-c3ca",
+    "question": "Is the student correct that this is the fallacy of accident? Answer yes or no.",
+    "input": "Consider this argument: 'Every bachelor is an unmarried man. Tomas is a bachelor according to every public record and his own statement. Therefore, Tomas is an unmarried man.' A student claims this commits the fallacy of accident because it applies a sweeping generalization about bachelors to one particular person without considering that Tomas might fall under some unstated exception.",
+    "output": "no",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the major premise is a definitional truth, not a generalization",
+        "there is no recognized exception to the definition of bachelor",
+        "applying definitions to instances is valid deduction",
+        "the fallacy requires an ignored legitimate exception, which is absent here"
+      ],
+      "correct_conclusion": "no",
+      "skill_uids": [
+        "c663-6a52-883c-c3ca"
+      ],
+      "skill_names": [
+        "accident-fallacy"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "3edd-7881-4027-cfeb",
+    "title": "Free speech absolutist",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:accident-fallacy",
+    "source_document_uid": "c663-6a52-883c-c3ca",
+    "question": "Name the fallacy in the commentator's argument.",
+    "input": "A commentator declares: 'People have the right to say whatever they want; that is what free speech means. Defendant Reyes said words in a crowded theater last month. Therefore, prosecuting Reyes violates his free speech rights and the case should be dismissed.' Court records show Reyes falsely shouted 'Fire!' in a packed theater on opening night, causing a stampede in which several patrons were injured.",
+    "output": "accident",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the generalization about a right to say whatever one wants",
+        "the specific case of Reyes shouting fire in a theater",
+        "the recognized exception for speech causing imminent harm / incitement",
+        "the argument ignores the harm-causing-speech exception"
+      ],
+      "correct_conclusion": "accident",
+      "skill_uids": [
+        "c663-6a52-883c-c3ca"
+      ],
+      "skill_names": [
+        "accident-fallacy"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "SINGLE_WORD",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "f977-b7cb-9023-e713",
+    "title": "Carrying weapons in public",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:accident-fallacy",
+    "source_document_uid": "c663-6a52-883c-c3ca",
+    "question": "Does the newsletter's argument commit the fallacy of accident? Answer yes or no.",
+    "input": "A neighborhood newsletter argues: 'Carrying loaded firearms through public streets is dangerous and should be condemned by the community. Officer Delgado walked down Maple Avenue this morning with a loaded sidearm visible on her hip. Therefore, Officer Delgado deserves community condemnation and should be reported to the city council for endangering residents.' Officer Delgado was on her assigned patrol route in full police uniform.",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the generalization about carrying loaded firearms publicly being dangerous/wrong",
+        "the specific case of Officer Delgado on patrol",
+        "the recognized exception for sworn law enforcement on duty",
+        "the argument ignores the law-enforcement exception"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "c663-6a52-883c-c3ca"
+      ],
+      "skill_names": [
+        "accident-fallacy"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "f1b3-79d9-0149-ec61",
+    "title": "Promise keeping and the borrowed knife",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:accident-fallacy",
+    "source_document_uid": "c663-6a52-883c-c3ca",
+    "question": "Which fallacy does this argument commit?",
+    "input": "Consider: 'Promises ought to be kept. Lin promised to return Hassan's hunting knife whenever Hassan asked for it. Hassan, in a rage and clearly intending to kill his neighbor, has just demanded the knife back. Therefore, Lin must hand over the knife immediately, since breaking a promise is wrong.' The arguer concedes Hassan's intent but insists the duty to keep promises settles the matter.",
+    "output": "accident",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the rule-of-thumb that promises ought to be kept",
+        "the specific case of returning the knife to a homicidal Hassan",
+        "the recognized exception when keeping the promise enables grave harm",
+        "the argument ignores this exception in reaching its conclusion"
+      ],
+      "correct_conclusion": "accident",
+      "skill_uids": [
+        "c663-6a52-883c-c3ca"
+      ],
+      "skill_names": [
+        "accident-fallacy"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "SINGLE_WORD",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "4298-288c-838c-6346",
+    "title": "Even numbers and division",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:accident-fallacy",
+    "source_document_uid": "c663-6a52-883c-c3ca",
+    "question": "Is the classmate's accusation of the fallacy of accident correct? Answer yes or no.",
+    "input": "A logic tutor presents this argument: 'Every even integer is divisible by two with no remainder. The number 2,847,366 is an even integer, as confirmed by checking its final digit. Therefore, 2,847,366 is divisible by two with no remainder.' A classmate insists the tutor has committed the fallacy of accident, since the argument moves from a sweeping rule about all even integers to a single specific number without examining whether that number is unusual.",
+    "output": "no",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the major premise is a mathematical truth without exceptions",
+        "there is no possible exception for any particular even integer",
+        "this is valid universal instantiation, not a defeasible rule-of-thumb",
+        "the fallacy requires an overlooked legitimate exception, which does not exist here"
+      ],
+      "correct_conclusion": "no",
+      "skill_uids": [
+        "c663-6a52-883c-c3ca"
+      ],
+      "skill_names": [
+        "accident-fallacy"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "5ca6-69fe-7607-4dfa",
+    "title": "Driving through red lights",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:accident-fallacy",
+    "source_document_uid": "c663-6a52-883c-c3ca",
+    "question": "What fallacy does the advocate's argument commit?",
+    "input": "A traffic-safety advocate argues: 'Drivers must stop at red lights; this is fundamental traffic law. Paramedic Owens drove through three red lights on Elm Street last Saturday at high speed. Therefore, Owens broke the law three times and her license should be suspended under the repeat-violation rule.' Dispatch records show Owens was driving a clearly marked ambulance with lights and siren active, transporting a cardiac arrest patient to the trauma center.",
+    "output": "accident",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the general traffic rule that drivers must stop at red lights",
+        "the specific case of Owens driving an active-emergency ambulance",
+        "the recognized statutory exception for emergency vehicles with lights and siren",
+        "the argument ignores the emergency-vehicle exception when condemning Owens"
+      ],
+      "correct_conclusion": "accident",
+      "skill_uids": [
+        "c663-6a52-883c-c3ca"
+      ],
+      "skill_names": [
+        "accident-fallacy"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "SINGLE_WORD",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "3841-df05-4729-9a9d",
+    "title": "City council budget exchange",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:complex-question-loaded-question-with-implicit-assumption",
+    "source_document_uid": "7876-61dd-dc24-4c2e",
+    "question": "Does Reyes's question to Hahn carry an implicit assumption that has not been conceded? Answer yes or no.",
+    "input": "At a public forum, Councilor Reyes addresses the city's transit director. The transcript records: 'Director Hahn, thank you for coming. As you know, ridership numbers are up 8% this year per your own report. Given that the agency has been mismanaging fare revenue for years, when will you commit to an independent audit?' Director Hahn has not previously acknowledged any mismanagement, and no audit finding to that effect has been entered into the record of this forum.",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the question presupposes prior mismanagement of fare revenue",
+        "any direct commitment-date answer concedes that mismanagement occurred",
+        "this presupposition has not been established or conceded in the passage",
+        "the 8% ridership figure is conceded background, not the smuggled claim"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "7876-61dd-dc24-4c2e"
+      ],
+      "skill_names": [
+        "complex-question-loaded-question-with-implicit-assumption"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "5256-42b4-bc6c-270b",
+    "title": "Press briefing on confirmed leak",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:complex-question-loaded-question-with-implicit-assumption",
+    "source_document_uid": "7876-61dd-dc24-4c2e",
+    "question": "Does the reporter's question smuggle in an unconceded presupposition? Answer yes or no.",
+    "input": "Press secretary Lin opens the briefing by stating: 'As we confirmed yesterday, an internal memo was leaked to the Tribune on Tuesday.' A reporter then raises a hand and asks, 'Given the leak, why hasn't the office disciplined anyone yet?' Lin pauses before answering. No claim about discipline has been made in the briefing, and the leak itself is part of Lin's own opening statement.",
+    "output": "no",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the question presupposes that a leak occurred",
+        "the leak was already established by Lin's opening statement",
+        "an established fact is not a smuggled assumption",
+        "the question is pointed but not loaded under the procedure"
+      ],
+      "correct_conclusion": "no",
+      "skill_uids": [
+        "7876-61dd-dc24-4c2e"
+      ],
+      "skill_names": [
+        "complex-question-loaded-question-with-implicit-assumption"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "ed95-5cf2-c794-a651",
+    "title": "Cross-examination of a witness",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:complex-question-loaded-question-with-implicit-assumption",
+    "source_document_uid": "7876-61dd-dc24-4c2e",
+    "question": "Identify in one short phrase the proposition smuggled into the attorney's question.",
+    "input": "Defense attorney to witness: 'Mr. Patel, you testified earlier that you were at the warehouse on the night of the 12th. Now tell the jury: how much did the defendant pay you to keep quiet about what you saw?' The trial record contains no testimony, exhibit, or stipulation indicating that any payment passed between the defendant and Mr. Patel. Patel's only prior testimony concerned his presence at the warehouse.",
+    "output": "the defendant paid the witness",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "any dollar-amount answer concedes a payment occurred",
+        "no payment has been established in the record",
+        "the smuggled claim is distinct from the surface 'how much' question",
+        "presence at the warehouse is conceded, not the loaded element"
+      ],
+      "correct_conclusion": "the defendant paid the witness",
+      "skill_uids": [
+        "7876-61dd-dc24-4c2e"
+      ],
+      "skill_names": [
+        "complex-question-loaded-question-with-implicit-assumption"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "FREE_FORM",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "c5ff-54a9-b7e7-80c1",
+    "title": "Two interview questions ranked",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:complex-question-loaded-question-with-implicit-assumption",
+    "source_document_uid": "7876-61dd-dc24-4c2e",
+    "question": "Which question carries an implicit unconceded assumption — Q1 or Q2?",
+    "input": "An interviewer asks a startup founder two questions in sequence. Q1: 'Your company filed for incorporation in Delaware last March, correct — and what motivated that choice?' Q2: 'Since your team has been burning through investor money irresponsibly, what's your plan to restore confidence?' The Delaware incorporation in March is documented in the public filings discussed earlier in the interview. No claim of irresponsible spending has been raised or conceded at any point in the conversation.",
+    "output": "Q2",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "Q1's presupposition (Delaware filing) is established background",
+        "Q2 presupposes irresponsible burn, which is not conceded",
+        "answering Q2's plan concedes the irresponsibility claim",
+        "only Q2 satisfies the loaded-question criterion"
+      ],
+      "correct_conclusion": "Q2",
+      "skill_uids": [
+        "7876-61dd-dc24-4c2e"
+      ],
+      "skill_names": [
+        "complex-question-loaded-question-with-implicit-assumption"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "RANKING",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "fce3-82b3-e50c-39d9",
+    "title": "Therapist case-note review",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:complex-question-loaded-question-with-implicit-assumption",
+    "source_document_uid": "7876-61dd-dc24-4c2e",
+    "question": "Identify in one short phrase the proposition the trainee's question smuggles past the client.",
+    "input": "A clinical supervisor reviews a trainee's notes. The trainee wrote that the client described difficulty sleeping and reported drinking two glasses of wine most evenings. During the next session, the trainee asked the client: 'How long have you been hiding your alcohol dependence from your family?' The client had not described dependence, only the two-glass evening pattern, and no diagnostic assessment for alcohol use disorder appears in the file.",
+    "output": "the client has alcohol dependence",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "any duration answer concedes dependence exists",
+        "dependence has not been established in the file",
+        "two glasses of wine is reported but not equated with dependence",
+        "the smuggled claim differs from the surface 'how long' question"
+      ],
+      "correct_conclusion": "the client has alcohol dependence",
+      "skill_uids": [
+        "7876-61dd-dc24-4c2e"
+      ],
+      "skill_names": [
+        "complex-question-loaded-question-with-implicit-assumption"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "FREE_FORM",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "85f4-bbb9-4088-5647",
+    "title": "Open-ended journalism question",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:complex-question-loaded-question-with-implicit-assumption",
+    "source_document_uid": "7876-61dd-dc24-4c2e",
+    "question": "Does the journalist's question carry an implicit unconceded assumption? Answer yes or no.",
+    "input": "A magazine profile of a novelist contains the following exchange. Journalist: 'Your last three books all feature unreliable narrators. Why do you keep returning to that device?' The novelist has, in earlier portions of the same interview reproduced in the article, confirmed that all three of her recent books use unreliable narrators and called it a deliberate choice.",
+    "output": "no",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the question presupposes repeated use of unreliable narrators",
+        "this fact is conceded earlier in the interview",
+        "open-ended 'why' questions on conceded topics are not loaded",
+        "no contested proposition is smuggled in"
+      ],
+      "correct_conclusion": "no",
+      "skill_uids": [
+        "7876-61dd-dc24-4c2e"
+      ],
+      "skill_names": [
+        "complex-question-loaded-question-with-implicit-assumption"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "df43-c5e4-beaf-b71e",
+    "title": "Debate on environmental policy",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:complex-question-loaded-question-with-implicit-assumption",
+    "source_document_uid": "7876-61dd-dc24-4c2e",
+    "question": "Does the moderator's question carry an implicit assumption that the respondent has not conceded? Answer yes or no.",
+    "input": "Moderator to candidate Alvarez: 'Polls show voters are concerned about emissions. Now, given that your party's plan will obviously destroy thousands of manufacturing jobs, how do you justify pushing it forward?' Earlier in the debate, Alvarez disputed the jobs claim explicitly, citing two independent economic studies projecting net job growth. The moderator did not retract or address Alvarez's rebuttal before posing the question.",
+    "output": "yes",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the question presupposes the plan destroys manufacturing jobs",
+        "Alvarez has actively contested this claim earlier",
+        "any justification answer concedes the destruction claim",
+        "the polling concern is conceded background, not the loaded element"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "7876-61dd-dc24-4c2e"
+      ],
+      "skill_names": [
+        "complex-question-loaded-question-with-implicit-assumption"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "9170-8833-1cc3-8b97",
+    "title": "Factual error versus smuggled claim",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:complex-question-loaded-question-with-implicit-assumption",
+    "source_document_uid": "7876-61dd-dc24-4c2e",
+    "question": "Which analyst's question is loaded with a smuggled implicit assumption — A or B?",
+    "input": "Two analysts review a transcript. Analyst A asks the CEO: 'Your company was founded in 1987 — what was the original product line?' (The company was actually founded in 1986; the date in the question is a misstatement, but no other claim is hidden.) Analyst B asks the same CEO: 'What steps are you taking to address the bribery scandal at your firm?' No bribery scandal has been mentioned in the transcript or established by any source cited.",
+    "output": "B",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "A contains a factual error about the founding year, not a smuggled claim",
+        "the procedure distinguishes factual mistakes from embedded presuppositions",
+        "B presupposes a bribery scandal that is not established",
+        "answering B's 'steps' question concedes the scandal exists"
+      ],
+      "correct_conclusion": "B",
+      "skill_uids": [
+        "7876-61dd-dc24-4c2e"
+      ],
+      "skill_names": [
+        "complex-question-loaded-question-with-implicit-assumption"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "RANKING",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "63cd-bda8-1590-32ae",
+    "title": "Parent confronting a teenager",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:complex-question-loaded-question-with-implicit-assumption",
+    "source_document_uid": "7876-61dd-dc24-4c2e",
+    "question": "Identify in one short phrase the proposition the parent's question smuggles past Sam.",
+    "input": "A parent finds an empty cookie jar on the counter. Earlier that afternoon, the parent's teenager Sam admitted to eating the last cookies and apologized. The parent later asks Sam: 'So when are you going to stop sneaking food behind my back?' Aside from the cookie incident, which Sam disclosed openly rather than concealed, no pattern of sneaking food has been mentioned, observed, or admitted in the household.",
+    "output": "Sam has a pattern of sneaking food",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the cookie incident was openly disclosed, not sneaked",
+        "the question presupposes an ongoing pattern of sneaking",
+        "any 'when' answer concedes the pattern exists",
+        "the smuggled claim is the pattern, not the single cookie event"
+      ],
+      "correct_conclusion": "Sam has a pattern of sneaking food",
+      "skill_uids": [
+        "7876-61dd-dc24-4c2e"
+      ],
+      "skill_names": [
+        "complex-question-loaded-question-with-implicit-assumption"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "FREE_FORM",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "9de5-9e59-5e8f-2607",
+    "title": "Software audit meeting",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:complex-question-loaded-question-with-implicit-assumption",
+    "source_document_uid": "7876-61dd-dc24-4c2e",
+    "question": "Does the auditor's question carry an implicit unconceded assumption? Answer yes or no.",
+    "input": "An external auditor reviews a development team. The team lead has confirmed in writing that the most recent release shipped on March 3 and that two regression bugs were filed afterward. In the meeting, the auditor asks the team lead: 'Why did you knowingly ship the release with critical security flaws?' Nothing in the written record, the bug tracker shown, or the prior discussion characterizes the regression bugs as security flaws or as known prior to release.",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the March 3 release and regression bugs are conceded facts",
+        "the question presupposes both prior knowledge and a security-flaw classification",
+        "neither prior knowledge nor security classification is established",
+        "any 'why' answer concedes the knowing-ship claim"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "7876-61dd-dc24-4c2e"
+      ],
+      "skill_names": [
+        "complex-question-loaded-question-with-implicit-assumption"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "14f3-4973-b190-9366",
+    "title": "Mayor on pothole budget",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:red-herring",
+    "source_document_uid": "4c53-1ddf-a469-fb6a",
+    "question": "Does the mayor's reply exhibit a red-herring diversion? Answer yes or no.",
+    "input": "At a town hall, a resident asks: 'Mayor Hensley, why was the pothole repair budget cut by 40% this fiscal year?' The mayor replies: 'Our town is the heart of this county. The families here, the small businesses, the volunteer fire crews — they make this place special. I think about our children's future every single day, and I want them to inherit streets full of neighbors who care. That's the real foundation of any community.'",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the question's core subject is the 40% pothole budget cut",
+        "the reply shifts to community pride, families, and children",
+        "emotionally appealing language replaces the budget explanation",
+        "the budget question is never addressed"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "4c53-1ddf-a469-fb6a"
+      ],
+      "skill_names": [
+        "red-herring"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "aa63-0675-bfdb-7c84",
+    "title": "Coach on benched striker",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:red-herring",
+    "source_document_uid": "4c53-1ddf-a469-fb6a",
+    "question": "Does the coach's reply exhibit a red-herring diversion? Answer yes or no.",
+    "input": "Reporter: 'Coach, why did you bench striker Alvaro for the entire second half despite the team trailing 1-0?' Coach: 'Alvaro had been dealing with a mild hamstring tightness flagged by our medical staff at halftime, so we made a precautionary substitution. He's also one of the hardest workers I've ever coached, and his attitude in the locker room is exemplary.'",
+    "output": "no",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the core question concerns why Alvaro was benched",
+        "the coach gives a direct medical reason (hamstring tightness)",
+        "the praise about work ethic is supplementary, not substitutive",
+        "the question is genuinely addressed"
+      ],
+      "correct_conclusion": "no",
+      "skill_uids": [
+        "4c53-1ddf-a469-fb6a"
+      ],
+      "skill_names": [
+        "red-herring"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "9457-0b28-e0b0-c3aa",
+    "title": "Senator on vote record",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:red-herring",
+    "source_document_uid": "4c53-1ddf-a469-fb6a",
+    "question": "Does the senator's reply exhibit a red-herring diversion? Answer yes or no.",
+    "input": "Journalist: 'Senator Pell, why did you vote against the wildfire relief bill last Thursday?' Senator Pell: 'Let me tell you, the firefighters in this state are nothing short of heroes. I've visited burn zones, I've hugged families who lost everything, and I will always stand with those brave men and women on the front lines. Public safety is in my blood — my own father was a volunteer fire chief for twenty years.'",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the question asks why the senator voted against the relief bill",
+        "reply substitutes praise for firefighters and family backstory",
+        "emotionally resonant language masks the evasion",
+        "the actual vote rationale is never given"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "4c53-1ddf-a469-fb6a"
+      ],
+      "skill_names": [
+        "red-herring"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "152b-ad7a-e879-bf1b",
+    "title": "CEO on layoffs",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:red-herring",
+    "source_document_uid": "4c53-1ddf-a469-fb6a",
+    "question": "Does the CEO's reply exhibit a red-herring diversion? Answer yes or no.",
+    "input": "Analyst: 'Why did Vextra lay off 1,200 engineers this quarter?' CEO: 'We restructured our R&D portfolio after the Q2 review showed three product lines were no longer aligned with our cloud-first strategy, and headcount in those lines was reduced accordingly. We remain confident in our long-term roadmap and grateful to the talented people who built those products.'",
+    "output": "no",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the core question concerns the 1,200 engineer layoffs",
+        "the CEO names a specific cause: R&D restructuring around three product lines",
+        "the closing remark about gratitude is supplementary",
+        "the question is directly answered"
+      ],
+      "correct_conclusion": "no",
+      "skill_uids": [
+        "4c53-1ddf-a469-fb6a"
+      ],
+      "skill_names": [
+        "red-herring"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "bcae-1b87-cbc8-3363",
+    "title": "Principal on test scores",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:red-herring",
+    "source_document_uid": "4c53-1ddf-a469-fb6a",
+    "question": "Does the principal's reply exhibit a red-herring diversion? Answer yes or no.",
+    "input": "Parent: 'Principal Ortiz, why did our school's eighth-grade math scores drop 18 points this year?' Principal: 'Our students are extraordinary. Every morning I see kids helping each other in the hallways, joining clubs, volunteering at the food bank. The character of this school is something no test can measure. We're raising future leaders, and I couldn't be prouder of who they are becoming.'",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the question concerns an 18-point math score drop",
+        "reply pivots to student character and extracurriculars",
+        "warm, emotionally appealing language is used",
+        "no explanation for the score drop is provided"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "4c53-1ddf-a469-fb6a"
+      ],
+      "skill_names": [
+        "red-herring"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "aa1e-5f48-e8c4-5d9f",
+    "title": "Chef on missing dish",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:red-herring",
+    "source_document_uid": "4c53-1ddf-a469-fb6a",
+    "question": "Does the chef's reply exhibit a red-herring diversion? Answer yes or no.",
+    "input": "Critic: 'Chef Renaud, why was the signature duck confit removed from the autumn menu?' Chef: 'Our supplier in Gascony halted shipments after a regional avian flu quarantine, so we couldn't source the legs at our quality standard. We're trialing a guinea fowl alternative while the quarantine lifts.'",
+    "output": "no",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the question concerns removal of duck confit from the menu",
+        "the chef names supplier quarantine as the direct cause",
+        "the guinea fowl detail is relevant context, not a diversion",
+        "the question is directly answered"
+      ],
+      "correct_conclusion": "no",
+      "skill_uids": [
+        "4c53-1ddf-a469-fb6a"
+      ],
+      "skill_names": [
+        "red-herring"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "b006-d9ec-9d12-7597",
+    "title": "Airline on cancellation rate",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:red-herring",
+    "source_document_uid": "4c53-1ddf-a469-fb6a",
+    "question": "Does the spokesperson's reply exhibit a red-herring diversion? Answer yes or no.",
+    "input": "Reporter: 'Why does SkyArc have the highest flight cancellation rate of any major US carrier this summer?' Spokesperson: 'At SkyArc we believe travel connects families, fuels dreams, and brings cultures together. Our crews work tirelessly, our lounges are world-class, and we've just announced free Wi-Fi on all transcontinental routes. Nothing matters more to us than the smiles of the travelers who choose to fly with us.'",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the question concerns the highest cancellation rate among US carriers",
+        "reply substitutes brand values, lounges, and Wi-Fi announcements",
+        "warmly appealing language disguises the evasion",
+        "the cancellation rate is never explained"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "4c53-1ddf-a469-fb6a"
+      ],
+      "skill_names": [
+        "red-herring"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "9faa-c3fa-da9b-c472",
+    "title": "Researcher on retracted paper",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:red-herring",
+    "source_document_uid": "4c53-1ddf-a469-fb6a",
+    "question": "Does Dr. Klein's reply exhibit a red-herring diversion? Answer yes or no.",
+    "input": "Interviewer: 'Dr. Klein, why was your 2021 paper on synaptic pruning retracted?' Dr. Klein: 'During post-publication review, we discovered that two figures had been generated from a mislabeled dataset belonging to a pilot study, which inflated the effect size. Once we identified the error, we requested the retraction ourselves. I remain committed to rigorous neuroscience and to mentoring the next generation of researchers.'",
+    "output": "no",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the question concerns the reason for retraction",
+        "Klein names mislabeled dataset and inflated effect size",
+        "the closing about rigor and mentorship is supplementary",
+        "the question is directly answered"
+      ],
+      "correct_conclusion": "no",
+      "skill_uids": [
+        "4c53-1ddf-a469-fb6a"
+      ],
+      "skill_names": [
+        "red-herring"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "f628-5f10-649f-42cc",
+    "title": "Studio on sequel delay",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:red-herring",
+    "source_document_uid": "4c53-1ddf-a469-fb6a",
+    "question": "Does the studio head's reply exhibit a red-herring diversion? Answer yes or no.",
+    "input": "Fan at panel: 'Why has the Starveil sequel been delayed three times since 2022?' Studio head: 'Our fans are the most passionate, most creative community in entertainment. We see your fan art, your cosplay, your theory threads — and it moves us every single day. We make these films because of you, and we will never stop honoring the world you helped build with us.'",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the question concerns three sequel delays since 2022",
+        "reply substitutes praise of the fan community",
+        "emotionally resonant language is used",
+        "no reason for the delays is given"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "4c53-1ddf-a469-fb6a"
+      ],
+      "skill_names": [
+        "red-herring"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "768f-e868-f24a-259e",
+    "title": "Hospital on infection rate",
+    "domain": "rhetoric",
+    "source_artifact": "s3.m5:red-herring",
+    "source_document_uid": "4c53-1ddf-a469-fb6a",
+    "question": "Does Director Amaya's reply exhibit a red-herring diversion? Answer yes or no.",
+    "input": "Board member: 'Director Amaya, why did our post-surgical infection rate climb to 6.2% last quarter, well above the 2% benchmark?' Director Amaya: 'Our nurses are the soul of this hospital. They show up at 4 a.m., they hold patients' hands during the hardest moments, they advocate fiercely for every person who walks through our doors. I want to take this opportunity to thank each of them publicly. Compassion is what defines us.'",
+    "output": "yes",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the question concerns a 6.2% post-surgical infection rate exceeding benchmark",
+        "reply pivots to praise of nursing staff and compassion",
+        "emotionally appealing language replaces the clinical answer",
+        "the infection rate question is never addressed"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "4c53-1ddf-a469-fb6a"
+      ],
+      "skill_names": [
+        "red-herring"
+      ],
+      "skill_categories": [
+        "rhetorical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "a3a8-1d57-a92b-2629",
+    "title": "Library passage with simile trap",
+    "domain": "literary",
+    "source_artifact": "s3.m5:metaphor",
+    "source_document_uid": "e663-9326-5e78-c857",
+    "question": "Quote the exact metaphor (not simile) from the passage.",
+    "input": "Marcus wandered the abandoned library after midnight. Dust motes drifted in the moonlight like tiny dancers. The silence was a heavy cloak that pressed against his shoulders as he moved between the towering shelves. His footsteps echoed off the marble floor as if announcing his trespass. He paused at the reference desk, where a single lamp glowed warmly.",
+    "output": "The silence was a heavy cloak",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "identifies the silence/cloak equation as the metaphor",
+        "rejects the 'like tiny dancers' simile",
+        "rejects the 'as if announcing' simile",
+        "recognizes direct 'was' equation between unlike categories"
+      ],
+      "correct_conclusion": "The silence was a heavy cloak",
+      "skill_uids": [
+        "e663-9326-5e78-c857"
+      ],
+      "skill_names": [
+        "metaphor"
+      ],
+      "skill_categories": [
+        "literary"
+      ]
+    },
+    "query_type": "FREE_FORM",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "e959-5cff-f81c-a9ec",
+    "title": "Boardroom speech identification",
+    "domain": "literary",
+    "source_artifact": "s3.m5:metaphor",
+    "source_document_uid": "e663-9326-5e78-c857",
+    "question": "Which sentence contains a metaphor (not a simile)?",
+    "input": "The CEO addressed the shareholders with practiced calm. 'Our competitors are circling sharks in bloodied water,' she began. 'They smell weakness like predators sense prey. But this company resembles a fortress, built on decades of trust. Our quarterly numbers are similar to last year's, steady and reliable. Make no mistake: complacency will sink us faster than any external threat.'",
+    "output": "Our competitors are circling sharks in bloodied water",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "selects the competitors/sharks equation",
+        "rejects 'like predators sense prey' as simile",
+        "rejects 'resembles a fortress' as explicit comparison",
+        "rejects 'similar to last year's' as explicit comparison",
+        "recognizes 'are' as a direct equation marker"
+      ],
+      "correct_conclusion": "Our competitors are circling sharks in bloodied water",
+      "skill_uids": [
+        "e663-9326-5e78-c857"
+      ],
+      "skill_names": [
+        "metaphor"
+      ],
+      "skill_categories": [
+        "literary"
+      ]
+    },
+    "query_type": "FREE_FORM",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "58d8-404b-77ee-2c36",
+    "title": "Grandmother's hands interpretation",
+    "domain": "literary",
+    "source_artifact": "s3.m5:metaphor",
+    "source_document_uid": "e663-9326-5e78-c857",
+    "question": "In one word, what quality does the metaphor transfer from 'maps' to the grandmother's hands?",
+    "input": "When Elena visited her grandmother in the nursing home, she always studied the old woman's hands. Those hands were maps of a long journey—every line a road traveled, every spot a city visited, every scar a border crossed. They had kneaded bread during the war, held three children through fevers, and signed the deed to the little house on Maple Street.",
+    "output": "history",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "identifies 'hands were maps' as the metaphor",
+        "infers maps represent recorded journeys/experience",
+        "transfers the quality of accumulated history to hands",
+        "does not select a literal feature like 'lines' or 'roads'"
+      ],
+      "correct_conclusion": "history",
+      "skill_uids": [
+        "e663-9326-5e78-c857"
+      ],
+      "skill_names": [
+        "metaphor"
+      ],
+      "skill_categories": [
+        "literary"
+      ]
+    },
+    "query_type": "SINGLE_WORD",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "4b6f-e137-0ed2-32f3",
+    "title": "Storm passage yes-no check",
+    "domain": "literary",
+    "source_artifact": "s3.m5:metaphor",
+    "source_document_uid": "e663-9326-5e78-c857",
+    "question": "Does this passage contain a metaphor? Answer yes or no.",
+    "input": "The storm rolled in like a freight train, shaking the windows of the small cottage. Wind howled through the eaves as if mourning some ancient loss. Rain hammered the roof relentlessly. Inside, six-year-old Tomas clutched his blanket and waited for his mother to return from the barn, where the lantern still burned faintly in the distance.",
+    "output": "no",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "notes 'like a freight train' is a simile",
+        "notes 'as if mourning' is a simile/personification with marker",
+        "confirms no direct 'is/are/became' non-literal equation exists",
+        "rejects vivid description alone as metaphor"
+      ],
+      "correct_conclusion": "no",
+      "skill_uids": [
+        "e663-9326-5e78-c857"
+      ],
+      "skill_names": [
+        "metaphor"
+      ],
+      "skill_categories": [
+        "literary"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "8b1f-409c-2340-a745",
+    "title": "Teacher's classroom monologue",
+    "domain": "literary",
+    "source_artifact": "s3.m5:metaphor",
+    "source_document_uid": "e663-9326-5e78-c857",
+    "question": "Quote the metaphor used to describe knowledge.",
+    "input": "Mr. Kowalski paced before his ninth-grade class. 'Knowledge is a garden,' he said, tapping the chalkboard. 'You must tend it daily or weeds will choke what you've planted. Some of you treat your minds like storage closets, cramming facts in before exams. Others let ideas grow wild as untended fields. Neither approach yields the harvest I expect by June.'",
+    "output": "Knowledge is a garden",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "selects 'Knowledge is a garden' as direct equation",
+        "rejects 'like storage closets' as simile",
+        "rejects 'as untended fields' as simile",
+        "recognizes 'is' as the metaphor marker"
+      ],
+      "correct_conclusion": "Knowledge is a garden",
+      "skill_uids": [
+        "e663-9326-5e78-c857"
+      ],
+      "skill_names": [
+        "metaphor"
+      ],
+      "skill_categories": [
+        "literary"
+      ]
+    },
+    "query_type": "FREE_FORM",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "4878-21cf-df51-66d0",
+    "title": "City at dawn ranking",
+    "domain": "literary",
+    "source_artifact": "s3.m5:metaphor",
+    "source_document_uid": "e663-9326-5e78-c857",
+    "question": "Which description (A or B) contains the metaphor?",
+    "input": "Consider two descriptions of the same city at dawn. Description A: 'The city was a slumbering giant, its breath rising as steam from manhole covers, its heartbeat thrumming faintly beneath the asphalt.' Description B: 'The city resembled a sleeping creature, with steam rising like breath from manhole covers and a faint thrumming similar to a heartbeat beneath the asphalt.'",
+    "output": "A",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "identifies 'was a slumbering giant' as direct equation in A",
+        "notes B uses 'resembled', 'like', and 'similar to' as explicit markers",
+        "concludes A meets the metaphor criteria",
+        "concludes B is composed of similes"
+      ],
+      "correct_conclusion": "A",
+      "skill_uids": [
+        "e663-9326-5e78-c857"
+      ],
+      "skill_names": [
+        "metaphor"
+      ],
+      "skill_categories": [
+        "literary"
+      ]
+    },
+    "query_type": "RANKING",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "6fb3-5544-62b4-e205",
+    "title": "Politician's victory speech",
+    "domain": "literary",
+    "source_artifact": "s3.m5:metaphor",
+    "source_document_uid": "e663-9326-5e78-c857",
+    "question": "Quote the metaphor from this passage.",
+    "input": "Senator Vance stepped to the podium after winning reelection. 'My opponents predicted I would kick the bucket politically after the scandal,' he laughed. 'But hope is the engine of every campaign, and ours never stalled. We pulled ourselves up by our bootstraps when polling looked grim. Tonight, the voters have spoken louder than any pundit's prediction. This victory belongs to every volunteer who knocked on doors.'",
+    "output": "hope is the engine of every campaign",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "selects 'hope is the engine' as the live metaphor",
+        "rejects 'kick the bucket' as a dead idiom",
+        "rejects 'pulled ourselves up by our bootstraps' as a dead idiom",
+        "rejects 'louder than any pundit' as comparative, not metaphoric equation",
+        "recognizes engine/hope as cross-domain equation"
+      ],
+      "correct_conclusion": "hope is the engine of every campaign",
+      "skill_uids": [
+        "e663-9326-5e78-c857"
+      ],
+      "skill_names": [
+        "metaphor"
+      ],
+      "skill_categories": [
+        "literary"
+      ]
+    },
+    "query_type": "FREE_FORM",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "4cca-c32b-30bc-f8ff",
+    "title": "Trial closing argument",
+    "domain": "literary",
+    "source_artifact": "s3.m5:metaphor",
+    "source_document_uid": "e663-9326-5e78-c857",
+    "question": "What is the tenor (subject) of the metaphor 'a house of cards'?",
+    "input": "The defense attorney faced the jury. 'The prosecution's case is a house of cards,' she declared. 'Their key witness contradicted himself like a man lost in a maze. Their evidence appears similar to that of a dozen unsolved cases—circumstantial at best. My client has been a pillar of this community for thirty years. Do not let speculation send an innocent man to prison.'",
+    "output": "the prosecution's case",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "identifies 'house of cards' as metaphor vehicle",
+        "identifies 'the prosecution's case' as the tenor",
+        "rejects the witness simile ('like a man lost in a maze')",
+        "rejects 'similar to' comparison as a metaphor",
+        "treats 'pillar of this community' as a separate dead metaphor"
+      ],
+      "correct_conclusion": "the prosecution's case",
+      "skill_uids": [
+        "e663-9326-5e78-c857"
+      ],
+      "skill_names": [
+        "metaphor"
+      ],
+      "skill_categories": [
+        "literary"
+      ]
+    },
+    "query_type": "FREE_FORM",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "396f-83f3-7a8a-52a1",
+    "title": "Construct metaphor for grief",
+    "domain": "literary",
+    "source_artifact": "s3.m5:metaphor",
+    "source_document_uid": "e663-9326-5e78-c857",
+    "question": "Construct a single metaphorical sentence equating grief directly with such a phenomenon.",
+    "input": "A novelist is drafting a passage about a character processing the loss of her father. She wants to convey that grief is not a single event but something that returns repeatedly with varying force, sometimes overwhelming and sometimes gentle, but always inevitable. She has already written: 'Mira learned that her sorrow would not depart on a fixed schedule.' She wants the next sentence to be a metaphor (not a simile) equating grief with a natural phenomenon that captures recurrence and varying intensity.",
+    "output": "Grief was the tide",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "uses direct equation (is/was/became) without 'like' or 'as'",
+        "equates grief with a natural phenomenon (tide, ocean, weather, etc.)",
+        "the vehicle conveys recurrence and varying intensity",
+        "vehicle and tenor belong to different categories"
+      ],
+      "correct_conclusion": "Grief was the tide",
+      "skill_uids": [
+        "e663-9326-5e78-c857"
+      ],
+      "skill_names": [
+        "metaphor"
+      ],
+      "skill_categories": [
+        "literary"
+      ]
+    },
+    "query_type": "FREE_FORM",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "284e-3421-ff39-58a1",
+    "title": "Coach's halftime speech",
+    "domain": "literary",
+    "source_artifact": "s3.m5:metaphor",
+    "source_document_uid": "e663-9326-5e78-c857",
+    "question": "Quote the live metaphor that describes the second half.",
+    "input": "Coach Reyes slammed the clipboard down in the locker room. 'Listen up. The second half is a battlefield, and right now you're playing like tourists. Their forward moves as if he owns the pitch. Our defense has been swiss cheese all season—full of holes nobody's patching. We've spilled the beans on every set piece because we telegraph our intentions. Forty-five minutes left. Decide who you want to be.'",
+    "output": "The second half is a battlefield",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "selects 'The second half is a battlefield' as direct equation",
+        "rejects 'playing like tourists' as simile",
+        "rejects 'as if he owns the pitch' as simile",
+        "rejects 'swiss cheese' and 'spilled the beans' as dead idioms or alternative metaphors not describing the second half",
+        "recognizes battlefield/half as cross-domain equation via 'is'"
+      ],
+      "correct_conclusion": "The second half is a battlefield",
+      "skill_uids": [
+        "e663-9326-5e78-c857"
+      ],
+      "skill_names": [
+        "metaphor"
+      ],
+      "skill_categories": [
+        "literary"
+      ]
+    },
+    "query_type": "FREE_FORM",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "5468-5fa2-3862-9eb4",
+    "title": "Crate through the doorway",
+    "domain": "spatial",
+    "source_artifact": "s3.m5:spatial-reasoning",
+    "source_document_uid": "8e58-7e91-600c-5a44",
+    "question": "Is the crate's width greater than 30 inches? Answer yes or no.",
+    "input": "Movers carried a wooden crate from the truck into the foyer. The crate slid through the front doorway with about an inch of clearance on each side. Once inside, they tried to push it through the interior office door but it would not pass; the crate's side scraped both jambs. The front doorway is 36 inches wide. The office door is 30 inches wide. The hallway between them is 48 inches wide. The crate was not rotated between the two attempts.",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "crate passed through 36-inch doorway with ~1 inch clearance on each side",
+        "crate failed to pass through 30-inch office door",
+        "width must exceed 30 inches but be at most ~34 inches",
+        "hallway width is irrelevant distractor"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "8e58-7e91-600c-5a44"
+      ],
+      "skill_names": [
+        "spatial-reasoning"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "e6db-8551-c397-7808",
+    "title": "Shelf above the cabinet",
+    "domain": "spatial",
+    "source_artifact": "s3.m5:spatial-reasoning",
+    "source_document_uid": "8e58-7e91-600c-5a44",
+    "question": "Which is higher on the wall, the clock or the map?",
+    "input": "In the study, a tall bookcase stands against the north wall. A framed map hangs on the same wall directly above the bookcase, its lower edge touching the bookcase's top. A small clock is mounted on the wall above the map, with a gap of two inches between the clock and the map's upper edge. A reading lamp sits on the floor beside the bookcase. The ceiling is nine feet high.",
+    "output": "clock",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "map sits above bookcase",
+        "clock sits above map with a gap",
+        "therefore clock is higher than map",
+        "lamp and ceiling height are distractors"
+      ],
+      "correct_conclusion": "clock",
+      "skill_uids": [
+        "8e58-7e91-600c-5a44"
+      ],
+      "skill_names": [
+        "spatial-reasoning"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "SINGLE_WORD",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "e894-678b-3996-7a60",
+    "title": "Pipe through the wall",
+    "domain": "spatial",
+    "source_artifact": "s3.m5:spatial-reasoning",
+    "source_document_uid": "8e58-7e91-600c-5a44",
+    "question": "What is the approximate outer diameter of the pipe in inches?",
+    "input": "A plumber threaded a copper pipe through a circular hole drilled in a stud wall. The pipe slid through the hole snugly, with no visible gap. The hole was drilled with a 1-inch bit. On the far side of the wall, the pipe connected to a fitting whose inlet is labeled 3/4 inch nominal, which corresponds to an outer diameter of about 7/8 inch for standard copper tubing. The wall is 4.5 inches thick.",
+    "output": "1 inch",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "pipe passed snugly through 1-inch hole",
+        "snug fit means outer diameter ≈ hole diameter",
+        "the 7/8-inch nominal figure is a trap based on fitting label",
+        "wall thickness is irrelevant"
+      ],
+      "correct_conclusion": "1 inch",
+      "skill_uids": [
+        "8e58-7e91-600c-5a44"
+      ],
+      "skill_names": [
+        "spatial-reasoning"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "SINGLE_WORD",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "b769-3575-a1ba-c99a",
+    "title": "Boxes stacked in closet",
+    "domain": "spatial",
+    "source_artifact": "s3.m5:spatial-reasoning",
+    "source_document_uid": "8e58-7e91-600c-5a44",
+    "question": "What is the height of one box in inches?",
+    "input": "Lin stacked three boxes in a closet. The red box sits directly on the floor. The blue box rests on top of the red box. The green box rests on top of the blue box, and its top is flush with a shelf mounted inside the closet. Lin also leaned a broom against the side of the stack. The closet shelf is 38 inches above the floor. Each box is the same height.",
+    "output": "approximately 12.67 inches",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "three equal-height boxes stacked from floor",
+        "top of stack flush with shelf at 38 inches",
+        "total stack height equals 38 inches",
+        "each box height = 38/3 ≈ 12.67 inches"
+      ],
+      "correct_conclusion": "approximately 12.67 inches",
+      "skill_uids": [
+        "8e58-7e91-600c-5a44"
+      ],
+      "skill_names": [
+        "spatial-reasoning"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "SINGLE_WORD",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "22ce-a499-3dbc-0086",
+    "title": "Ladder against the barn",
+    "domain": "spatial",
+    "source_artifact": "s3.m5:spatial-reasoning",
+    "source_document_uid": "8e58-7e91-600c-5a44",
+    "question": "What is the length of the ladder in feet?",
+    "input": "Farmer Owens leaned a straight ladder against the side of his barn so its top just reached the edge of the hayloft opening. The base of the ladder rested 5 feet out from the barn wall on level ground. The hayloft opening's lower edge is 12 feet above the ground. A bale of hay sat near the ladder's base, and a rooster perched on a fence 20 feet away.",
+    "output": "13",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "ladder forms right triangle with wall and ground",
+        "legs are 5 feet and 12 feet",
+        "hypotenuse (ladder length) = 13 feet via Pythagoras",
+        "hay bale and rooster are distractors"
+      ],
+      "correct_conclusion": "13",
+      "skill_uids": [
+        "8e58-7e91-600c-5a44"
+      ],
+      "skill_names": [
+        "spatial-reasoning"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "SINGLE_WORD",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "1f4f-32d4-f368-1719",
+    "title": "Marble through the funnel",
+    "domain": "spatial",
+    "source_artifact": "s3.m5:spatial-reasoning",
+    "source_document_uid": "8e58-7e91-600c-5a44",
+    "question": "Is the diameter of the second marble greater than 8 millimeters? Answer yes or no.",
+    "input": "A child dropped several marbles into a kitchen funnel held over a jar. The funnel's lower spout has an inner diameter of 8 millimeters. The first marble passed all the way through and clinked into the jar. The second marble, slightly larger, lodged in the spout and would not fall through despite tapping. The funnel's upper opening is 90 millimeters wide. The jar's mouth is 50 millimeters wide.",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "first marble passed through 8 mm spout, so its diameter ≤ 8 mm",
+        "second marble lodged in spout and did not pass",
+        "second marble's diameter must exceed 8 mm",
+        "upper opening and jar mouth widths are irrelevant"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "8e58-7e91-600c-5a44"
+      ],
+      "skill_names": [
+        "spatial-reasoning"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "b2bb-99e8-be4d-956b",
+    "title": "Train under the bridge",
+    "domain": "spatial",
+    "source_artifact": "s3.m5:spatial-reasoning",
+    "source_document_uid": "8e58-7e91-600c-5a44",
+    "question": "Was the tank's height (from flatcar deck to top) greater than 10 feet? Answer yes or no.",
+    "input": "A freight train passed beneath an old stone bridge on the rural line. The locomotive cleared the bridge, but a tall cylindrical tank loaded on the third flatcar struck the underside of the bridge and was sheared off. The bridge's underside is exactly 14 feet above the rails. The flatcar's deck sits 4 feet above the rails. The locomotive's roof is 13 feet above the rails. Other cars on the train carried lower cargo and passed without incident.",
+    "output": "yes",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "bridge clearance above rails is 14 feet",
+        "flatcar deck is 4 feet above rails, leaving 10 feet of clearance above the deck",
+        "tank struck the bridge, so tank height from deck > 10 feet",
+        "locomotive height is a distractor"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "8e58-7e91-600c-5a44"
+      ],
+      "skill_names": [
+        "spatial-reasoning"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "89a8-52d9-4fb7-ccef",
+    "title": "Garden plots beside river",
+    "domain": "spatial",
+    "source_artifact": "s3.m5:spatial-reasoning",
+    "source_document_uid": "8e58-7e91-600c-5a44",
+    "question": "In which compass direction does Plot C lie from the toolshed?",
+    "input": "Three rectangular garden plots lie in a row along the south bank of a river. Plot A is westernmost, Plot C easternmost, and Plot B between them. A footpath runs along the river's edge, north of all three plots. A toolshed stands south of Plot B. From Plot A, the toolshed is to the southeast. From Plot C, the gardener walks west to reach the shed and then turns south.",
+    "output": "northeast",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "plots A, B, C run west to east along river",
+        "shed is south of Plot B",
+        "Plot C is east of B, so east of shed; plots are north of shed",
+        "therefore Plot C is northeast of shed"
+      ],
+      "correct_conclusion": "northeast",
+      "skill_uids": [
+        "8e58-7e91-600c-5a44"
+      ],
+      "skill_names": [
+        "spatial-reasoning"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "SINGLE_WORD",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "bfdd-50fe-942c-588e",
+    "title": "Painting and the doorway",
+    "domain": "spatial",
+    "source_artifact": "s3.m5:spatial-reasoning",
+    "source_document_uid": "8e58-7e91-600c-5a44",
+    "question": "Is the painting's long side greater than 80 inches? Answer yes or no.",
+    "input": "A gallery assistant tried to carry a large rectangular painting through a standard interior doorway while keeping the painting upright (its long edge vertical). It would not fit through the doorway in that orientation; the painting's width exceeded the door's width. She then rotated the painting flat (long edge horizontal) and slid it through diagonally with care. The doorway is 32 inches wide and 80 inches tall. The painting is 36 inches on its short side.",
+    "output": "no",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "upright orientation: short side (36 in) is horizontal, exceeds 32-inch door width — explains failure",
+        "painting's long side is vertical when upright and must be ≤ 80 in or it wouldn't fit upright by height either",
+        "actually upright failed only by width, so long side fit within 80-inch height",
+        "therefore long side ≤ 80 inches"
+      ],
+      "correct_conclusion": "no",
+      "skill_uids": [
+        "8e58-7e91-600c-5a44"
+      ],
+      "skill_names": [
+        "spatial-reasoning"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "9cbe-e7b5-7f76-6f95",
+    "title": "Books on the shelf",
+    "domain": "spatial",
+    "source_artifact": "s3.m5:spatial-reasoning",
+    "source_document_uid": "8e58-7e91-600c-5a44",
+    "question": "Which book is at the far right end of the row?",
+    "input": "On a single shelf, four books stand upright in a row. The atlas is immediately to the left of the dictionary. The novel is immediately to the right of the dictionary. The cookbook is at the far left end of the row, with the atlas immediately to its right. A bookmark pokes out of the dictionary, and a small plant sits on top of the shelf above the novel.",
+    "output": "novel",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "order from left: cookbook, atlas, dictionary, novel",
+        "cookbook is far left; novel is rightmost",
+        "bookmark and plant are distractors",
+        "order derived by chaining the relations"
+      ],
+      "correct_conclusion": "novel",
+      "skill_uids": [
+        "8e58-7e91-600c-5a44"
+      ],
+      "skill_names": [
+        "spatial-reasoning"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "SINGLE_WORD",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "738f-f184-4809-376a",
+    "title": "Greenhouse irrigation trigger",
+    "domain": "logic",
+    "source_artifact": "s3.m5:modus-ponens",
+    "source_document_uid": "6b61-1f46-7da2-22a0",
+    "question": "Did the misting system activate this morning? Answer yes or no.",
+    "input": "The greenhouse manual states: if the soil moisture sensor reads below 20 percent, the misting system activates automatically. The sensor was calibrated last Tuesday by technician Hale, who noted that misting often correlates with hotter afternoons. This morning at 6 a.m., the sensor logged a reading of 14 percent. Hale was off-site at the time and did not manually intervene. The afternoon temperature later climbed to 31 degrees, the highest of the week.",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "conditional ties activation to sensor reading below 20 percent",
+        "reading of 14 percent affirms the antecedent",
+        "hot afternoon and technician absence are distractors",
+        "consequent (activation) follows by modus ponens"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "6b61-1f46-7da2-22a0"
+      ],
+      "skill_names": [
+        "modus-ponens"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "3322-6ce5-a8aa-aa6b",
+    "title": "Customs clearance rule",
+    "domain": "logic",
+    "source_artifact": "s3.m5:modus-ponens",
+    "source_document_uid": "6b61-1f46-7da2-22a0",
+    "question": "Must container CX-882 be diverted to bay 4? Answer yes or no.",
+    "input": "Port regulation 7 reads: whenever a shipment's manifest lists lithium cells, it must be diverted to bay 4 for inspection. Inspector Ortiz also mentioned that bay 4 inspections sometimes happen for shipments flagged by random audit. Today's manifest for container CX-882 lists lithium cells alongside textiles and ceramic tiles. Container CX-901, by contrast, was diverted to bay 4 yesterday after a random audit, though it carried no lithium.",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "regulation: lithium cells on manifest implies diversion to bay 4",
+        "CX-882's manifest lists lithium cells, affirming antecedent",
+        "CX-901 example is a distractor (consequent without antecedent)",
+        "conclude diversion required"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "6b61-1f46-7da2-22a0"
+      ],
+      "skill_names": [
+        "modus-ponens"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "b38b-6f61-7884-2409",
+    "title": "Scholarship eligibility clause",
+    "domain": "logic",
+    "source_artifact": "s3.m5:modus-ponens",
+    "source_document_uid": "6b61-1f46-7da2-22a0",
+    "question": "Does Jun qualify for the senior research tier? Answer yes or no.",
+    "input": "The Bramwell Scholarship handbook states: if an applicant publishes a peer-reviewed paper before graduation, they qualify for the senior research tier. Reviewers noted that senior-tier recipients in past years have usually also held teaching assistantships. Applicant Jun graduated in May; in March, her co-authored paper appeared in the Journal of Applied Optics after peer review. Jun never held a teaching assistantship. The committee is preparing tier assignments this week.",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "conditional: peer-reviewed publication before graduation implies senior tier qualification",
+        "Jun's March publication satisfies the antecedent",
+        "teaching assistantship correlation is a distractor, not a requirement",
+        "conclusion: Jun qualifies"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "6b61-1f46-7da2-22a0"
+      ],
+      "skill_names": [
+        "modus-ponens"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "88e5-9383-010c-4e95",
+    "title": "Fire alarm protocol",
+    "domain": "logic",
+    "source_artifact": "s3.m5:modus-ponens",
+    "source_document_uid": "6b61-1f46-7da2-22a0",
+    "question": "Based solely on the protocol and the door unlock event, can we conclude a floor-3 smoke detector triggered? Answer yes or no.",
+    "input": "Building protocol: if any smoke detector on floor 3 triggers, the stairwell doors on floors 2 through 4 unlock automatically. Maintenance logs show the stairwell doors unlocked at 2:14 p.m. yesterday. Separately, security footage indicates someone propped open the floor-3 emergency exit around noon, which is unrelated to the smoke detector circuit. The smoke detectors themselves were tested last quarter and passed inspection.",
+    "output": "no",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "conditional: smoke detector trigger implies stairwell unlock",
+        "only the consequent (unlock) is affirmed, not the antecedent",
+        "affirming the consequent is invalid",
+        "propped exit and inspection details are distractors"
+      ],
+      "correct_conclusion": "no",
+      "skill_uids": [
+        "6b61-1f46-7da2-22a0"
+      ],
+      "skill_names": [
+        "modus-ponens"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "4192-33cd-d8e0-e4fd",
+    "title": "Library overdue policy",
+    "domain": "logic",
+    "source_artifact": "s3.m5:modus-ponens",
+    "source_document_uid": "6b61-1f46-7da2-22a0",
+    "question": "What charge is added to Delacroix's account for the late book?",
+    "input": "Library policy: if a patron returns a book more than 14 days late, a $5 fee is added to their account. Patron Delacroix returned 'The Cartographer's Daughter' 21 days past its due date last Friday. The librarian on duty mentioned that fees are sometimes waived for first-time offenders, but no such waiver has been recorded in Delacroix's file. Delacroix also returned two other books on time the same day.",
+    "output": "$5",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "conditional: returning more than 14 days late triggers $5 fee",
+        "21 days late satisfies the antecedent",
+        "waiver possibility is a distractor with no recorded waiver",
+        "conclude $5 fee applies"
+      ],
+      "correct_conclusion": "$5",
+      "skill_uids": [
+        "6b61-1f46-7da2-22a0"
+      ],
+      "skill_names": [
+        "modus-ponens"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "SINGLE_WORD",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "ca2d-f787-031c-7400",
+    "title": "Vineyard harvest signal",
+    "domain": "logic",
+    "source_artifact": "s3.m5:modus-ponens",
+    "source_document_uid": "6b61-1f46-7da2-22a0",
+    "question": "When does harvest begin at Cote Rouge?",
+    "input": "Vintner's rule at Cote Rouge: if the Brix sugar level of the Syrah grapes reaches 24 degrees, harvest begins the next morning. Foreman Luc noted that harvests at the neighboring estate began this Tuesday. On Monday afternoon, refractometer readings on Cote Rouge's Syrah block averaged 24.3 degrees Brix. Weather forecasts predict mild conditions through the week, and the picking crew is on standby.",
+    "output": "Tuesday morning",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "conditional: Brix at 24 implies harvest next morning",
+        "Monday reading of 24.3 affirms antecedent",
+        "neighbor's harvest is a distractor",
+        "consequent: harvest Tuesday morning"
+      ],
+      "correct_conclusion": "Tuesday morning",
+      "skill_uids": [
+        "6b61-1f46-7da2-22a0"
+      ],
+      "skill_names": [
+        "modus-ponens"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "FREE_FORM",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "3267-89a6-1342-3cfc",
+    "title": "Reactor shutdown criterion",
+    "domain": "logic",
+    "source_artifact": "s3.m5:modus-ponens",
+    "source_document_uid": "6b61-1f46-7da2-22a0",
+    "question": "Based on the manual and observed pressure, does modus ponens license concluding the rods were inserted due to the pressure rule? Answer yes or no.",
+    "input": "Reactor manual, section 4: if coolant pressure exceeds 180 psi, the control rods are inserted automatically. Engineer Park observed that control rods were inserted at 03:42 this morning during her shift. Logs show coolant pressure peaked at 162 psi overnight. A separate manual override drill was scheduled for 03:30, conducted by the night supervisor.",
+    "output": "no",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "conditional requires pressure exceeding 180 psi",
+        "actual peak was 162 psi, antecedent not affirmed",
+        "rod insertion (consequent) occurred but from another cause (drill)",
+        "cannot apply modus ponens without affirmed antecedent"
+      ],
+      "correct_conclusion": "no",
+      "skill_uids": [
+        "6b61-1f46-7da2-22a0"
+      ],
+      "skill_names": [
+        "modus-ponens"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "6d2f-95f6-31c5-b9dd",
+    "title": "Trade treaty trigger",
+    "domain": "logic",
+    "source_artifact": "s3.m5:modus-ponens",
+    "source_document_uid": "6b61-1f46-7da2-22a0",
+    "question": "Will Velmar suspend grain exports to Kosti for 90 days under Article 12?",
+    "input": "Article 12 of the Velmar-Kosti trade treaty: if Kosti raises tariffs on Velmaran steel above 8 percent, Velmar suspends grain exports to Kosti for 90 days. Last month, Velmar reduced grain exports to Kosti by half, citing domestic shortages. This week, Kosti's parliament voted to raise tariffs on Velmaran steel to 11 percent, effective immediately. The Velmaran trade ministry has scheduled a press conference for Friday.",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "conditional: tariffs above 8 percent imply 90-day grain suspension",
+        "11 percent tariff affirms antecedent",
+        "prior export reduction for shortages is a distractor",
+        "conclude suspension is triggered"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "6b61-1f46-7da2-22a0"
+      ],
+      "skill_names": [
+        "modus-ponens"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "24cb-795d-a33d-9001",
+    "title": "Allergy clinic protocol",
+    "domain": "logic",
+    "source_artifact": "s3.m5:modus-ponens",
+    "source_document_uid": "6b61-1f46-7da2-22a0",
+    "question": "Should the allergist prescribe an epinephrine auto-injector for Reyes per protocol?",
+    "input": "Clinic protocol: if a patient's IgE level for peanut protein exceeds 15 kU/L, the allergist prescribes an epinephrine auto-injector. Nurse Aabir notes that auto-injectors are also commonly prescribed for patients with documented anaphylaxis history. Patient Reyes has no recorded anaphylaxis episodes. Her latest blood panel shows a peanut IgE of 22 kU/L, well above the threshold. The allergist reviews her chart this afternoon.",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "conditional: IgE above 15 kU/L implies auto-injector prescription",
+        "Reyes's 22 kU/L affirms antecedent",
+        "anaphylaxis history is an alternative path, not required here",
+        "conclude prescription per protocol"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "6b61-1f46-7da2-22a0"
+      ],
+      "skill_names": [
+        "modus-ponens"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "a1f8-1e1e-e6d4-6efb",
+    "title": "Chess tournament tiebreak",
+    "domain": "logic",
+    "source_artifact": "s3.m5:modus-ponens",
+    "source_document_uid": "6b61-1f46-7da2-22a0",
+    "question": "Which player advances under rule 9, Rina or Suvi?",
+    "input": "Tournament rule 9: if two players finish with identical match points, the player with the higher Buchholz score advances. Commentator Vega remarked that Buchholz often correlates with stronger opening repertoires. After round 7, Tomasz advanced to the final bracket. Players Rina and Suvi each finished round 6 with 4.5 match points apiece. Rina's Buchholz totaled 31.5; Suvi's totaled 28.0. The arbiter is finalizing the bracket now.",
+    "output": "Rina",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "conditional: tied match points implies higher Buchholz advances",
+        "Rina and Suvi tied at 4.5, affirming antecedent",
+        "Rina's Buchholz (31.5) exceeds Suvi's (28.0)",
+        "Tomasz and opening-repertoire remarks are distractors",
+        "conclude Rina advances"
+      ],
+      "correct_conclusion": "Rina",
+      "skill_uids": [
+        "6b61-1f46-7da2-22a0"
+      ],
+      "skill_names": [
+        "modus-ponens"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "RANKING",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "6d87-c72d-2ef6-2b9b",
+    "title": "Coffee shop regulars deduction",
+    "domain": "logic",
+    "source_artifact": "s3.m5:statistical-syllogism",
+    "source_document_uid": "d544-fae1-7f2f-0941",
+    "question": "Is this argument a statistical syllogism? Answer yes or no.",
+    "input": "A small market research firm reports that most regulars at the Fernwood Cafe order an espresso-based drink during their morning visits. Tomas has been documented as a Fernwood Cafe regular for the past three years. The firm's analyst concludes that, based on this information alone, Tomas probably orders an espresso-based drink when he visits in the morning. The analyst is careful to label this an inductive inference, noting that some regulars prefer drip coffee or tea instead. No additional facts about Tomas's personal preferences are given.",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "majority premise about regulars ordering espresso drinks",
+        "Tomas is a member of the Fernwood regulars group",
+        "conclusion is probabilistic about Tomas individually",
+        "groups in premises and conclusion match"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "d544-fae1-7f2f-0941"
+      ],
+      "skill_names": [
+        "statistical-syllogism"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "b4da-1465-d345-44b0",
+    "title": "Whales and mammalian lungs",
+    "domain": "logic",
+    "source_artifact": "s3.m5:statistical-syllogism",
+    "source_document_uid": "d544-fae1-7f2f-0941",
+    "question": "Is the orca argument a statistical syllogism? Answer yes or no.",
+    "input": "A biology textbook offers the following argument as a warm-up exercise. Premise one: All mammals have lungs. Premise two: An orca is a mammal. Conclusion: Therefore, an orca has lungs. The textbook then asks whether this is the same kind of reasoning as 'Most commuters own a transit pass; Lena is a commuter; so Lena probably owns one.' A student writing in the margin labels both arguments as statistical syllogisms because each one ends with a claim about a specific individual.",
+    "output": "no",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "major premise uses 'all', making it universal",
+        "argument is deductive, not inductive",
+        "statistical syllogism requires a 'most' or majority premise",
+        "student's marginal note is wrong"
+      ],
+      "correct_conclusion": "no",
+      "skill_uids": [
+        "d544-fae1-7f2f-0941"
+      ],
+      "skill_names": [
+        "statistical-syllogism"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "175b-3110-2cbf-b85d",
+    "title": "Library patrons generalization only",
+    "domain": "logic",
+    "source_artifact": "s3.m5:statistical-syllogism",
+    "source_document_uid": "d544-fae1-7f2f-0941",
+    "question": "Is this passage an instance of statistical syllogism? Answer yes or no.",
+    "input": "A neighborhood librarian observes that the majority of patrons who visit on Saturday mornings check out at least one cookbook before leaving. She mentions this pattern to a colleague during a staff meeting and adds that it has held steady for nearly two years. She does not name any particular patron, draw any conclusion about a specific individual, or suggest that any named visitor will or has checked out a cookbook. The colleague nods and they move on to discussing the upcoming book sale.",
+    "output": "no",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "passage contains a majority generalization",
+        "no individual is identified as a group member",
+        "no conclusion is drawn about a specific individual",
+        "all three components must be present for the pattern to apply"
+      ],
+      "correct_conclusion": "no",
+      "skill_uids": [
+        "d544-fae1-7f2f-0941"
+      ],
+      "skill_names": [
+        "statistical-syllogism"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "d5aa-3813-33cf-d8ec",
+    "title": "Marathon finisher prediction",
+    "domain": "logic",
+    "source_artifact": "s3.m5:statistical-syllogism",
+    "source_document_uid": "d544-fae1-7f2f-0941",
+    "question": "Is the columnist's argument a statistical syllogism? Answer yes or no.",
+    "input": "A sports columnist writes: 'Almost all runners who complete the Riverside Marathon train at least sixteen weeks beforehand. Priya completed the Riverside Marathon last Sunday. So Priya almost certainly trained at least sixteen weeks for it.' The columnist underscores that a small fraction of finishers manage with shorter preparation, but most do not. She presents the inference as a likely-but-not-guaranteed conclusion about Priya specifically, drawn from what is typical of the marathon's finishers as a group.",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "'almost all' signals a statistical majority premise",
+        "Priya's membership in the finisher group is asserted",
+        "conclusion about Priya is probabilistic",
+        "inference is inductive, not deductive"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "d544-fae1-7f2f-0941"
+      ],
+      "skill_names": [
+        "statistical-syllogism"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "e134-b868-ab23-af2b",
+    "title": "Mismatched group reference",
+    "domain": "logic",
+    "source_artifact": "s3.m5:statistical-syllogism",
+    "source_document_uid": "d544-fae1-7f2f-0941",
+    "question": "Does this argument satisfy the requirements of a valid statistical syllogism? Answer yes or no.",
+    "input": "An opinion piece reasons as follows: 'Most software engineers at large tech firms hold a bachelor's degree in computer science. Marcus works as a software engineer at a small three-person startup. Therefore, Marcus probably holds a bachelor's degree in computer science.' The piece treats this as a textbook statistical syllogism, citing the high percentage as adequate support. A reader who applies the relevant procedure carefully will notice something off about how the groups line up between the generalization and the membership claim.",
+    "output": "no",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "generalization is about engineers at large tech firms",
+        "Marcus belongs to engineers at a small startup, a different group",
+        "groups in the premise and membership claim must match",
+        "the inference fails the group-alignment requirement"
+      ],
+      "correct_conclusion": "no",
+      "skill_uids": [
+        "d544-fae1-7f2f-0941"
+      ],
+      "skill_names": [
+        "statistical-syllogism"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "7306-cd88-190e-ca9a",
+    "title": "Certainty from probabilistic premise",
+    "domain": "logic",
+    "source_artifact": "s3.m5:statistical-syllogism",
+    "source_document_uid": "d544-fae1-7f2f-0941",
+    "question": "Which student is correct, the first or the second?",
+    "input": "A debate coach presents this argument to her students. 'Most graduates of Eastfield High enroll in a four-year college within a year of graduating. Jen just graduated from Eastfield High. Therefore, it is certain that Jen will enroll in a four-year college within a year.' The coach asks the students to evaluate whether the conclusion follows in the way the argument claims. One student says it is a perfectly fine statistical syllogism. Another student is hesitant and points to the word 'certain' in the conclusion.",
+    "output": "second",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "premise is statistical (most), allowing exceptions",
+        "conclusion is stated with certainty",
+        "inductive gap between probabilistic premise and certain conclusion",
+        "second student correctly flags the overstatement"
+      ],
+      "correct_conclusion": "second",
+      "skill_uids": [
+        "d544-fae1-7f2f-0941"
+      ],
+      "skill_names": [
+        "statistical-syllogism"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "RANKING",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "d965-706b-4147-d677",
+    "title": "Identify the missing component",
+    "domain": "logic",
+    "source_artifact": "s3.m5:statistical-syllogism",
+    "source_document_uid": "d544-fae1-7f2f-0941",
+    "question": "Which component is missing? Answer in a short phrase.",
+    "input": "Consider this passage from a policy brief: 'The majority of registered voters in Brookline County voted in the last municipal election. Civic engagement in the county has remained robust over the past decade, and the local newspaper has consistently endorsed candidates from across the political spectrum.' The brief stops there and does not name any particular voter. A reviewer is asked which structural element of a statistical syllogism the passage lacks: the majority premise, the individual membership statement, or the individual-level conclusion.",
+    "output": "individual membership and conclusion",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "majority premise is present",
+        "no specific individual is named as a member",
+        "no individual-level conclusion is drawn",
+        "the passage is therefore not a statistical syllogism"
+      ],
+      "correct_conclusion": "individual membership and conclusion",
+      "skill_uids": [
+        "d544-fae1-7f2f-0941"
+      ],
+      "skill_names": [
+        "statistical-syllogism"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "FREE_FORM",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "2cbe-f707-d643-6234",
+    "title": "Veterinary clinic appointment",
+    "domain": "logic",
+    "source_artifact": "s3.m5:statistical-syllogism",
+    "source_document_uid": "d544-fae1-7f2f-0941",
+    "question": "What kind of argument is the technician making? Answer in two or three words.",
+    "input": "A veterinary technician notes that most cats brought to the Maple Street Clinic for their annual checkup receive a rabies booster during the visit. Mr. Han brings his cat Biscuit to the Maple Street Clinic for an annual checkup tomorrow morning. Based only on this information, the technician tells a coworker, 'Biscuit will probably get a rabies booster tomorrow.' She emphasizes she could be wrong in any individual case but thinks the prediction is reasonable given the clinic's typical practice.",
+    "output": "statistical syllogism",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "majority premise about cats receiving boosters",
+        "Biscuit is a member of cats at this clinic for checkups",
+        "conclusion is probabilistic about Biscuit",
+        "all three components align"
+      ],
+      "correct_conclusion": "statistical syllogism",
+      "skill_uids": [
+        "d544-fae1-7f2f-0941"
+      ],
+      "skill_names": [
+        "statistical-syllogism"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "SINGLE_WORD",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "95c0-640c-4a3e-dfe1",
+    "title": "Universal premise about triangles",
+    "domain": "logic",
+    "source_artifact": "s3.m5:statistical-syllogism",
+    "source_document_uid": "d544-fae1-7f2f-0941",
+    "question": "Is this a statistical syllogism? Answer yes or no.",
+    "input": "A geometry tutor writes the following on the board. 'Every triangle has interior angles that sum to 180 degrees. The figure shaded in red on the worksheet is a triangle. So the interior angles of the red figure sum to 180 degrees.' He then asks his class whether this is the same form of reasoning as a statistical syllogism, since both arguments move from a general claim and a membership statement to a conclusion about a specific case. He wants the students to identify the form precisely.",
+    "output": "no",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "'every' makes the major premise universal",
+        "the argument is deductive",
+        "statistical syllogism requires a probabilistic majority premise",
+        "shared structure does not equal shared inference type"
+      ],
+      "correct_conclusion": "no",
+      "skill_uids": [
+        "d544-fae1-7f2f-0941"
+      ],
+      "skill_names": [
+        "statistical-syllogism"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "1a44-04c1-7063-fc7f",
+    "title": "Pilot recurrent training inference",
+    "domain": "logic",
+    "source_artifact": "s3.m5:statistical-syllogism",
+    "source_document_uid": "d544-fae1-7f2f-0941",
+    "question": "Is the analyst's original argument a legitimate statistical syllogism? Answer yes or no.",
+    "input": "An aviation analyst argues: 'Most commercial airline pilots licensed in this country complete recurrent simulator training every six months. Captain Reyes is a commercial airline pilot licensed in this country. Therefore, Captain Reyes likely completed recurrent simulator training within the last six months.' A junior colleague objects that because some pilots fall behind on recurrent training due to medical leave or scheduling conflicts, the argument is invalid and should be discarded entirely as a piece of reasoning. The analyst disagrees and defends the inference's structure.",
+    "output": "yes",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "premise uses 'most', a statistical generalization",
+        "Captain Reyes is identified as a group member",
+        "conclusion is appropriately hedged with 'likely'",
+        "exceptions don't invalidate an inductive inference; they're expected"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "d544-fae1-7f2f-0941"
+      ],
+      "skill_names": [
+        "statistical-syllogism"
+      ],
+      "skill_categories": [
+        "logical"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "ba67-dc34-4a2d-b92e",
+    "title": "Surgeon before difficult call",
+    "domain": "theory of the mind",
+    "source_artifact": "s3.m5:emotional-self-regulation",
+    "source_document_uid": "19ff-7eff-4c1e-4eaa",
+    "question": "Which specific action in the passage shows Dr. Patel regulating her own emotional state?",
+    "input": "Dr. Patel learned the donor heart had been damaged in transit. Her chest tightened and her hands started to shake as she walked toward the waiting family. Halfway down the corridor, she stopped at a window, closed her eyes, and exhaled slowly four times until her shoulders dropped. Then she straightened her coat and continued. The family stood as she approached. She delivered the news in a steady voice, answered every question, and gently placed a hand on the mother's arm when she began to weep.",
+    "output": "exhaling slowly at the window",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the trigger is learning the donor heart was damaged",
+        "the regulating action is stopping to breathe slowly at the window",
+        "placing a hand on the mother is comforting another, not self-regulation",
+        "the action is self-directed and precedes her response"
+      ],
+      "correct_conclusion": "exhaling slowly at the window",
+      "skill_uids": [
+        "19ff-7eff-4c1e-4eaa"
+      ],
+      "skill_names": [
+        "emotional-self-regulation"
+      ],
+      "skill_categories": [
+        "theory of the mind"
+      ]
+    },
+    "query_type": "FREE_FORM",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "9cfc-78dd-5a10-64dc",
+    "title": "Negotiator at the table",
+    "domain": "theory of the mind",
+    "source_artifact": "s3.m5:emotional-self-regulation",
+    "source_document_uid": "19ff-7eff-4c1e-4eaa",
+    "question": "Does the passage contain an instance of Ruiz regulating his own emotion? Answer yes or no.",
+    "input": "When the rival delegation accused his country of bad faith, Ambassador Ruiz felt heat rise in his face. He picked up his water glass, took a deliberate sip, and set it down before speaking. He calmly suggested a fifteen-minute recess so tempers could cool, looking pointedly at the rival lead negotiator who was red-faced and gripping his pen. Once in the hallway, Ruiz also instructed his deputy to soften her tone in the next session.",
+    "output": "yes",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the trigger is the accusation of bad faith and his rising heat",
+        "the self-regulating action is the deliberate sip before speaking",
+        "calling a recess targets the room, and instructing the deputy targets another person",
+        "at least one self-directed modulation is present"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "19ff-7eff-4c1e-4eaa"
+      ],
+      "skill_names": [
+        "emotional-self-regulation"
+      ],
+      "skill_categories": [
+        "theory of the mind"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "79b5-8e91-25c8-36c1",
+    "title": "Two siblings after bad news",
+    "domain": "theory of the mind",
+    "source_artifact": "s3.m5:emotional-self-regulation",
+    "source_document_uid": "19ff-7eff-4c1e-4eaa",
+    "question": "Which sibling demonstrates emotional self-regulation in this passage?",
+    "input": "After the doctor left, Maya and her brother Eli sat in silence. Maya felt grief crash over her; she pressed her palms hard against her thighs and silently named five objects in the room until her breathing slowed. Eli, who had been numb since morning, simply stared at the floor without moving, the same blank expression he had worn for hours. Neither spoke for several minutes. Then Maya stood and went to fetch water for them both.",
+    "output": "Maya",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "Maya experiences a clear trigger (grief crashing over her)",
+        "Maya performs deliberate self-directed actions (pressing palms, naming objects)",
+        "Eli's blankness is not a deliberate modulation but a continuation of numbness",
+        "regulation requires both trigger and deliberate modulating action"
+      ],
+      "correct_conclusion": "Maya",
+      "skill_uids": [
+        "19ff-7eff-4c1e-4eaa"
+      ],
+      "skill_names": [
+        "emotional-self-regulation"
+      ],
+      "skill_categories": [
+        "theory of the mind"
+      ]
+    },
+    "query_type": "SINGLE_WORD",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "9ea9-ea32-f930-7665",
+    "title": "Pilot in turbulence",
+    "domain": "theory of the mind",
+    "source_artifact": "s3.m5:emotional-self-regulation",
+    "source_document_uid": "19ff-7eff-4c1e-4eaa",
+    "question": "Does the passage depict Captain Lindgren engaging in emotional self-regulation? Answer yes or no.",
+    "input": "Captain Lindgren had flown for twenty years and rarely felt nervous. Cruising at 35,000 feet through clear skies, she chatted easily with her first officer about weekend plans and sipped her coffee. When mild turbulence began an hour later, she calmly adjusted altitude per protocol and informed passengers in an even tone, exactly as her training required.",
+    "output": "no",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "no emotional trigger or internal state shift is described",
+        "her calm chatting and protocol response are routine, not modulation",
+        "surface calmness without a trigger does not count as self-regulation",
+        "trained protocol behavior alone is not deliberate emotion modulation"
+      ],
+      "correct_conclusion": "no",
+      "skill_uids": [
+        "19ff-7eff-4c1e-4eaa"
+      ],
+      "skill_names": [
+        "emotional-self-regulation"
+      ],
+      "skill_categories": [
+        "theory of the mind"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "9297-3dc5-90a5-4207",
+    "title": "Manager after harsh email",
+    "domain": "theory of the mind",
+    "source_artifact": "s3.m5:emotional-self-regulation",
+    "source_document_uid": "19ff-7eff-4c1e-4eaa",
+    "question": "Which action best exemplifies Devon's emotional self-regulation?",
+    "input": "Reading the client's scathing email, Devon felt a hot urge to fire back a defensive reply. He drafted three angry sentences, then stopped. He closed the laptop, walked to the kitchen, made tea, and reminded himself that the client had just lost a major contract and was lashing out. When he returned, he reread the email and wrote a measured response acknowledging the client's frustration. He also forwarded the thread to his colleague Anita, urging her to stay patient if the client called her.",
+    "output": "closing the laptop and reframing the client's behavior",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "trigger is the scathing email and his hot urge to fire back",
+        "Devon deliberately interrupts his impulse by closing the laptop",
+        "he reframes by reminding himself of the client's situation",
+        "urging Anita to stay patient regulates someone else, not himself"
+      ],
+      "correct_conclusion": "closing the laptop and reframing the client's behavior",
+      "skill_uids": [
+        "19ff-7eff-4c1e-4eaa"
+      ],
+      "skill_names": [
+        "emotional-self-regulation"
+      ],
+      "skill_categories": [
+        "theory of the mind"
+      ]
+    },
+    "query_type": "FREE_FORM",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "4c7b-4426-f510-c9e5",
+    "title": "Two debaters under pressure",
+    "domain": "theory of the mind",
+    "source_artifact": "s3.m5:emotional-self-regulation",
+    "source_document_uid": "19ff-7eff-4c1e-4eaa",
+    "question": "Rank Hassan and Clara from clearer to weaker example of emotional self-regulation.",
+    "input": "During the final round, the moderator mocked Hassan's accent. Hassan felt a flash of humiliation, mentally counted to five, and chose to address only the substance of the question in his rebuttal. His opponent Clara, irritated by the moderator's behavior on Hassan's behalf, snapped at the moderator to apologize and demanded the question be rephrased. Both debaters were praised afterward for their composure.",
+    "output": "Hassan, Clara",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "Hassan has a trigger (humiliation) and a self-directed modulation (counting, refocusing)",
+        "Clara's action targets the moderator, not her own emotion",
+        "external praise for composure does not equal self-regulation",
+        "Hassan is the clearer instance of self-regulation"
+      ],
+      "correct_conclusion": "Hassan, Clara",
+      "skill_uids": [
+        "19ff-7eff-4c1e-4eaa"
+      ],
+      "skill_names": [
+        "emotional-self-regulation"
+      ],
+      "skill_categories": [
+        "theory of the mind"
+      ]
+    },
+    "query_type": "RANKING",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "56ab-d46b-ba2d-305a",
+    "title": "Goalkeeper before penalty",
+    "domain": "theory of the mind",
+    "source_artifact": "s3.m5:emotional-self-regulation",
+    "source_document_uid": "19ff-7eff-4c1e-4eaa",
+    "question": "Which action in the passage qualifies as emotional self-regulation?",
+    "input": "The referee pointed to the spot. Aiyana's stomach lurched and her pulse spiked. She turned her back to the striker, walked to the post, touched it twice, and recited her pre-save mantra under her breath until her breathing evened out. Then she faced the ball. After the save, her teammates rushed her; she shouted at her defender, who had caused the penalty, to mark tighter next time.",
+    "output": "touching the post and reciting her mantra",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "trigger is the penalty being awarded and her physiological spike",
+        "self-directed actions are touching the post and reciting the mantra",
+        "shouting at the defender is directed at another, not self",
+        "the modulation occurs before her response to the trigger"
+      ],
+      "correct_conclusion": "touching the post and reciting her mantra",
+      "skill_uids": [
+        "19ff-7eff-4c1e-4eaa"
+      ],
+      "skill_names": [
+        "emotional-self-regulation"
+      ],
+      "skill_categories": [
+        "theory of the mind"
+      ]
+    },
+    "query_type": "FREE_FORM",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "53f3-429a-1739-0071",
+    "title": "Teacher and disruptive student",
+    "domain": "theory of the mind",
+    "source_artifact": "s3.m5:emotional-self-regulation",
+    "source_document_uid": "19ff-7eff-4c1e-4eaa",
+    "question": "Whose behavior in the passage shows emotional self-regulation?",
+    "input": "When Marcus threw the marker across the classroom, Mr. Oduya felt anger flare instantly. He paused, set down the textbook, and silently counted his breaths to four before speaking. In a level voice, he asked Marcus to step into the hallway. Once there, he firmly told Marcus that throwing things was unacceptable and that Marcus needed to calm down before returning. Marcus, still seething, kicked the wall.",
+    "output": "Mr. Oduya",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "Mr. Oduya has a trigger (anger flaring) and modulates with pause and counted breaths",
+        "telling Marcus to calm down regulates another, not the self",
+        "Marcus shows a trigger but no deliberate self-modulation; he kicks the wall",
+        "only Mr. Oduya satisfies both conditions"
+      ],
+      "correct_conclusion": "Mr. Oduya",
+      "skill_uids": [
+        "19ff-7eff-4c1e-4eaa"
+      ],
+      "skill_names": [
+        "emotional-self-regulation"
+      ],
+      "skill_categories": [
+        "theory of the mind"
+      ]
+    },
+    "query_type": "SINGLE_WORD",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "7bdf-bdf3-d353-2510",
+    "title": "Author at hostile reading",
+    "domain": "theory of the mind",
+    "source_artifact": "s3.m5:emotional-self-regulation",
+    "source_document_uid": "19ff-7eff-4c1e-4eaa",
+    "question": "Does the passage contain Nadia regulating her own emotional state? Answer yes or no.",
+    "input": "An audience member stood up and called Nadia's novel offensive. Heat rushed to her cheeks and her thoughts scrambled. She took a slow sip of water, reminded herself that one strong reaction did not define the room, and waited until she could feel her voice steady before answering. She thanked him for the question and offered a thoughtful reply. Later, the host apologized profusely to her for the audience member's tone.",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "trigger is the hostile accusation and her physiological reaction",
+        "self-directed actions: slow sip, cognitive reframing, waiting for steady voice",
+        "the host's apology is external and not her regulation",
+        "both trigger and deliberate modulation are present"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "19ff-7eff-4c1e-4eaa"
+      ],
+      "skill_names": [
+        "emotional-self-regulation"
+      ],
+      "skill_categories": [
+        "theory of the mind"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "4b86-1959-0198-4851",
+    "title": "Father after child's tantrum",
+    "domain": "theory of the mind",
+    "source_artifact": "s3.m5:emotional-self-regulation",
+    "source_document_uid": "19ff-7eff-4c1e-4eaa",
+    "question": "Which character's behavior is the clearest example of emotional self-regulation?",
+    "input": "When his four-year-old hurled a bowl of pasta at the wall, Theo felt fury rise. He turned away, walked to the porch, and stood gripping the railing while he forced his jaw to unclench and counted backwards from twenty. Meanwhile, his partner crouched beside their daughter, speaking softly and rubbing her back to help her settle. After a few minutes, Theo came back inside and quietly began cleaning the floor with their daughter's help.",
+    "output": "Theo",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "Theo has a clear trigger (fury at the thrown bowl)",
+        "Theo's self-directed actions: walking away, unclenching jaw, counting backwards",
+        "the partner's soothing targets the daughter, not the partner's own emotion",
+        "self-regulation requires the modulation to be aimed at the self"
+      ],
+      "correct_conclusion": "Theo",
+      "skill_uids": [
+        "19ff-7eff-4c1e-4eaa"
+      ],
+      "skill_names": [
+        "emotional-self-regulation"
+      ],
+      "skill_categories": [
+        "theory of the mind"
+      ]
+    },
+    "query_type": "SINGLE_WORD",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "a665-882f-06a0-efc8",
+    "title": "Marble on tilted tray",
+    "domain": "physical knowledge",
+    "source_artifact": "s3.m5:folk-physics-common-knowledge-physics",
+    "source_document_uid": "6c8b-51cc-d9ac-3f5a",
+    "question": "While the tray remains tilted, in which direction does the marble move: toward the cat's edge or toward the opposite edge?",
+    "input": "Renu sets a smooth wooden tray flat on her dining table and places a glass marble in the center. Her cat Pixel jumps onto one edge of the tray, pressing that edge down so the tray now slopes steadily from the cat's side toward the opposite side. The marble has no glue, no groove, and nothing blocking it. The tray surface is dry and polished. Renu watches without touching anything. The cat holds its position, keeping the tilt steady for several seconds before jumping off.",
+    "output": "toward the opposite edge",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "the tray is tilted with the cat's side higher pressed down... actually cat presses edge down so cat's side is lower",
+        "gravity pulls the marble down the slope",
+        "the marble rolls toward the lower edge, which is the cat's edge"
+      ],
+      "correct_conclusion": "toward the cat's edge",
+      "skill_uids": [
+        "6c8b-51cc-d9ac-3f5a"
+      ],
+      "skill_names": [
+        "folk-physics-common-knowledge-physics"
+      ],
+      "skill_categories": [
+        "physical knowledge"
+      ]
+    },
+    "query_type": "FREE_FORM",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "7c79-c765-e8b7-bf1e",
+    "title": "Ice cube in warm tea",
+    "domain": "physical knowledge",
+    "source_artifact": "s3.m5:folk-physics-common-knowledge-physics",
+    "source_document_uid": "6c8b-51cc-d9ac-3f5a",
+    "question": "Is the ice cube smaller than when he dropped it in? Answer yes or no.",
+    "input": "Hassan pours hot black tea into a ceramic mug and, before drinking, drops a single ice cube into it. The mug sits on the kitchen counter for two minutes while he answers a phone call. The kitchen is a normal room temperature. No one stirs the mug, adds anything else, or moves it. When Hassan returns, he glances into the mug to check on the ice cube before taking a sip.",
+    "output": "yes",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "hot tea transfers heat to the ice",
+        "ice melts when warmed",
+        "after two minutes the cube has shrunk"
+      ],
+      "correct_conclusion": "yes",
+      "skill_uids": [
+        "6c8b-51cc-d9ac-3f5a"
+      ],
+      "skill_names": [
+        "folk-physics-common-knowledge-physics"
+      ],
+      "skill_categories": [
+        "physical knowledge"
+      ]
+    },
+    "query_type": "YES_NO",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "e346-01f6-3656-3b53",
+    "title": "Cork released underwater",
+    "domain": "physical knowledge",
+    "source_artifact": "s3.m5:folk-physics-common-knowledge-physics",
+    "source_document_uid": "6c8b-51cc-d9ac-3f5a",
+    "question": "Once released, does the cork rise to the surface, stay in place, or sink further? Answer in one phrase.",
+    "input": "At a swimming pool, Lila holds a dry wine cork at the bottom of the deep end, pressing it against the tiled floor with her fingertip. The pool water is still. Around her, swimmers above are doing slow laps, but no one is near her. Lila lifts her finger off the cork without pushing it in any direction. She keeps her hand still and watches the cork.",
+    "output": "rise to the surface",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "cork is less dense than water",
+        "buoyancy exceeds gravity for cork",
+        "released cork floats upward to the surface"
+      ],
+      "correct_conclusion": "rise to the surface",
+      "skill_uids": [
+        "6c8b-51cc-d9ac-3f5a"
+      ],
+      "skill_names": [
+        "folk-physics-common-knowledge-physics"
+      ],
+      "skill_categories": [
+        "physical knowledge"
+      ]
+    },
+    "query_type": "FREE_FORM",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "4f41-23b6-87a9-f5f6",
+    "title": "Bus brakes and standing rider",
+    "domain": "physical knowledge",
+    "source_artifact": "s3.m5:folk-physics-common-knowledge-physics",
+    "source_document_uid": "6c8b-51cc-d9ac-3f5a",
+    "question": "Relative to the bus, does Aiyana's upper body lurch forward or backward?",
+    "input": "Aiyana is standing in the aisle of a city bus, not holding any pole, while the bus drives forward at a steady speed. Ahead, a delivery truck suddenly stops in the lane. The bus driver slams the brakes hard, and the bus decelerates sharply. Aiyana is not expecting the stop and her feet remain planted on the floor due to friction with her shoes, but nothing else restrains her body. Other seated passengers are belted in.",
+    "output": "forward",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "bus decelerates suddenly",
+        "her body's inertia keeps it moving forward",
+        "relative to the bus, she pitches forward"
+      ],
+      "correct_conclusion": "forward",
+      "skill_uids": [
+        "6c8b-51cc-d9ac-3f5a"
+      ],
+      "skill_names": [
+        "folk-physics-common-knowledge-physics"
+      ],
+      "skill_categories": [
+        "physical knowledge"
+      ]
+    },
+    "query_type": "SINGLE_WORD",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "5bc7-819a-f10f-1c9a",
+    "title": "Dropped ceramic plate",
+    "domain": "physical knowledge",
+    "source_artifact": "s3.m5:folk-physics-common-knowledge-physics",
+    "source_document_uid": "6c8b-51cc-d9ac-3f5a",
+    "question": "What should Theo most urgently warn his son about when he enters the kitchen? Answer in one short phrase.",
+    "input": "While drying dishes, Theo loses his grip on a thin ceramic dinner plate. It slips from chest height and falls onto a hard tile floor below. The plate is not wrapped or padded. Theo does not catch it. The kitchen is otherwise quiet, with no rugs or mats on the tile. The plate lands flat with a sharp sound. Theo's young son, hearing the noise, runs in barefoot from the living room to see what happened.",
+    "output": "broken pieces",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "ceramic plate falling onto hard tile shatters",
+        "broken shards are dangerous to bare feet",
+        "the urgent hazard is the sharp pieces, not the noise or the plate's loss"
+      ],
+      "correct_conclusion": "broken pieces",
+      "skill_uids": [
+        "6c8b-51cc-d9ac-3f5a"
+      ],
+      "skill_names": [
+        "folk-physics-common-knowledge-physics"
+      ],
+      "skill_categories": [
+        "physical knowledge"
+      ]
+    },
+    "query_type": "FREE_FORM",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "0c6c-5eb7-d9ca-b8db",
+    "title": "Helium balloon released indoors",
+    "domain": "physical knowledge",
+    "source_artifact": "s3.m5:folk-physics-common-knowledge-physics",
+    "source_document_uid": "6c8b-51cc-d9ac-3f5a",
+    "question": "Where does the released helium balloon end up?",
+    "input": "At a birthday party, Mira is handed a helium-filled balloon on a short ribbon. The room has a tall ceiling and is otherwise calm — no fans, no open windows, no air vents blowing nearby. Distracted by the cake, Mira lets go of the ribbon entirely. The balloon was not weighted at the bottom. Other balloons in the room are tied to chairs and remain in place. Mira does not reach to grab the ribbon back.",
+    "output": "ceiling",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "helium is less dense than air",
+        "an unrestrained helium balloon rises",
+        "in a closed room it stops at the ceiling"
+      ],
+      "correct_conclusion": "ceiling",
+      "skill_uids": [
+        "6c8b-51cc-d9ac-3f5a"
+      ],
+      "skill_names": [
+        "folk-physics-common-knowledge-physics"
+      ],
+      "skill_categories": [
+        "physical knowledge"
+      ]
+    },
+    "query_type": "SINGLE_WORD",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "1129-daad-e764-6bb2",
+    "title": "Pouring water from kettle",
+    "domain": "physical knowledge",
+    "source_artifact": "s3.m5:folk-physics-common-knowledge-physics",
+    "source_document_uid": "6c8b-51cc-d9ac-3f5a",
+    "question": "When the water reaches the spout, does it flow into the cup or remain in the kettle?",
+    "input": "Devon fills an electric kettle with cold water and sets it to boil. Once it clicks off, he lifts the kettle by its handle and tilts the spout over an empty teacup that sits on the counter directly below the spout's tip. He keeps the spout aimed at the cup and continues tilting until the water inside the kettle reaches the spout opening. The cup is wide-mouthed and clean. Devon does not move the cup.",
+    "output": "flow into the cup",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "tilting brings water past the spout's lip",
+        "gravity pulls the water out and downward",
+        "water lands in the cup positioned below"
+      ],
+      "correct_conclusion": "flow into the cup",
+      "skill_uids": [
+        "6c8b-51cc-d9ac-3f5a"
+      ],
+      "skill_names": [
+        "folk-physics-common-knowledge-physics"
+      ],
+      "skill_categories": [
+        "physical knowledge"
+      ]
+    },
+    "query_type": "FREE_FORM",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "5a97-0a20-e447-6322",
+    "title": "Two balls down a ramp",
+    "domain": "physical knowledge",
+    "source_artifact": "s3.m5:folk-physics-common-knowledge-physics",
+    "source_document_uid": "6c8b-51cc-d9ac-3f5a",
+    "question": "Do the two balls reach the bottom at roughly the same time, or does one arrive much sooner? Answer in one short phrase.",
+    "input": "On a wooden plank propped against a stack of books, Owen sets up a simple ramp. At the top, he holds two balls side by side: a solid rubber ball and a steel ball bearing of the same size. He releases both at exactly the same instant. The ramp is smooth and clean, the room is still, and neither ball is given any push. Both roll freely down the same slope to the floor. Owen films the run on his phone to settle a bet with his sister, who insists one ball will clearly beat the other to the bottom.",
+    "output": "roughly the same time",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "common intuition correctly says heavier and lighter objects fall/roll together under gravity in everyday conditions",
+        "the trap is assuming the heavier steel ball wins by a wide margin",
+        "on a smooth ramp both balls arrive at nearly the same time"
+      ],
+      "correct_conclusion": "roughly the same time",
+      "skill_uids": [
+        "6c8b-51cc-d9ac-3f5a"
+      ],
+      "skill_names": [
+        "folk-physics-common-knowledge-physics"
+      ],
+      "skill_categories": [
+        "physical knowledge"
+      ]
+    },
+    "query_type": "FREE_FORM",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "68e6-7326-a6e6-94ce",
+    "title": "Book on a moving skateboard",
+    "domain": "physical knowledge",
+    "source_artifact": "s3.m5:folk-physics-common-knowledge-physics",
+    "source_document_uid": "6c8b-51cc-d9ac-3f5a",
+    "question": "Relative to the skateboard's original direction of motion, which way does the book slide off?",
+    "input": "In an empty hallway, Priya places a hardcover book flat on top of a skateboard. She gives the skateboard a strong, steady push forward and lets go. The skateboard rolls smoothly across the level floor. The book is not glued, taped, or held — it just rests on the deck. Suddenly the front wheels of the skateboard hit a small raised threshold strip across the floor, and the skateboard stops abruptly. The book was not touching anything else.",
+    "output": "forward",
+    "difficulty": "advanced",
+    "acceptance_criteria": {
+      "must_identify": [
+        "skateboard halts suddenly",
+        "the book's inertia keeps it moving forward",
+        "the book slides off the front of the deck"
+      ],
+      "correct_conclusion": "forward",
+      "skill_uids": [
+        "6c8b-51cc-d9ac-3f5a"
+      ],
+      "skill_names": [
+        "folk-physics-common-knowledge-physics"
+      ],
+      "skill_categories": [
+        "physical knowledge"
+      ]
+    },
+    "query_type": "SINGLE_WORD",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  },
+  {
+    "task_uid": "e00c-95a6-c8e2-16f4",
+    "title": "Hot pan on cold counter",
+    "domain": "physical knowledge",
+    "source_artifact": "s3.m5:folk-physics-common-knowledge-physics",
+    "source_document_uid": "6c8b-51cc-d9ac-3f5a",
+    "question": "Compared to when he set it down, is the skillet hotter, about the same, or cooler when he returns?",
+    "input": "After frying eggs, Marco lifts a hot cast-iron skillet straight off the burner and sets it down on the granite countertop with no trivet or towel underneath. He immediately walks away to answer the door. The skillet was hot enough to make oil sputter just moments before. The granite countertop is at normal room temperature. The kitchen is otherwise undisturbed; no one touches the pan. Marco returns about fifteen minutes later and reaches for the skillet's handle to wash it.",
+    "output": "cooler",
+    "difficulty": "intermediate",
+    "acceptance_criteria": {
+      "must_identify": [
+        "heat flows from hot skillet to cooler surroundings and counter",
+        "with the burner off, no new heat is added",
+        "after fifteen minutes the skillet has cooled noticeably"
+      ],
+      "correct_conclusion": "cooler",
+      "skill_uids": [
+        "6c8b-51cc-d9ac-3f5a"
+      ],
+      "skill_names": [
+        "folk-physics-common-knowledge-physics"
+      ],
+      "skill_categories": [
+        "physical knowledge"
+      ]
+    },
+    "query_type": "SINGLE_WORD",
+    "extraction_method": "s3.m5.task-synthesis-v1"
+  }
+]

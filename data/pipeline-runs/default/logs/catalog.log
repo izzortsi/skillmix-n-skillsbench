@@ -1,0 +1,11 @@
+Seeded 10 skills: data/wikipedia-seed/source.json -> /home/istrozzi/Documents/kk-digital-docker/llm-skills/data/pipeline-runs/default/catalog/skills.json
+  [reasoning] self-serving-bias
+  [rhetorical] accident-fallacy
+  [rhetorical] complex-question-loaded-question-with-implicit-assumption
+  [rhetorical] red-herring
+  [literary] metaphor
+  [logical] spatial-reasoning
+  [logical] modus-ponens
+  [logical] statistical-syllogism
+  [theory of the mind] emotional-self-regulation
+  [physical knowledge] folk-physics-common-knowledge-physics

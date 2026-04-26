@@ -1,0 +1,36 @@
+---
+name: red-herring
+description: Use when when asked to detect a diversion in which a responder substitutes
+  an irrelevant but appealing topic for a direct answer to a posed question.
+skill_uid: 4c53-1ddf-a469-fb6a
+category: rhetorical
+source: bench_catalog.procedural-v1
+---
+
+# red-herring
+
+Introducing irrelevant points to detract attention from a question.
+
+## When to Use
+
+- when asked to detect a diversion in which a responder substitutes an irrelevant but appealing topic for a direct answer to a posed question.
+
+## Procedure
+
+1. Locate the explicit question or challenge posed in the passage and write down its core subject.
+2. For each response sentence, identify its actual topic and compare it to the question's subject.
+3. Mark any response segment that shifts to a broadly appealing or tangential topic without answering the core subject.
+4. Check whether the shift uses positive or emotionally resonant language to make the diversion seem like a natural reply.
+5. Confirm that the original question remains unaddressed after the diversion before concluding the pattern applies.
+
+## Constraints
+
+- Do not flag a response that genuinely addresses the question even if it includes additional praise or context.
+- Require both a clear question and a clear topic shift; a vague or partial answer alone is not sufficient.
+- Do not flag off-topic remarks that occur without any prior question prompting them.
+- Do not rely on tone alone; the response must fail to engage the question's actual subject.
+
+## Example
+
+Positive: A reporter asks a CEO why quarterly profits dropped, and the CEO replies that the company is deeply committed to innovation and employee wellbeing. Why: the reply swaps the specific profit question for unrelated positive themes without addressing it.
+Negative: A reporter asks a CEO why quarterly profits dropped, and the CEO explains supply-chain delays before adding that the company remains committed to innovation. Why: the core question is directly answered, with the positive remark as supplement rather than substitution.

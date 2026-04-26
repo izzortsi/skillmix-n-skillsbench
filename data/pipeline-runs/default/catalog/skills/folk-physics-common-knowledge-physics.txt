@@ -1,0 +1,20 @@
+---
+name: folk-physics-common-knowledge-physics
+description: Use when producing text that illustrates folk physics (common knowledge
+  physics)
+skill_uid: 6c8b-51cc-d9ac-3f5a
+category: physical knowledge
+source: s2.m1.wikipedia-seed
+---
+
+# folk-physics-common-knowledge-physics
+
+The untrained human perception of basic physical phenomena.
+
+## When to Use
+
+- producing text that illustrates folk physics (common knowledge physics)
+
+## Example
+
+'If I roll the pen off of the table, it will fall to the floor.'

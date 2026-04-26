@@ -1,0 +1,57 @@
+[
+  {"task_uid":"t1","title":"Guild bylaw with distractor","domain":"logic","source_artifact":"","source_document_uid":"",
+   "question":"Does Mira satisfy bylaw 1 for master artisan status? Answer yes or no.",
+   "input":"Guild bylaw 1: Every master artisan must have completed a seven-year apprenticeship under a single registered master. Apprentice Mira trained under master potter Doran for seven consecutive years. In an unrelated matter, Doran was accused of fraud last winter but acquitted in a full guild hearing this spring. Mira's seven-year training concluded last month.",
+   "output":"yes","difficulty":"advanced",
+   "acceptance_criteria":{"must_identify":["bylaw requires 7 years under a single master","Mira met both conditions","the fraud/acquittal is a distractor, not a bylaw violation"],"correct_conclusion":"yes"},
+   "query_type":"FREE_FORM","extraction_method":"hand"},
+
+  {"task_uid":"t2","title":"Three-sentence deflection","domain":"rhetoric","source_artifact":"","source_document_uid":"",
+   "question":"Which single phrase is the red herring? Answer with one of: waste reduction, governor commendations, software renewal.",
+   "input":"Auditor: 'The committee is asking specifically about the $4.2M in unexplained expenditures this quarter.' Treasurer: 'Our department has reduced waste by 12% year-over-year, our staff has received commendations from the governor for public service, and the software renewal contract is essential for tax processing next year.'",
+   "output":"governor commendations","difficulty":"advanced",
+   "acceptance_criteria":{"must_identify":["waste reduction and software renewal are budget-topical","commendations from the governor do not address expenditures","the red herring is the off-topic positive claim"],"correct_conclusion":"governor commendations"},
+   "query_type":"FREE_FORM","extraction_method":"hand"},
+
+  {"task_uid":"t3","title":"Smuggled premise","domain":"rhetoric","source_artifact":"","source_document_uid":"",
+   "question":"What core unstated premise does the reporter's question presuppose? Answer in one short phrase.",
+   "input":"At a press conference: 'Professor, why did the research team manipulate the trial data to support their conclusion that the drug is effective?'",
+   "output":"the research team manipulated data","difficulty":"advanced",
+   "acceptance_criteria":{"must_identify":["any direct answer concedes manipulation occurred","the why-question smuggles the accusation as fact"],"correct_conclusion":"the research team manipulated data"},
+   "query_type":"FREE_FORM","extraction_method":"hand"},
+
+  {"task_uid":"t4","title":"Cathedral speech","domain":"literary","source_artifact":"","source_document_uid":"",
+   "question":"In this metaphor, what does each 'arch' represent? Answer with one word.",
+   "input":"The CEO's annual address was a cathedral of certainties: each column was a statistic, each arch was a promise, and each stained-glass panel was a quote from the company's founders.",
+   "output":"promise","difficulty":"advanced",
+   "acceptance_criteria":{"must_identify":["the passage explicitly pairs 'arch' with 'promise'","the metaphor maps architectural parts to rhetorical components"],"correct_conclusion":"promise"},
+   "query_type":"FREE_FORM","extraction_method":"hand"},
+
+  {"task_uid":"t5","title":"Post-match reflection","domain":"reasoning","source_artifact":"","source_document_uid":"",
+   "question":"Does the player's reflection exhibit self-serving bias? Answer yes or no.",
+   "input":"Post-match interview with a top tennis player after a loss: 'I lost tonight because I didn't adjust my strategy quickly enough when my opponent shifted tactics in the third set. My coach had warned me about exactly this scenario earlier this week and he turned out to be right.'",
+   "output":"no","difficulty":"advanced",
+   "acceptance_criteria":{"must_identify":["player attributes the loss to own tactical failure (internal, failure)","player credits the coach's prediction (external, success)","this inverts the self-serving pattern, so the answer is no"],"correct_conclusion":"no"},
+   "query_type":"FREE_FORM","extraction_method":"hand"},
+
+  {"task_uid":"t6","title":"Confidential consent","domain":"rhetoric","source_artifact":"","source_document_uid":"",
+   "question":"Does the rule correctly condemn Dr. Ansari's action? Answer yes or no.",
+   "input":"Hospital rule: Employees must not disclose confidential patient information to parties outside the direct care team. Situation: Dr. Ansari, the attending physician, explains a minor patient's diagnosis to the patient's legal guardian in order to obtain the required informed consent before emergency surgery.",
+   "output":"no","difficulty":"advanced",
+   "acceptance_criteria":{"must_identify":["informed consent legally requires guardian disclosure","guardians are implicit parties to the care decision","the rule as stated omits this well-known exception"],"correct_conclusion":"no"},
+   "query_type":"FREE_FORM","extraction_method":"hand"},
+
+  {"task_uid":"t7","title":"Reference-class choice","domain":"logic","source_artifact":"","source_document_uid":"",
+   "question":"Based only on this information, what approximate probability should you assign to Jordan committing at least one moving violation this year? Answer with a percentage.",
+   "input":"A national survey finds that 18% of licensed drivers commit at least one moving violation per year. A separate study of drivers in major metropolitan regions finds that 47% of metropolitan drivers commit at least one moving violation per year. Jordan has a driver's license, drives daily, and lives in Los Angeles.",
+   "output":"47%","difficulty":"advanced",
+   "acceptance_criteria":{"must_identify":["Jordan is in the metropolitan reference class","use the tighter reference class over the broader one","statistical syllogism prefers the most specific applicable generalization"],"correct_conclusion":"47%"},
+   "query_type":"FREE_FORM","extraction_method":"hand"},
+
+  {"task_uid":"t8","title":"Three pots on the counter","domain":"spatial","source_artifact":"","source_document_uid":"",
+   "question":"Which pot is closest to the refrigerator? Answer with one letter: A, B, or C.",
+   "input":"Three flowerpots — A, B, C — sit on a kitchen counter that runs north-south along the east wall of a room. The cook stands inside the room, facing the counter. From the cook's standpoint, A is to the left of B and to the right of C. The refrigerator is at the south end of the counter.",
+   "output":"B","difficulty":"advanced",
+   "acceptance_criteria":{"must_identify":["the cook faces east (toward the east-wall counter)","facing east, the cook's left points north and the cook's right points south","A is north of B (A is on the cook's left of B)","A is south of C (A is on the cook's right of C)","south-to-north order on the counter is B, A, C","the refrigerator is at the south end, so the closest pot is the southernmost one"],"correct_conclusion":"B"},
+   "query_type":"FREE_FORM","extraction_method":"hand"}
+]

@@ -1,0 +1,38 @@
+---
+name: statistical-syllogism
+description: Use when asked to detect, classify, or evaluate an argument that moves
+  from a 'most members have property P' premise plus an individual's group membership
+  to a conclusion about that individual.
+skill_uid: d544-fae1-7f2f-0941
+category: logical
+source: bench_catalog.procedural-v1
+---
+
+# statistical-syllogism
+
+A syllogism that argues, using inductive reasoning, from a generalization true for the most part to a particular case.
+
+## When to Use
+
+- Use when asked to detect, classify, or evaluate an argument that moves from a 'most members have property P' premise plus an individual's group membership to a conclusion about that individual.
+
+## Procedure
+
+1. Scan the passage for a generalization that holds for most (but not all) members of a group, using quantifiers like 'almost all', 'the majority', 'usually', or 'most'.
+2. Locate a statement asserting that a specific individual or instance is a member of that group.
+3. Check whether a conclusion is drawn (or is being asked) that applies the general trait to that specific member.
+4. Verify the inference is inductive (probabilistic) rather than deductive: the premise must allow exceptions, not claim universality.
+5. Confirm the three pieces align: the group in the generalization, the group in the membership claim, and the trait attributed to the individual must all match.
+6. Flag or apply the pattern only when all three components (majority premise, membership premise, individual conclusion) are present and connected.
+
+## Constraints
+
+- Do not flag arguments whose major premise is universal ('all' or 'none') rather than statistical.
+- Do not flag a standalone generalization that lacks an individual-case conclusion.
+- Require the group referenced in the generalization to be the same group the individual is said to belong to.
+- Do not treat a conclusion stated with certainty as equivalent when the premise is only probabilistic; note the inductive gap.
+
+## Example
+
+Positive: 'Most commuters in this city own a transit pass. Lena is a commuter here, so she likely has a transit pass.' Why: a majority premise plus individual membership yields a probabilistic conclusion about that individual.
+Negative: 'All mammals have lungs. A whale is a mammal, so a whale has lungs.' Why: the major premise is universal, making this a deductive categorical syllogism rather than an inductive inference from a statistical majority.

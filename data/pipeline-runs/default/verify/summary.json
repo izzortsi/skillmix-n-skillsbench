@@ -1,0 +1,9 @@
+{
+  "examples_attempted": 3,
+  "verified": 2,
+  "rejected": 1,
+  "max_rounds": 1,
+  "verifier_model": "claude-opus-4-7",
+  "refiner_model": "claude-opus-4-7",
+  "source": "s3.m4.agentic-verified"
+}

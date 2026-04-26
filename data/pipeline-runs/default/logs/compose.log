@@ -1,0 +1,9 @@
+[1/3] k=2 [multi-cat] skills=(modus-ponens, emotional-self-regulation)
+    q='My therapist said: 'If I notice my heart rate spiking during arguments with my p...' answer_len=1201
+[2/3] k=2 [multi-cat] skills=(self-serving-bias, emotional-self-regulation)
+    q='I just got passed over for a promotion at work and I'm furious. My manager said ...' answer_len=1136
+[3/3] k=2 [multi-cat] skills=(self-serving-bias, complex-question-loaded-question-with-implicit-assumption)
+    q='My sister just got promoted and I didn't, and now everyone in the family keeps a...' answer_len=1419
+
+Wrote 3 examples -> /home/istrozzi/Documents/kk-digital-docker/llm-skills/data/pipeline-runs/default/compose/examples.json
+  k=2  catalog=10  parsed_question=3/3

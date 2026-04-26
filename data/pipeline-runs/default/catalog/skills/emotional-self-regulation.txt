@@ -1,0 +1,19 @@
+---
+name: emotional-self-regulation
+description: Use when producing text that illustrates emotional self regulation
+skill_uid: 19ff-7eff-4c1e-4eaa
+category: theory of the mind
+source: s2.m1.wikipedia-seed
+---
+
+# emotional-self-regulation
+
+a complex process that involves initiating, inhibiting, or modulating one's state or behavior in a given situation.
+
+## When to Use
+
+- producing text that illustrates emotional self regulation
+
+## Example
+
+Examples of emotional self regulation include meditating, pausing to collect oneself before speaking, and practicing stress management.

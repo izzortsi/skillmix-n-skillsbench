@@ -1,0 +1,19 @@
+---
+name: statistical-syllogism
+description: Use when producing text that illustrates statistical syllogism
+skill_uid: d544-fae1-7f2f-0941
+category: logical
+source: s2.m1.wikipedia-seed
+---
+
+# statistical-syllogism
+
+A syllogism that argues, using inductive reasoning, from a generalization true for the most part to a particular case.
+
+## When to Use
+
+- producing text that illustrates statistical syllogism
+
+## Example
+
+'Almost all people are taller than 26 inches. Gareth is a person. Therefore, Gareth is taller than 26 inches.'

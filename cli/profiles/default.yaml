@@ -1,0 +1,103 @@
+profile_name: default
+run_dir: data/pipeline-runs/default
+catalog_method: s2.m1
+catalog_provider: anthropic:claude-opus-4-7
+catalog_source: data/wikipedia-seed/source.json
+catalog_n_roots: 5
+catalog_max_subskills: 4
+catalog_root_batch_size: 5
+catalog_target_size: 100
+catalog_categories: 10
+catalog_batch_size: 15
+catalog_max_batches_per_category: 5
+catalog_concurrency: 1
+compose_method: s3.m1
+compose_provider: anthropic:claude-opus-4-7
+compose_n: 20
+compose_k: 2
+compose_seed: 42
+compose_same_category: false
+compose_categories: []
+compose_domain: ''
+compose_topics: data/topics/topics.json
+compose_sentence_limit: 2
+verify_verifier: anthropic:claude-opus-4-7
+verify_refiner: anthropic:claude-opus-4-7
+verify_max_rounds: 2
+verify_limit: 0
+skillmix_student: ollama:qwen3.5:2b
+skillmix_judge: anthropic:claude-opus-4-7
+skillmix_k: 2
+skillmix_trials: 10
+skillmix_sentence_limit: 2
+skillmix_topics: data/topics/topics.json
+skillmix_seed: 42
+solve_tasks: data/mini-tasks.json
+solve_model: claude-opus-4-7
+solve_thinking_budget: 4096
+solve_max_tokens: 8000
+solve_limit: 0
+# ---- bench_catalog (declarative -> procedural Skill rewrite) ------------
+# Takes catalog/skills.json and rewrites each entry into a procedural Skill
+# (numbered steps, constraints, dual positive/negative example) suitable for
+# injection into the student's system prompt. Paper: SkillsBench definition
+# of a Skill as procedural guidance, not few-shot examples.
+bench_catalog_provider: anthropic:claude-opus-4-7
+bench_catalog_limit: 0
+bench_catalog_skills: []   # non-empty = rewrite only these skill names
+
+# ---- bench (SkillsBench corpus eval) ------------------------------------
+bench_tasks: data/mini-tasks.json
+
+# Single-student mode (ignored while bench_models is non-empty).
+bench_provider: ollama:qwen3.5:2b
+
+# Multi-student sweep. Every "provider:model" is benchmarked; episodes are
+# merged into one episodes.json tagged with .model. Set to [] to fall back
+# to bench_provider above.
+bench_models:
+  - anthropic:claude-haiku-4-5-20251001
+  - ollama:llama3.1:8b
+  - ollama:qwen3.5:2b
+  - ollama:qwen3.5:0.8b
+
+bench_judge: anthropic:claude-opus-4-7
+bench_mode: singlecall
+
+# Per-task skill injection: {task_uid: skill_name}. Each listed task runs
+# baseline AND one curated episode with its mapped skill; unlisted tasks run
+# baseline only. Skill names must match an entry in catalog/skills.json.
+# Ignored when bench_cross_task is true.
+#
+# Each task in data/mini-tasks.json exercises one skill from the Wikipedia
+# seed catalog; the map below is 1:1 so every task gets both a baseline and
+# a curated episode per student.
+bench_task_skill_map:
+  t1: modus-ponens
+  t2: red-herring
+  t3: complex-question-loaded-question-with-implicit-assumption
+  t4: metaphor
+  t5: self-serving-bias
+  t6: accident-fallacy
+  t7: statistical-syllogism
+  t8: spatial-reasoning
+# Optional: path to a JSON file with the same shape. Used only when the
+# inline dict above is empty.
+bench_task_skill_map_file: ""
+
+bench_cross_task: false
+bench_limit: 0
+
+# ---- bench_traced (skill-injected solver with native CoT capture) -------
+# Closes Gap A. Runs s4.m4 in --mode inject: per task, baseline + curated
+# (procedural skill from bench_catalog injected into the system prompt).
+# Each episode carries the model's native thinking blocks AND the injected
+# skill — that's the (CoT, injected-skill) pair an SFT pipeline needs.
+# Reuses bench_tasks + bench_task_skill_map above.
+bench_traced_model: claude-opus-4-7
+bench_traced_thinking_budget: 4096
+bench_traced_max_tokens: 8000
+bench_traced_judge: anthropic:claude-opus-4-7
+bench_traced_limit: 0
+
+bench_viz_dpi: 150
