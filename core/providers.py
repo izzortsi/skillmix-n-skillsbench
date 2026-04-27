@@ -402,12 +402,23 @@ class MockProvider:
 
 
 def create_provider(name: str = "anthropic", model: str = "", **kwargs) -> Any:
-    """Create a provider by name. Nice defaults for common cases."""
+    """Create a provider by name. Nice defaults for common cases.
+
+    Supported kwargs:
+      max_tokens: per-call output cap (default depends on provider).
+                  Increase for prompts that ask for many records in one call.
+      host:       ollama only — base URL override.
+    """
+    max_tokens = kwargs.get("max_tokens")
     if name == "anthropic":
+        if max_tokens is not None:
+            return AnthropicProvider(model=model or DEFAULT_ANTHROPIC_MODEL, max_tokens=max_tokens)
         return AnthropicProvider(model=model or DEFAULT_ANTHROPIC_MODEL)
     if name == "ollama":
         # Strip an optional "ollama:" prefix in case the spec was stored with it.
         resolved = model[len("ollama:"):] if model.startswith("ollama:") else model
+        if max_tokens is not None:
+            return OllamaProvider(model=resolved, host=kwargs.get("host"), max_tokens=max_tokens)
         return OllamaProvider(model=resolved, host=kwargs.get("host"))
     if name == "mock":
         return MockProvider(model=model or "mock")

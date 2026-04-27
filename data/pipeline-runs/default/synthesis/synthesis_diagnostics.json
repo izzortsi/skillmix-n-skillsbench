@@ -1,0 +1,10 @@
+{
+  "malformed": [],
+  "failures": [
+    {
+      "skill_uid": "e5e6-71b6-0106-b886",
+      "skill_name": "appeal-to-authority",
+      "error": "no JSON array found in response: '[\\n{\\n\"title\": \"Astrophysicist endorses cancer therapy\",\\n\"domain\": \"rhetoric\",\\n\"input\": \"A new pamphlet argues that mistletoe extract injections cure pancreatic cancer. The pamphlet\\'s central support reads: \\'Dr. Lena Voss, a celebrated astrophysicist who won the Halberg Prize for her work on pulsar ti'"
+    }
+  ]
+}

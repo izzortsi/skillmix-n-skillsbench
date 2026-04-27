@@ -106,6 +106,7 @@ def filter_episodes(
     conditions: Optional[List[str]] = None,
     min_response_chars: int = 50,
     min_score: float = 0.0,
+    skip_skills: Optional[List[str]] = None,
 ) -> List[Dict[str, Any]]:
     """Apply quality + condition filters.
 
@@ -114,11 +115,18 @@ def filter_episodes(
       - judge passed = True
       - response is non-trivially long (filters out "ANSWER: yes" one-liners
         even if they passed; we want the CoT, not just the conclusion)
+
+    `skip_skills`: list of skill names to exclude entirely (matched against
+    episode.injected_skill_name). Used to drop ceiling skills where the
+    procedure is overhead rather than scaffolding.
     """
     cond_set = set(conditions) if conditions else None
+    skip_set = set(skip_skills) if skip_skills else None
     out: List[Dict[str, Any]] = []
     for ep in episodes:
         if cond_set is not None and ep.get("condition") not in cond_set:
+            continue
+        if skip_set is not None and ep.get("injected_skill_name", "") in skip_set:
             continue
         if require_passed and not ep.get("passed"):
             continue
@@ -164,6 +172,7 @@ def build_dataset(
     conditions: Optional[List[str]] = None,
     min_score: float = 0.0,
     min_response_chars: int = 50,
+    skip_skills: Optional[List[str]] = None,
     dedup: bool = True,
     verbose: bool = False,
 ) -> Dict[str, Any]:
@@ -186,6 +195,7 @@ def build_dataset(
         conditions=conditions,
         min_score=min_score,
         min_response_chars=min_response_chars,
+        skip_skills=skip_skills,
     )
     n_after_filter = len(filtered)
 
@@ -276,12 +286,18 @@ def main() -> None:
     parser.add_argument("--min-response-chars", type=int, default=50,
                         help="Drop rows with response shorter than this many chars "
                              "(default: 50; filters one-line ANSWER-only responses)")
+    parser.add_argument("--skip-skills", default="",
+                        help="Comma-separated skill names to exclude entirely "
+                             "(matched against episode.injected_skill_name). "
+                             "Use to drop ceiling skills where the procedure is "
+                             "overhead rather than scaffolding.")
     parser.add_argument("--no-dedup", action="store_true",
                         help="Skip dedup by (task_uid, condition, model)")
     parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args()
 
     conditions = [c.strip() for c in args.conditions.split(",") if c.strip()]
+    skip_skills = [s.strip() for s in args.skip_skills.split(",") if s.strip()] or None
     summary = build_dataset(
         episodes_path=args.episodes,
         out_path=args.out,
@@ -289,6 +305,7 @@ def main() -> None:
         conditions=conditions,
         min_score=args.min_score,
         min_response_chars=args.min_response_chars,
+        skip_skills=skip_skills,
         dedup=not args.no_dedup,
         verbose=args.verbose,
     )

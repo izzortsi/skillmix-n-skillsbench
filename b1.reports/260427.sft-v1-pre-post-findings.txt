@@ -1,0 +1,277 @@
+================================================================================
+REPORT: SFT V1 — PRE / POST FINDINGS (qwen3.5:0.8b)
+================================================================================
+
+Date:   2026-04-27
+Status: COMPLETED
+
+================================================================================
+OVERVIEW
+================================================================================
+
+This report documents the result of the v1 SFT experiment: train Qwen3.5-0.8B
+via LoRA on a 353-row procedural-skill demonstration corpus, then measure
+whether the trained model uses injected procedural skills more effectively
+than the base model.
+
+THE QUESTION
+
+  Does SFT on (task + injected procedural skill -> Opus CoT) demonstrations
+  cause a smaller student to apply the injected procedure when it sees one,
+  measurably lifting its task-solving rate vs the base student?
+
+THE ONE-SENTENCE ANSWER
+
+  No clean lift. The SFT taught the FORMAT (step-by-step + ANSWER line) and
+  meaningfully improved baseline accuracy (+12.5 pp), but did NOT teach the
+  model to use injected skills DIFFERENTLY than no-skill prompts. The Δ from
+  skill injection actually flipped sign (+5.5 pp -> -5.0 pp).
+
+================================================================================
+SETUP
+================================================================================
+
+Student        Qwen/Qwen3.5-0.8B (873M params, qwen35 architecture)
+Adapter        LoRA r=8, alpha=16, dropout=0.05, target_modules=all-linear
+Training       3 epochs, lr=2e-4 cosine, batch=1 x grad_accum=8 (effective 8)
+Loss masking   FELL BACK to loss-on-all-tokens (Qwen3.5 chat template lacks
+               the {% generation %} markers TRL >=0.18 needs for
+               assistant-only loss masking; documented warning emitted)
+Train rows     353 (curated-passing only, from bench_traced over 400 train
+               tasks at Opus pass rate ~88%)
+Train data     SFT v2 corpus at data/pipeline-runs/default/sft_dataset/dataset.jsonl
+
+Eval design    200 holdout tasks (5 per skill x 40 skills, disjoint from train)
+Eval prompt    s4.m4 SOLVER_SYSTEM_PROMPT (matches SFT corpus; pre-SFT bench
+               re-run with --system-prompt solver to keep apples-to-apples)
+Conditions     baseline (no skill in system) + curated (skill block injected)
+Judge          anthropic:claude-opus-4-7
+
+Methodology    Pre-SFT bench (corpus_harness on 200 holdout tasks, 4 students)
+               Post-SFT bench (eval_qwen35_lora.py on same 200, SFT'd qwen)
+               Same prompt, same tasks, same judge — only difference is the
+               LoRA adapter on the qwen-0.8b student.
+
+================================================================================
+AGGREGATE RESULTS
+================================================================================
+
+                              BL pass     CU pass     Δ
+  Pre-SFT  qwen3.5:0.8b       0.510       0.565       +0.055
+  Post-SFT qwen3.5:0.8b       0.635       0.585       -0.050
+  Δ from SFT                  +0.125      +0.020      -0.105 (sign flip)
+
+  Pre-SFT  haiku-4-5          0.785       0.800       +0.015 (reference; no SFT)
+
+KEY OBSERVATIONS
+
+  1. Baseline accuracy lifted +12.5 pp. The model became substantially better
+     at producing answer-shaped responses to procedural-skill-style tasks.
+     This is not a small effect.
+
+  2. Curated accuracy lifted only +2.0 pp — within noise.
+
+  3. Δ pass (curated - baseline) flipped from +5.5 pp to -5.0 pp. Pre-SFT,
+     skill injection helped a little. Post-SFT, skill injection slightly
+     hurts on average.
+
+  4. Mean scores tell the same story:
+        Pre-SFT  BL 0.519   CU 0.562
+        Post-SFT BL 0.620   CU 0.573
+
+================================================================================
+PER-SKILL BREAKDOWN (post-SFT, n=5 per skill except where noted)
+================================================================================
+
+Read at n=77 mid-run; full n=200 paste from the per-skill diff one-liner
+recommended below for the production version of this report. The pattern
+visible at n=77 — and consistent with the aggregate flip — is two clusters:
+
+LIFT CLUSTER (skill injection HELPED post-SFT)
+
+  self-serving-bias              BL 2/5 -> CU 3/5    +20 pp
+  accident-fallacy               BL 2/5 -> CU 3/5    +20 pp
+  modus-tollens                  BL 4/5 -> CU 5/5    +20 pp
+  ad-hominem                     BL 3/5 -> CU 3/5    flat (partial up)
+
+REGRESSION CLUSTER (skill injection HURT post-SFT)
+
+  modus-ponens                   BL 5/5 -> CU 4/5    -20 pp
+  disjunctive-syllogism          BL 4/5 -> CU 3/5    -20 pp
+  statistical-syllogism          BL 5/5 -> CU 3/5    -40 pp
+  hypothetical-syllogism         BL 5/5 -> CU 3/5    -40 pp
+  contrapositive                 BL 5/5 -> CU 2/5    -60 pp
+
+THE PATTERN
+
+  Skills where pre-SFT baseline was at CEILING (5/5) tend to REGRESS in
+  curated. The injected procedure adds 5-6 steps the model must walk
+  through; on tasks the model could solve directly via intuition, the
+  procedure introduces opportunities for sub-inference errors.
+
+  Skills where pre-SFT baseline was WEAK tend to LIFT in curated. The
+  procedure provides scaffolding the model needed.
+
+  This pattern is interpretable: SFT taught the model to APPLY procedures
+  when shown one; what it didn't teach is when to apply vs ignore them.
+
+================================================================================
+DIAGNOSIS
+================================================================================
+
+WHAT SFT DID
+
+  - Taught the SOLVER format (step-by-step reasoning, ANSWER: line).
+    Evidence: baseline responses now use "Step 1 (Identify ...): ..."
+    style consistently, vs sparse pre-SFT formatting.
+  - Taught the model to follow injected procedures verbatim.
+    Evidence: curated responses use exact procedure-step language from the
+    skill block ("Locate generalization", "Scan for conditional", etc),
+    while baseline responses use generic step labels ("Identify the
+    argument", "Locate the rule").
+  - Lifted absolute baseline accuracy +12.5 pp.
+
+WHAT SFT DID NOT DO
+
+  - Did NOT teach the model to differentially benefit from skill injection.
+  - Did NOT close the procedural-skill-following gap to a frontier model.
+  - Did NOT generalize procedural application to skills it had ceiling
+    on at baseline (logic skills regressed).
+
+ROOT-CAUSE ANALYSIS
+
+  1. Curated-only training corpus.
+        All 353 SFT rows had the (task + skill block, Opus CoT) pattern.
+        The model never saw a (task without skill block, direct reasoning)
+        positive demonstration. With no contrastive signal between the two
+        prompt distributions, it learned a unified "procedural responder"
+        behavior that fires regardless of skill presence — which lifts
+        baseline (because the format helps) but blunts the curated edge
+        (because nothing trained the model to use the procedure
+        differentially).
+
+  2. Loss masking fallback.
+        TRL >=0.18 requires {% generation %} markers in the chat template
+        for assistant_only_loss; Qwen3.5's stock template lacks them.
+        Training fell back to loss-on-all-tokens. This dilutes the
+        gradient signal — the model spent capacity learning to predict
+        system + user tokens (easy gradient, format learning) instead of
+        focusing on response generation. Likely amplified the
+        format-takeover effect.
+
+  3. Ceiling skills in the SFT corpus.
+        The 40-skill catalog includes both interpretive skills with
+        headroom (red-herring, accident-fallacy, self-serving-bias) and
+        deductive skills the base model already handles well
+        (modus-ponens, contrapositive, statistical-syllogism). Including
+        the latter in the SFT corpus teaches the model to mechanically
+        walk through procedures on tasks it could one-shot, introducing
+        the regression we observe.
+
+================================================================================
+WHAT WORKED (BUILD-OUT VALIDATIONS)
+================================================================================
+
+  - End-to-end pipeline ran cleanly: catalog -> bench_catalog -> s3.m5 ->
+    bench_traced -> sft_dataset -> training -> eval
+  - Pre/post comparison was clean (matched prompt, tasks, judge); no
+    confounds in the experimental setup itself
+  - Training was healthy: monotonic loss decrease 2.42 -> 0.46, no NaNs,
+    grad norms stable, ~31 min walltime on consumer GPU
+  - Judge fixes (deterministic ANSWER-line extraction, markdown stripping)
+    held up across 1600+ episodes; no spurious extraction failures observed
+
+================================================================================
+v1.5 PLAN
+================================================================================
+
+The findings point to two complementary fixes — A is high-confidence and
+cheap; B is exploratory.
+
+A. CORPUS COMPOSITION FIX (recommended first)
+   1. Include baseline-passing rows in the SFT corpus.
+        Run sft_dataset with --conditions curated,baseline. Each row
+        carries metadata.condition; downstream filter or train trainers
+        can use both. Teaches: "with skill = follow procedure; without
+        skill = reason directly."
+   2. Drop ceiling skills from the SFT corpus.
+        Skills where Opus pre-SFT pass > 0.9 in baseline are unlikely to
+        benefit from procedural scaffolding; their inclusion mostly
+        teaches the model to add overhead. Candidates to drop based on
+        post-SFT regression: modus-ponens, contrapositive,
+        statistical-syllogism, hypothetical-syllogism, disjunctive-
+        syllogism.
+   3. Patch Qwen3.5 chat template for assistant_only_loss.
+        Inject {% generation %}...{% endgeneration %} around the assistant
+        branch of the template. Save as a local tokenizer override. This
+        un-dilutes the gradient signal and should reduce the format-
+        takeover effect.
+
+   Cost: ~$5-10 for any incremental data generation; ~30 min retraining;
+   ~30 min re-eval.
+
+B. FULL FINE-TUNE (deferred diagnostic)
+   If A still produces flat curated lift, run full FT (no LoRA) on the same
+   corpus. Tests whether LoRA capacity is the bottleneck. Use lr=5e-6,
+   2 epochs, weight_decay=0.01, with held-out 10% as eval split for early
+   stopping. We already discussed this trade-off; current decision was
+   "LoRA first, FT after checking results" — A first remains consistent.
+
+================================================================================
+WHAT TO MEASURE IN v1.5
+================================================================================
+
+Same eval design (200 holdout tasks, SOLVER prompt, Opus judge). Success
+criteria, in order of strength:
+
+  WIN     post-SFT-v1.5 curated > 0.65 AND > baseline (clear lift,
+          differential skill benefit)
+  PARTIAL post-SFT-v1.5 curated > 0.585 (improves over v1) BUT still
+          < or = baseline (signal direction-corrected; magnitude small)
+  STAY    post-SFT-v1.5 curated approx 0.585 (corpus changes did not
+          unlock differential procedural following; problem may be deeper —
+          consider Path B or rethink the SFT framing)
+
+================================================================================
+OPEN QUESTIONS / DECISIONS
+================================================================================
+
+  1. Approve v1.5 corpus composition fix (Path A above)?
+  2. Should the chat-template patch ship as a small helper script in
+     training/ (e.g. patch_qwen35_template.py) or be left to user?
+  3. Per-skill diff at n=200 has not been computed and pasted into this
+     report. Recommended: run the one-liner I sent earlier against
+     bench-eval-pre-sft and bench-eval-post-sft, paste the output, and
+     update this report's PER-SKILL BREAKDOWN section with the n=200
+     numbers (replacing the n=77 estimates).
+
+================================================================================
+ARTIFACTS
+================================================================================
+
+  data/pipeline-runs/default/sft_dataset/dataset.jsonl
+        SFT v1 training corpus (353 rows, curated-only)
+
+  data/pipeline-runs/default/bench-eval-pre-sft/episodes.json
+        Pre-SFT eval, qwen3.5:0.8b + haiku, SOLVER prompt, 800 episodes
+
+  data/pipeline-runs/default/bench-eval-pre-sft.corpus-prompt.bak/
+        Pre-SFT eval with corpus_harness prompt (kept for reference;
+        the prompt-mismatch run that motivated the SOLVER-prompt redux)
+
+  data/pipeline-runs/default/bench-eval-post-sft/episodes.json
+        Post-SFT eval, SFT'd qwen3.5:0.8b, SOLVER prompt, 400 episodes
+
+  training/train_qwen35_lora.py
+        LoRA training script (TRL-version-aware; chat-template fallback)
+
+  training/eval_qwen35_lora.py
+        Post-SFT eval script (uses SOLVER prompt to match SFT corpus)
+
+  b1.reports/260425.sft-dataset-generation-status.txt
+        Earlier session's status report covering pipeline build-out,
+        bench_traced/sft_dataset/student-characterization findings
+
+================================================================================
+END REPORT
+================================================================================

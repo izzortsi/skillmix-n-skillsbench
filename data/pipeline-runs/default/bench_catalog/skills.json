@@ -4,21 +4,21 @@
     "name": "self-serving-bias",
     "description": "A cognitive or perceptual process that is distorted by the need to maintain and enhance one's self esteem.",
     "category": "reasoning",
-    "example": "Positive: A manager says her team's successful quarter reflects her leadership, but the failed quarter was due to market conditions beyond her control. Why: Success is attributed internally and failure externally by the same subject, protecting self-image.\nNegative: A student says he passed because he studied hard and failed another exam because he didn't study enough. Why: Both outcomes receive internal attributions, so there is no self-protective asymmetry.",
+    "example": "Positive: A salesperson says her record month proves her skill, but blames last month's poor numbers on a bad territory assignment and an unfair quota. Why: The same agent attributes her success internally and her failure externally, forming the asymmetric pattern.\nNegative: A salesperson says her record month was due to a strong product launch, and her poor month was due to her own under-preparation. Why: Causes are assigned without protecting self-image, so the asymmetric attribution pattern is absent.",
     "procedure": [
-      "Locate each statement in the passage where a person or group explains the cause of an outcome involving themselves.",
-      "Classify each outcome as favorable (success, praise, gain) or unfavorable (failure, blame, loss) for the speaker.",
-      "For each attribution, note whether the cause cited is internal (ability, effort, character) or external (luck, others, environment, conditions).",
-      "Flag the pattern only when favorable outcomes are paired with internal causes AND unfavorable outcomes are paired with external causes by the same subject.",
-      "Verify the pattern serves self-esteem protection or enhancement, rather than being justified by evidence presented in the passage.",
-      "Confirm at least one success-internal and one failure-external pairing coexist before marking the pattern as present."
+      "Locate every passage statement where a person, group, or institution explains the cause of an outcome involving themselves.",
+      "For each such statement, classify the outcome as positive (success, gain, praise) or negative (failure, loss, blame).",
+      "Identify whether the cited cause is internal (ability, effort, character) or external (luck, others, circumstances, environment).",
+      "Flag pairings where positive outcomes are credited to internal causes AND negative outcomes are blamed on external causes by the same agent.",
+      "Confirm the asymmetry is about the same agent's self-image; discard cases where different agents evaluate different outcomes.",
+      "Match the flagged pattern to the challenge's question and use it to support the required answer."
     ],
-    "when_to_use": "When asked to detect asymmetric causal attribution in which a speaker credits themselves for positive outcomes while blaming external factors for negative ones.",
+    "when_to_use": "Apply when the challenge asks the student to identify, label, or explain attributions an agent makes about their own successes versus failures in a passage.",
     "constraints": [
-      "Do not flag cases where only successes or only failures are discussed; both polarities must appear.",
-      "Do not flag attributions that the passage independently supports with evidence, even if they favor the speaker.",
-      "Do not flag third-party attributions; the speaker and the subject of the outcome must be the same.",
-      "A single self-congratulatory or blame-shifting statement alone is insufficient without the contrasting pair."
+      "Do not flag a single attribution in isolation; both the success-internal and failure-external sides must be present for the same agent.",
+      "Do not flag accurate causal explanations supported by the passage's evidence, even if they happen to favor the agent.",
+      "Do not flag cases where an outsider (not the agent themselves) assigns the credit or blame.",
+      "Do not flag generic optimism or pessimism that lacks an explicit causal attribution."
     ],
     "source": "bench_catalog.procedural-v1",
     "parent_skill_uid": ""
@@ -28,20 +28,21 @@
     "name": "accident-fallacy",
     "description": "an informal fallacy and a deductively valid but unsound argument occurring in a statistical syllogism (an argument based on a generalization) when an exception to a rule of thumb is ignored.",
     "category": "rhetorical",
-    "example": "Positive: An argument claims 'Taking others' property is theft; tax collectors take others' property; therefore tax collectors are thieves.' Why: It applies a rule-of-thumb to a case while ignoring the legal-authorization exception.\nNegative: An argument claims 'All triangles have three sides; this figure is a triangle; therefore it has three sides.' Why: The major premise is universally true with no exceptions, so no exception is being overlooked.",
+    "example": "Positive: An argument concludes that a lifeguard who held a swimmer underwater is guilty of assault because 'forcibly restraining someone in water is assault,' ignoring the rescue context. Why: A general rule is applied to a case whose recognized exception (rescue) is suppressed.\nNegative: An argument concludes that a mugger who held a victim underwater is guilty of assault because 'forcibly restraining someone in water is assault.' Why: No recognized exception applies to the specific case, so the rule is being used legitimately rather than fallaciously.",
     "procedure": [
-      "Locate the general rule or generalization stated in the passage (often a broad claim like 'X is always Y' or 'all X are Y').",
-      "Identify the specific case or instance the argument applies the rule to.",
-      "Check whether the specific case has features that plausibly qualify as a recognized exception to the general rule (context, role, intent, legal permission, etc.).",
-      "Determine whether the argument ignores or suppresses that exception when drawing its conclusion about the specific case.",
-      "Confirm the argument's form is a statistical or rule-of-thumb syllogism rather than a universally true premise, and flag it only if an overlooked exception is what drives the faulty conclusion."
+      "Locate the general rule or generalization stated in the passage (e.g., 'X is always Y' or 'doing Z is wrong').",
+      "Identify the specific case to which the argument applies that rule.",
+      "Check whether the specific case has features that are commonly recognized exceptions to the rule (professional context, consent, legal authorization, emergency, etc.).",
+      "Test whether the argument's conclusion depends on ignoring or suppressing those exception-creating features.",
+      "Confirm the structure: a sweeping generalization + a literal-match instance + a conclusion that treats the instance as if no exception applies.",
+      "If all three elements are present, mark the reasoning as committing this fallacy; otherwise reject the match."
     ],
-    "when_to_use": "when asked to detect or diagnose an argument that applies a general rule to a specific case while overlooking a legitimate exception to that rule.",
+    "when_to_use": "Use when asked to detect or label reasoning that applies a general rule rigidly to a specific case while ignoring a recognized exception that would normally exempt it.",
     "constraints": [
-      "Do not flag arguments whose major premise is genuinely exceptionless rather than a generalization.",
-      "Do not flag arguments where the specific case does not actually fall under a recognized exception.",
-      "Require that both a generalization and an ignored qualifying exception be identifiable; missing either element disqualifies the match.",
-      "Do not confuse this with hasty generalization, which moves from cases to a rule rather than from a rule to a case."
+      "Do not flag arguments where the general rule genuinely admits no relevant exception in the cited case.",
+      "Do not flag arguments that already acknowledge or address the exception before drawing the conclusion.",
+      "Require both a stated generalization and a specific instance subsumed under it; a lone overgeneralization without an applied case does not qualify.",
+      "Do not confuse this with hasty generalization, which moves from instance to rule rather than rule to instance."
     ],
     "source": "bench_catalog.procedural-v1",
     "parent_skill_uid": ""
@@ -51,21 +52,21 @@
     "name": "complex-question-loaded-question-with-implicit-assumption",
     "description": "A question that is loaded with an implicit assumption.",
     "category": "rhetorical",
-    "example": "Positive: A question asks 'When did you stop cheating on the exams?' in a context where cheating has not been established. Why: Any dated answer concedes prior cheating, which was never agreed to.\nNegative: A question asks 'Why did the suspect confess?' in a passage that has already stated the suspect confessed. Why: The presupposition is an established fact in the passage, not a smuggled assumption.",
+    "example": "Positive: A passage contains the line 'Have you stopped cheating on the exams?' addressed to a student whose cheating has not been established. Why: Both 'yes' and 'no' force the student to concede prior cheating, and that prior cheating is the unestablished embedded claim.\nNegative: A passage contains the line 'Why did you take the bus today?' addressed to someone the passage already states rode the bus. Why: The presupposition is already established as fact in context, so the question is a normal information request rather than a loaded one.",
     "procedure": [
       "Locate every interrogative sentence in the passage or challenge.",
-      "For each question, list the propositions that must already be true for the question to make sense (its presuppositions).",
-      "Test each presupposition by asking whether a direct answer ('yes' or explanation) would force the respondent to concede that proposition.",
-      "Check whether the presupposition is contested, unestablished, or unfavorable to the respondent rather than mutually accepted background.",
-      "Mark the question as carrying an implicit assumption only if at least one presupposition is both non-trivial and not conceded elsewhere in the passage.",
-      "Record which specific proposition is being smuggled in, distinct from the surface question being asked."
+      "For each question, paraphrase it as 'Given X, ...?' and explicitly write out X — the proposition the question takes for granted.",
+      "Test whether X is itself contested, unproven, or unestablished elsewhere in the passage; if X is already accepted by all parties, the question is not loaded.",
+      "Check whether any direct answer (yes/no or a chosen option) would force the responder to concede X regardless of which answer they pick.",
+      "Only mark the question as carrying an implicit assumption if both conditions hold: X is unestablished AND every available answer commits the responder to X.",
+      "Record the specific embedded proposition X as the loaded assumption, not the surface topic of the question."
     ],
-    "when_to_use": "Apply when asked to identify, analyze, or flag questions whose phrasing forces the answerer to accept an unstated or disputed claim.",
+    "when_to_use": "Use when asked to identify, extract, or evaluate the implicit presupposition embedded inside a question in the passage.",
     "constraints": [
-      "Do not flag a question merely because it is pointed, accusatory, or emotionally charged if its presuppositions are already established facts.",
-      "Do not flag open-ended questions (who/what/why) that have no hidden claim beyond the topic itself.",
-      "Require that a direct answer logically entails agreement with the contested proposition; mere topical relevance is not enough.",
-      "Do not conflate a factual error inside a question with an embedded presupposition smuggled past the answerer."
+      "Do not flag ordinary information-seeking questions whose presuppositions are already established as true in the passage.",
+      "Do not treat a question as loaded merely because it has an aggressive or accusatory tone.",
+      "Require that at least one available answer would be unfairly self-incriminating; if a neutral answer exists, the pattern is absent.",
+      "Identify the specific embedded claim, not just the broader subject matter of the question."
     ],
     "source": "bench_catalog.procedural-v1",
     "parent_skill_uid": ""
@@ -75,20 +76,20 @@
     "name": "red-herring",
     "description": "Introducing irrelevant points to detract attention from a question.",
     "category": "rhetorical",
-    "example": "Positive: A reporter asks a CEO why quarterly profits dropped, and the CEO replies that the company is deeply committed to innovation and employee wellbeing. Why: the reply swaps the specific profit question for unrelated positive themes without addressing it.\nNegative: A reporter asks a CEO why quarterly profits dropped, and the CEO explains supply-chain delays before adding that the company remains committed to innovation. Why: the core question is directly answered, with the positive remark as supplement rather than substitution.",
+    "example": "Positive: Asked why a budget was cut, an official replies by celebrating the nation's history of innovation and resilience. Why: The reply ignores the budget question and substitutes an unrelated laudatory theme.\nNegative: Asked why a budget was cut, an official says the cut was painful but necessary due to revenue shortfalls. Why: The reply directly addresses the question's subject even though it is brief or uncomfortable.",
     "procedure": [
-      "Locate the explicit question or challenge posed in the passage and write down its core subject.",
-      "For each response sentence, identify its actual topic and compare it to the question's subject.",
-      "Mark any response segment that shifts to a broadly appealing or tangential topic without answering the core subject.",
-      "Check whether the shift uses positive or emotionally resonant language to make the diversion seem like a natural reply.",
-      "Confirm that the original question remains unaddressed after the diversion before concluding the pattern applies."
+      "Locate the explicit question or topic posed in the passage and write down its core subject.",
+      "For each response sentence, test whether it directly addresses that core subject or instead pivots to a different topic.",
+      "Mark any sentence that substitutes broad, emotionally appealing themes (values, virtues, unrelated achievements) for a direct answer.",
+      "Check whether the diverting material shares only superficial vocabulary with the original question while ignoring its actual ask.",
+      "Confirm the response never returns to the original subject before concluding; if it doesn't, treat the diversion as deliberate."
     ],
-    "when_to_use": "when asked to detect a diversion in which a responder substitutes an irrelevant but appealing topic for a direct answer to a posed question.",
+    "when_to_use": "When asked to detect or construct a response that deflects a pointed question by pivoting to an unrelated but plausible-sounding topic.",
     "constraints": [
-      "Do not flag a response that genuinely addresses the question even if it includes additional praise or context.",
-      "Require both a clear question and a clear topic shift; a vague or partial answer alone is not sufficient.",
-      "Do not flag off-topic remarks that occur without any prior question prompting them.",
-      "Do not rely on tone alone; the response must fail to engage the question's actual subject."
+      "Do not flag a response merely for being vague; it must shift to a distinctly different subject.",
+      "Do not flag tangents that ultimately circle back and answer the original question.",
+      "Require both an unanswered question and a substituted topic before classifying; one alone is insufficient.",
+      "Do not flag responses that decline to answer explicitly without introducing a substitute topic."
     ],
     "source": "bench_catalog.procedural-v1",
     "parent_skill_uid": ""
@@ -98,21 +99,21 @@
     "name": "metaphor",
     "description": "a figure of speech that, for rhetorical effect, directly refers to one thing by mentioning another.",
     "category": "literary",
-    "example": "Positive: A passage states 'Her voice was a warm blanket on a cold night' when discussing how a speaker comforted listeners. Why: A voice (auditory) is directly equated with a blanket (tactile object) to transfer the quality of comfort without 'like' or 'as'.\nNegative: A passage states 'Her voice was like a warm blanket on a cold night.' Why: The explicit comparison marker 'like' makes this a simile rather than a direct substitution of one thing for another.",
+    "example": "Positive: A passage states 'Time is a thief that steals our youth.' Why: time and a thief are different categories, equated implicitly to transfer the attribute of stealing.\nNegative: A passage states 'Her smile was like sunshine on a cold day.' Why: the comparison is explicit via 'like', making it a simile rather than the target device.",
     "procedure": [
-      "Scan the passage for sentences that equate or substitute one noun/concept for another unlike thing.",
-      "For each candidate, confirm the comparison is direct (uses 'is', 'are', 'becomes', or renaming) rather than hedged with 'like' or 'as'.",
-      "Check that the two things compared belong to different categories or domains, so the statement is not literally true.",
-      "Infer the shared attribute the author wants transferred from the vehicle to the tenor (role, quality, function).",
-      "Match that inference to the challenge's question (identify, interpret, or apply) and select or construct the response accordingly.",
-      "Reject candidates whose comparison is literal, idiomatic-but-dead, or uses explicit comparison markers."
+      "Scan the passage for phrases that equate or substitute one thing for another (X is Y, X becomes Y, or X named in terms of Y).",
+      "For each candidate, check that the two things belong to different domains or categories so the equation cannot be literally true.",
+      "Confirm the comparison is implicit — verify that connector words such as 'like', 'as', 'than', or 'resembles' are absent from the construction.",
+      "Determine the rhetorical transfer: identify which attribute of the second term is being mapped onto the first.",
+      "Reject candidates that are literal statements of fact, idioms with no transferred meaning in context, or comparisons explicitly signaled as similes.",
+      "Select the candidate(s) where the implicit cross-domain identification carries the rhetorical effect required by the challenge."
     ],
-    "when_to_use": "When asked to identify, interpret, or construct an implicit comparison where one thing is described as being another unlike thing without 'like' or 'as'.",
+    "when_to_use": "When asked to identify, classify, or interpret a figure of speech in which one thing is described by being equated with something from a different category without explicit comparison words.",
     "constraints": [
-      "Do not flag comparisons that use explicit markers such as 'like', 'as', 'resembles', or 'similar to'.",
-      "Do not flag statements that are literally true even if vivid; the two terms must belong to distinct categories.",
-      "Require a non-literal equation of two entities; mere descriptive adjectives or personification alone do not qualify.",
-      "Do not treat fixed idioms whose figurative sense has faded as instances of this device."
+      "Do not flag a sentence that uses 'like', 'as', or 'than' to draw the comparison; that pattern is a different device.",
+      "Do not flag literal statements even if they sound vivid; require a cross-domain identification that cannot be true literally.",
+      "Require the comparison to be implicit within the sentence; a stated analogy or labeled comparison does not qualify.",
+      "One shared attribute alone is not enough — the construction must actually name one thing as the other."
     ],
     "source": "bench_catalog.procedural-v1",
     "parent_skill_uid": ""
@@ -122,20 +123,20 @@
     "name": "spatial-reasoning",
     "description": "The capacity to reason about the spatial relationships between objects.",
     "category": "logical",
-    "example": "Positive: A passage says a ladder reached the second-story window, and the question asks what can be inferred about the ladder's length. Why: the reaching relation constrains a physical dimension derivable from the stated arrangement.\nNegative: A passage says 'the argument fit the occasion' and the question asks about the argument's suitability. Why: 'fit' is used metaphorically, so no physical spatial inference is warranted.",
+    "example": "Positive: A passage states a ladder reached the top of the wall, and the challenge asks what can be inferred about the ladder's length. Why: containment/extent of one object relative to another permits a direct geometric inference about length.\nNegative: A passage states one teammate 'outshone' another, and the challenge asks who was better. Why: 'outshone' is metaphorical performance language, not a physical arrangement, so geometric reasoning does not apply.",
     "procedure": [
-      "Scan the passage for nouns referring to physical objects, containers, paths, or locations and list them.",
-      "For each pair of objects mentioned together, identify the spatial relation described (inside, above, beside, passing through, fitting into, blocking, etc.).",
-      "Translate each relation into an implied constraint on size, shape, position, or orientation (e.g., 'X fit into Y' implies X's relevant dimension ≤ Y's opening).",
-      "Check the challenge question against these derived constraints to see whether answering it requires inferring a spatial property not stated explicitly.",
-      "Combine multiple spatial constraints when needed to resolve the question, and verify the inference is consistent with every relation stated in the passage."
+      "Scan the passage for nouns referring to physical objects, locations, containers, or paths and list them.",
+      "For each pair of related objects, note any stated or implied relationship of position, size, shape, orientation, distance, or containment.",
+      "Translate each relationship into a concrete spatial constraint (e.g., A is inside B implies A's relevant dimension is smaller than B's opening).",
+      "Combine the constraints to derive any inference the challenge asks about, checking that the inference follows from geometry rather than from social or causal reasoning.",
+      "Verify the conclusion against every spatial constraint you listed; discard it if any constraint is violated or under-specified."
     ],
-    "when_to_use": "Use when the challenge requires inferring a physical property, position, or arrangement of objects from relational cues in the passage rather than from direct statements.",
+    "when_to_use": "When the challenge requires inferring a fact about size, fit, position, orientation, distance, or path between physical objects from cues in the passage.",
     "constraints": [
-      "Do not apply when the passage's relations are purely metaphorical or social rather than physical.",
-      "Require that the inference follow from a stated spatial relation, not from world knowledge about the objects alone.",
-      "Do not over-specify dimensions the passage leaves underdetermined; infer only the relation the text supports.",
-      "One spatial word is not enough; confirm the relation actually constrains the property the question asks about."
+      "Do not invoke physical-dimension reasoning when the relationship described is purely emotional, temporal, or causal.",
+      "Require that at least one explicit physical interaction or arrangement be described in the passage; do not invent one.",
+      "Do not over-extend an inference beyond the dimension actually constrained (e.g., fitting through a width says nothing about depth).",
+      "Treat ambiguous spatial language as insufficient evidence rather than asserting a specific geometric conclusion."
     ],
     "source": "bench_catalog.procedural-v1",
     "parent_skill_uid": ""
@@ -145,21 +146,20 @@
     "name": "modus-ponens",
     "description": "A syllogism that is of the form 'If P then Q. P. Hence Q.'",
     "category": "logical",
-    "example": "Positive: A passage states 'If it rains, the match is canceled' and separately asserts 'It is raining,' prompting the student to infer the match is canceled. Why: the conditional and its affirmed antecedent are both present, yielding a valid consequent.\nNegative: A passage states 'If it rains, the match is canceled' and separately asserts 'The match was canceled,' prompting an inference that it rained. Why: only the consequent is affirmed, which does not license concluding the antecedent.",
+    "example": "Positive: A passage states 'If the sensor detects smoke, the alarm sounds' and later notes 'The sensor detected smoke this morning'. Why: Both the conditional and an assertion of its antecedent are present, licensing the consequent.\nNegative: A passage states 'If the sensor detects smoke, the alarm sounds' and later notes 'The alarm sounded this morning'. Why: Only the consequent is affirmed, which does not license inferring the antecedent and does not match this inference pattern.",
     "procedure": [
-      "Scan the passage for a conditional statement of the form 'if X then Y' (or equivalent phrasings like 'whenever X, Y' or 'X implies Y').",
-      "Identify the antecedent (the 'if' part) and the consequent (the 'then' part) of that conditional.",
-      "Search the passage for a separate assertion that the antecedent is true or has occurred.",
-      "Confirm the asserted fact matches the antecedent exactly, not a related or weaker claim.",
-      "If both the conditional and its affirmed antecedent are present, derive or select the consequent as the valid conclusion.",
-      "Reject the inference if the passage affirms the consequent, denies the antecedent, or introduces a different conditional structure."
+      "Scan the passage for a conditional statement of the form 'If X, then Y' (or equivalent phrasing like 'X implies Y', 'whenever X, Y', 'X only if Y → Y when X').",
+      "Identify the antecedent (the X clause) and the consequent (the Y clause) of that conditional.",
+      "Search the passage for a separate assertion that the antecedent X is actually true or has occurred.",
+      "Confirm both pieces are present and refer to the same X with consistent meaning, not a similar-sounding variant.",
+      "Apply the inference: when both the conditional and the affirmed antecedent hold, treat the consequent Y as a derivable conclusion of the passage."
     ],
-    "when_to_use": "when asked to evaluate whether a conclusion validly follows from a conditional premise paired with an affirmed antecedent.",
+    "when_to_use": "When the challenge asks what conclusion follows from a passage that contains a conditional rule together with an assertion that the rule's triggering condition holds.",
     "constraints": [
-      "Do not apply this pattern if only the consequent is asserted as true; that is a different and invalid inference.",
-      "Require both a conditional statement and an explicit affirmation of its antecedent before concluding.",
-      "Do not treat probabilistic or causal-sounding sentences as conditionals unless they establish a strict 'if-then' relationship.",
-      "Do not substitute a paraphrased or broader claim for the antecedent; the match must be exact in meaning."
+      "Do not apply this pattern if only the conditional is stated without an independent assertion that the antecedent is true.",
+      "Do not apply it when the passage instead asserts the consequent or denies the antecedent, since those do not license the same inference.",
+      "Require that the asserted fact match the antecedent exactly; reject near-paraphrases that shift scope, tense, or subject.",
+      "Do not chain further conclusions beyond the consequent unless additional rules and facts in the passage support them."
     ],
     "source": "bench_catalog.procedural-v1",
     "parent_skill_uid": ""
@@ -169,21 +169,21 @@
     "name": "statistical-syllogism",
     "description": "A syllogism that argues, using inductive reasoning, from a generalization true for the most part to a particular case.",
     "category": "logical",
-    "example": "Positive: 'Most commuters in this city own a transit pass. Lena is a commuter here, so she likely has a transit pass.' Why: a majority premise plus individual membership yields a probabilistic conclusion about that individual.\nNegative: 'All mammals have lungs. A whale is a mammal, so a whale has lungs.' Why: the major premise is universal, making this a deductive categorical syllogism rather than an inductive inference from a statistical majority.",
+    "example": "Positive: A passage states that most graduates of a program find work within a year, notes that a named person graduated from it, and asks what is likely true of that person. Why: A statistical generalization is applied to a particular member of the referenced group, yielding a probable conclusion.\nNegative: A passage states that every member of a club paid dues and that a named person is a member, asking whether they paid dues. Why: The premise is universal rather than statistical, so the inference is deductive rather than inductive from a partial generalization.",
     "procedure": [
-      "Scan the passage for a generalization that holds for most (but not all) members of a group, using quantifiers like 'almost all', 'the majority', 'usually', or 'most'.",
-      "Locate a statement asserting that a specific individual or instance is a member of that group.",
-      "Check whether a conclusion is drawn (or is being asked) that applies the general trait to that specific member.",
-      "Verify the inference is inductive (probabilistic) rather than deductive: the premise must allow exceptions, not claim universality.",
-      "Confirm the three pieces align: the group in the generalization, the group in the membership claim, and the trait attributed to the individual must all match.",
-      "Flag or apply the pattern only when all three components (majority premise, membership premise, individual conclusion) are present and connected."
+      "Scan the passage for a generalization that holds for most (but not all) members of a group, noting quantifiers like 'almost all', 'most', 'usually', or 'the vast majority'.",
+      "Locate a statement asserting that a specific individual or instance belongs to that group.",
+      "Check whether a conclusion is drawn (or is being asked of you) that applies the general property to that specific individual.",
+      "Confirm the inference is inductive: the premise is statistical/non-universal, so the conclusion is probable rather than guaranteed.",
+      "Distinguish this pattern from a deductive universal syllogism by verifying the major premise admits exceptions.",
+      "Use the structure to evaluate or construct the inference, treating the conclusion as defeasible if counter-evidence about the individual appears."
     ],
-    "when_to_use": "Use when asked to detect, classify, or evaluate an argument that moves from a 'most members have property P' premise plus an individual's group membership to a conclusion about that individual.",
+    "when_to_use": "Apply when the challenge involves drawing or evaluating a probable conclusion about a specific case from a premise that holds for most members of a class.",
     "constraints": [
-      "Do not flag arguments whose major premise is universal ('all' or 'none') rather than statistical.",
-      "Do not flag a standalone generalization that lacks an individual-case conclusion.",
-      "Require the group referenced in the generalization to be the same group the individual is said to belong to.",
-      "Do not treat a conclusion stated with certainty as equivalent when the premise is only probabilistic; note the inductive gap."
+      "Do not treat universal-quantifier premises ('all', 'every') as triggers; the major premise must be statistical and admit exceptions.",
+      "Do not apply when the specific individual is not explicitly placed within the generalized group.",
+      "Require both a statistical generalization and a particular-case minor premise; one alone is insufficient.",
+      "Do not assert the conclusion as certain; preserve its probabilistic character."
     ],
     "source": "bench_catalog.procedural-v1",
     "parent_skill_uid": ""
@@ -193,20 +193,20 @@
     "name": "emotional-self-regulation",
     "description": "a complex process that involves initiating, inhibiting, or modulating one's state or behavior in a given situation.",
     "category": "theory of the mind",
-    "example": "Positive: A character feels a surge of anger during an argument, takes a deep breath, and counts to ten before responding. Why: there is a clear trigger and a deliberate self-directed action to modulate the reaction.\nNegative: A character speaks calmly throughout a pleasant conversation with a friend. Why: no emotional trigger is present and no modulation is occurring, so surface calmness does not qualify.",
+    "example": "Positive: A character feels a surge of anger at a coworker, takes three slow breaths, and then chooses neutral words before replying. Why: An emotional impulse is met with a deliberate self-applied technique that modulates the response.\nNegative: A character feels angry and immediately shouts at a coworker, later regretting it. Why: There is an emotional impulse but no self-initiated step to inhibit or modulate it in the moment.",
     "procedure": [
-      "Locate the character or agent in the passage experiencing an emotional trigger or internal state shift.",
-      "Scan for explicit actions taken by that agent to initiate, inhibit, or modulate that state (pausing, breathing, reframing, delaying response, seeking calm).",
-      "Verify the action is self-directed and aimed at managing one's own emotion or behavior, not at changing the situation or another person.",
-      "Check that the modulation occurs in response to a specific emotional stimulus present in the passage.",
-      "Match the identified behavior against the challenge's question or acceptance criteria before selecting or labeling it."
+      "Locate the passage's character or speaker and identify the triggering event or emotional stimulus they encounter.",
+      "Scan for explicit actions or internal moves the subject takes between the trigger and their final response (e.g., pausing, breathing, reframing, delaying, redirecting attention).",
+      "Check whether those actions function to initiate, inhibit, or modulate an emotional state or behavioral impulse rather than simply expressing it.",
+      "Confirm the regulation is self-directed (the subject acts on their own state) and not imposed by another person or external force.",
+      "Match the identified action to the challenge's question or acceptance criteria, citing the specific sentence(s) that show the modulation step."
     ],
-    "when_to_use": "when asked to detect or identify instances where a character consciously manages their own emotional state or behavioral response to a triggering situation.",
+    "when_to_use": "when asked to identify, classify, or attribute moments in a passage where a character deliberately manages or adjusts their own emotional state or impulsive behavior.",
     "constraints": [
-      "Do not flag routine calm behavior that is not preceded by an emotional trigger.",
-      "Do not flag actions aimed at regulating another person's emotions rather than one's own.",
-      "Require both a triggering state and a deliberate modulating action; one alone is not sufficient.",
-      "Do not flag mere suppression that is involuntary or externally coerced."
+      "Do not flag passages where the subject merely expresses or vents an emotion without any inhibiting or modulating action.",
+      "Do not flag cases where another person calms or controls the subject; the management must be self-initiated.",
+      "Require evidence of both an emotional impulse and a deliberate response to it; one alone is insufficient.",
+      "Do not count routine planning or task execution unrelated to managing an affective state."
     ],
     "source": "bench_catalog.procedural-v1",
     "parent_skill_uid": ""
@@ -216,20 +216,725 @@
     "name": "folk-physics-common-knowledge-physics",
     "description": "The untrained human perception of basic physical phenomena.",
     "category": "physical knowledge",
-    "example": "Positive: The challenge asks what happens to an unsupported cup nudged off a counter. Why: Gravity-driven falling is a universally expected everyday outcome resolvable by untrained intuition.\nNegative: The challenge asks the terminal velocity of a feather in a specified air density. Why: It demands quantitative physics beyond common perception, so naive intuition is insufficient.",
+    "example": "Positive: A passage says a character knocks a glass off the counter and the challenge asks where the glass ends up. Why: The answer depends on the unstated expectation that unsupported objects fall downward.\nNegative: A passage describes the gravitational acceleration of a satellite and asks for its orbital period. Why: This requires quantitative physics, not untrained intuitive expectations.",
     "procedure": [
-      "Scan the passage and challenge for references to everyday physical events (falling, rolling, floating, breaking, pouring, collisions, temperature changes).",
-      "For each referenced event, predict the outcome a typical untrained observer would expect based on gravity, inertia, buoyancy, or contact forces.",
-      "Compare that intuitive prediction against what the passage states or asks; note any gaps the challenge expects you to fill with common-sense physical reasoning.",
-      "Apply the intuitive prediction only to resolve the specific question posed, avoiding elaboration into formal physics equations or edge cases.",
-      "Confirm the physical claim involved is one an average person would accept without instruments or calculation before relying on this reasoning."
+      "Scan the passage and challenge for references to physical objects, motion, support, contact, or everyday forces (gravity, friction, weight, balance).",
+      "For each such reference, identify the implicit physical expectation an untrained observer would hold (e.g., unsupported objects fall, pushed objects move, liquids spill from tipped containers).",
+      "Compare the scenario described against that default expectation and note whether the text confirms, violates, or relies on it without stating it.",
+      "If the challenge requires inference, apply the commonsense expectation as the missing premise to derive the answer.",
+      "Verify the inference uses only intuitive, non-quantitative reasoning; if precise calculation or specialized physics is required, mark this skill as insufficient."
     ],
-    "when_to_use": "when the challenge hinges on predicting or interpreting an everyday physical outcome that an average person would infer without formal training",
+    "when_to_use": "Apply when the challenge hinges on an unstated everyday expectation about how physical objects behave under ordinary conditions.",
     "constraints": [
-      "Do not invoke this reasoning for scenarios requiring quantitative calculation, specialized equipment, or expert-level physics.",
-      "Do not apply it when the passage explicitly overrides normal physical intuition (e.g., zero-gravity, fictional physics).",
-      "Require that the predicted outcome be one virtually any adult would agree on; uncertain or contested outcomes do not qualify.",
-      "Do not extend intuitive reasoning to microscopic, relativistic, or quantum phenomena where naive expectations fail."
+      "Do not invoke this when the passage requires formal calculation, numeric precision, or specialized scientific knowledge.",
+      "Do not apply to social, emotional, or abstract reasoning even if physical vocabulary appears metaphorically.",
+      "Require that an unstated physical expectation actually bridges the passage and the answer; mere mention of objects is not sufficient.",
+      "Do not override explicit statements in the passage that contradict default intuition."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "0998-f680-5faa-b251",
+    "name": "modus-tollens",
+    "description": "A valid argument form: from a conditional P→Q and the negation of Q, infer the negation of P. The contrapositive of modus ponens.",
+    "category": "logical",
+    "example": "Positive: A passage states 'If the alloy contains nickel, it resists corrosion in saltwater,' then reports that a tested sample corroded in saltwater; concluding the sample lacks nickel uses the pattern. Why: the consequent (corrosion resistance) is explicitly negated, licensing denial of the antecedent.\nNegative: A passage states 'If the alloy contains nickel, it resists corrosion,' then reports the sample contains no nickel; concluding the sample will corrode does not use the pattern. Why: this denies the antecedent rather than the consequent and is an invalid inference.",
+    "procedure": [
+      "Scan the passage for a conditional statement of the form 'if P then Q' (including paraphrases like 'whenever', 'all X are Y', 'requires', 'only if').",
+      "Identify the antecedent P and the consequent Q of that conditional precisely, noting any quantifiers or qualifiers attached.",
+      "Search the passage for an assertion, observation, or evidence that the consequent Q is false or absent in a specific case.",
+      "Confirm the case under discussion is the same subject the conditional applies to, and that the negation targets Q itself rather than a related but distinct claim.",
+      "If both the conditional and the negation of Q are established for that subject, derive that the antecedent P must be false for that subject and use this to answer the challenge.",
+      "Reject the inference if the conditional is merely correlational, hedged ('usually', 'often'), or if Q's absence is uncertain."
+    ],
+    "when_to_use": "Apply when the challenge requires inferring that some property or category does not hold for a subject, given a rule linking that property to a feature and evidence the feature is missing.",
+    "constraints": [
+      "Do not apply the inference when the rule is probabilistic or uses hedges like 'tends to' or 'often'.",
+      "Do not infer the negation of P from the negation of P itself or from the negation of an unrelated proposition; the missing element must be the consequent Q.",
+      "Require both pieces — the conditional and the explicit denial of the consequent — to be present in the passage; do not supply either from outside knowledge.",
+      "Do not confuse this pattern with affirming the consequent or denying the antecedent, which are invalid."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "a23e-aed2-c8f7-5f54",
+    "name": "hypothetical-syllogism",
+    "description": "A valid argument form: from P→Q and Q→R, infer P→R. Chains conditional statements transitively to license a longer-range inference.",
+    "category": "logical",
+    "example": "Positive: The passage states that membership in club X requires passing exam Y, and that passing exam Y requires fluency in language Z; the challenge asks what membership in X implies about language Z. Why: Two conditionals share a middle term (passing exam Y) and chain to license the inference about Z.\nNegative: The passage states that students who pass exam Y often join club X, and that fluent speakers of Z usually pass exam Y; the challenge asks what club X membership implies about Z. Why: The statements are statistical tendencies, not strict conditionals, so transitive chaining is not licensed.",
+    "procedure": [
+      "Scan the passage for conditional statements of the form 'if X then Y' (including paraphrases like 'X implies Y', 'whenever X, Y', 'X leads to Y').",
+      "List each conditional as an ordered pair (antecedent → consequent), normalizing wording so identical concepts share identical labels.",
+      "Search the list for two conditionals where the consequent of one exactly matches the antecedent of another, forming a link A→B and B→C.",
+      "Verify the shared middle term refers to the same entity or condition in both statements, not merely similar wording.",
+      "Compose the chained conditional A→C and check whether the challenge asks for such a derived linkage, prediction, or transitive consequence.",
+      "If the challenge requires a longer chain, repeat the linking step using the newly derived conditional as input until the target antecedent and consequent are connected or the chain breaks."
+    ],
+    "when_to_use": "Apply when the challenge asks you to derive a conditional relationship, prediction, or consequence that is not stated directly but can be reached by linking two or more conditional statements in the passage through a shared middle term.",
+    "constraints": [
+      "Do not chain statements unless the middle term is genuinely identical in meaning, not just lexically similar.",
+      "Do not chain non-conditional claims such as correlations, frequencies, or simple descriptions, even if they sound causal.",
+      "Require both links to be present in the source material; do not invent a missing intermediate conditional.",
+      "Preserve the direction of each conditional; do not reverse antecedent and consequent to force a chain."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "8daa-da56-aed4-da40",
+    "name": "disjunctive-syllogism",
+    "description": "A valid argument form: from a disjunction P∨Q and the negation of one disjunct ~P, infer the remaining disjunct Q. Requires the disjunction to be exhaustive.",
+    "category": "logical",
+    "example": "Positive: A passage states a network outage is caused by either a hardware fault or a software bug, then reports diagnostics confirm all hardware is functioning. Why: An exhaustive two-option disjunction plus negation of one disjunct licenses inferring the other.\nNegative: A passage says the outage might be caused by hardware, software, or operator error, then notes the hardware looks fine. Why: With three disjuncts and only one weakly excluded, the remaining options are not narrowed to a single conclusion.",
+    "procedure": [
+      "Scan the passage for a statement asserting that exactly one of two (or more) options must hold, and underline the list of disjuncts.",
+      "Verify the disjunction is exhaustive by checking whether the passage signals 'either...or', 'must be one of', or rules out other alternatives.",
+      "Search for a separate statement that explicitly negates, eliminates, or rules out one of the listed disjuncts.",
+      "Confirm the eliminated option matches one of the originally listed disjuncts in wording or clear referent, not a related-but-different claim.",
+      "Conclude the remaining disjunct(s) hold, and check the challenge's acceptance criteria call for that remaining option as the answer."
+    ],
+    "when_to_use": "When the passage presents a closed list of alternatives and eliminates some of them, and the challenge asks which alternative remains or follows.",
+    "constraints": [
+      "Do not apply when the listed alternatives are not mutually exhaustive or when other unstated possibilities remain open.",
+      "Do not apply when an option is merely weakened or made less likely rather than fully ruled out.",
+      "Do not apply when the eliminated item is not one of the originally enumerated disjuncts but a near-paraphrase with different scope.",
+      "Require both the disjunctive premise and the negation premise to be present in the passage; neither alone suffices."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "42b9-b340-b13a-a618",
+    "name": "contrapositive",
+    "description": "The transformation of a conditional P→Q into its logically equivalent form ~Q→~P. A statement and its contrapositive have identical truth conditions and license the same inferences.",
+    "category": "logical",
+    "example": "Positive: A regulation states 'if a vehicle is registered, it has passed inspection,' and the challenge asks what follows about a vehicle that has not passed inspection. Why: The denied consequent licenses inferring the antecedent fails, so the vehicle is not registered.\nNegative: A passage states 'most students who study pass the exam,' and the challenge asks what follows about a student who failed. Why: This is a statistical generalization, not a strict conditional, so reversing-and-negating does not yield a valid inference.",
+    "procedure": [
+      "Scan the passage for conditional statements of the form 'if P then Q' (including paraphrases like 'P only if Q', 'whenever P, Q', or 'P requires Q').",
+      "For each conditional, isolate the antecedent (P) and consequent (Q) explicitly.",
+      "Construct the equivalent reversed-and-negated form: 'if not Q then not P', negating each part carefully (including quantifiers and modals).",
+      "Read the challenge to see whether it asks about a situation where the consequent fails or is denied; if so, apply the reversed form to infer that the antecedent must also fail.",
+      "Verify the inference is licensed by the original conditional and not by an inverse ('if not P then not Q') or converse ('if Q then P'), which are not equivalent.",
+      "Match the resulting inference against the answer choices or acceptance criteria."
+    ],
+    "when_to_use": "Use when the passage contains a conditional rule and the challenge requires drawing a conclusion from the absence or denial of the consequent.",
+    "constraints": [
+      "Do not apply this transformation to mere correlations, generalizations, or statistical claims that lack a strict conditional structure.",
+      "Do not confuse the reversed-and-negated form with the converse or inverse, which are not logically equivalent.",
+      "Require both a clear antecedent and a clear consequent in the source statement; ambiguous or hedged conditionals should not be transformed.",
+      "Negate each component faithfully, preserving scope of quantifiers and modal qualifiers rather than flipping surface words alone."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "4e76-d9ae-de4b-443d",
+    "name": "ad-hominem",
+    "description": "An informal fallacy in which an argument is rebutted by attacking the character, motive, or attribute of the arguer rather than the substance of the argument itself.",
+    "category": "rhetorical",
+    "example": "Positive: A speaker presents a budget forecast; the responder replies 'you only believe that because your donors profit from it' and never addresses the forecast's numbers. Why: The reply substitutes motive-impugning for engagement with the substantive claim.\nNegative: A speaker presents a budget forecast; the responder notes the forecaster's funding source AND then walks through specific methodological flaws in the numbers. Why: The substantive claims are directly engaged, so referencing the arguer is supplementary rather than a substitute for argument.",
+    "procedure": [
+      "Locate the original argument in the passage and note its substantive claims (data, reasoning, or conclusions).",
+      "Locate the rebuttal or response directed at that argument.",
+      "Check whether the rebuttal engages with the original claims' content (evidence, logic, premises) or instead targets the arguer's character, motives, affiliations, or personal traits.",
+      "Confirm that the personal attribute cited is used as the reason to dismiss or discredit the argument, not merely mentioned as background.",
+      "Verify that the substantive claims remain unaddressed by the rebuttal before flagging the pattern."
+    ],
+    "when_to_use": "When asked to identify, classify, or analyze a rebuttal that appears to dismiss an argument by referencing the arguer rather than the argument's content.",
+    "constraints": [
+      "Do not flag a response that engages the substantive claims even if it also mentions the arguer's traits or motives.",
+      "Do not flag relevant credibility challenges where the arguer's expertise or bias is directly germane to evaluating evidence they themselves produced.",
+      "Require both elements: a personal attack or motive-impugning move AND a failure to address the underlying claim.",
+      "Do not flag mere insults that occur outside the context of rebutting an argument."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "31e0-84d0-ab45-b16f",
+    "name": "straw-man",
+    "description": "An informal fallacy in which an opponent's position is misrepresented in a weaker, easier-to-refute form, and the weakened version is then attacked as if it were the original.",
+    "category": "rhetorical",
+    "example": "Positive: Speaker A says 'we should add a 10pm noise ordinance in residential zones'; Speaker B replies 'so you want to ban all music in the city?' and argues against a music ban. Why: B refutes a broadened position A never took.\nNegative: Speaker A says 'we should add a 10pm noise ordinance'; Speaker B replies 'a 10pm cutoff is too early because shift workers socialize later' and argues against the actual proposal. Why: B engages the original claim without distorting its scope.",
+    "procedure": [
+      "Locate the original speaker's actual claim in the passage and quote or paraphrase it precisely, noting any qualifiers, scope limits, or hedges.",
+      "Locate the responder's restatement or characterization of that claim and write it next to the original.",
+      "Compare the two: check whether the responder added extremity, removed qualifiers, broadened scope, or substituted an unrelated stronger position.",
+      "Verify that the responder then attacks or refutes the altered version rather than the original wording.",
+      "Confirm the original speaker did not actually endorse the stronger version elsewhere in the passage before flagging."
+    ],
+    "when_to_use": "Use when asked to detect, label, or analyze a misrepresentation in which one party recasts another's argument into an easier target before rebutting it.",
+    "constraints": [
+      "Do not flag a faithful summary or a fair paraphrase, even if the responder disagrees forcefully.",
+      "Require both elements: a distorted restatement AND an attack on that distortion; rebuttal of the actual claim does not qualify.",
+      "Do not flag a request for clarification or a hypothetical extension that the responder explicitly marks as their own extrapolation.",
+      "Do not rely on tone alone; the structural mismatch between original claim and attacked claim must be demonstrable."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "f178-9280-a9c0-4439",
+    "name": "false-dilemma",
+    "description": "An informal fallacy in which only two options are presented as if they exhaust the alternatives, when in fact additional or intermediate options exist; also called a false dichotomy.",
+    "category": "rhetorical",
+    "example": "Positive: A passage argues 'either we cut the program entirely or accept bankruptcy', without mentioning partial cuts, restructuring, or revenue increases. Why: It compresses a spectrum of fiscal options into two extremes and ignores viable intermediates.\nNegative: A passage states 'either the switch is on or it is off' when describing a binary circuit. Why: The two options are genuinely exhaustive, so no alternatives are being suppressed.",
+    "procedure": [
+      "Locate any sentence in the passage that frames a decision, outcome, or position as a binary choice (e.g., 'either X or Y', 'we must choose between', 'if not A then B').",
+      "List the two options being presented and identify the domain or question they claim to resolve.",
+      "Brainstorm whether intermediate, partial, combined, or alternative options plausibly exist within that same domain (phased approaches, hybrids, third positions, qualified versions).",
+      "Check whether the passage explicitly rules out those alternatives with reasoning, or whether it simply omits them.",
+      "If alternatives exist and are omitted or dismissed without justification, mark the construction as restricting the choice space; if the binary is genuinely exhaustive or justified, do not mark it."
+    ],
+    "when_to_use": "When asked to detect or evaluate reasoning that presents a decision or conclusion as a forced choice between two options.",
+    "constraints": [
+      "Do not flag a binary framing when the two options are genuinely mutually exclusive and jointly exhaustive (e.g., logical negations).",
+      "Do not flag a passage merely because it mentions two options; the framing must imply no others are viable.",
+      "Require that plausible intermediate or alternative options exist in the same domain before marking the framing as restrictive.",
+      "Do not flag rhetorical contrasts used for emphasis when the surrounding text acknowledges other possibilities."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "24cd-55a6-1835-abc2",
+    "name": "slippery-slope",
+    "description": "An informal fallacy in which a chain of escalating consequences is asserted to follow from an initial action without adequate evidence that each step in the chain would actually occur.",
+    "category": "rhetorical",
+    "example": "Positive: An op-ed argues that permitting a small tax increase will lead to higher taxes overall, then to capital flight, then to economic collapse, with no evidence offered for any transition. Why: Multiple escalating consequences are asserted without justifying each causal link.\nNegative: A policy analyst argues that raising interest rates will reduce borrowing, citing historical data and a stated monetary mechanism. Why: A single supported causal claim with evidence does not constitute an unjustified escalation chain.",
+    "procedure": [
+      "Locate the initial action, policy, or proposal under discussion in the passage.",
+      "Identify any chain of predicted consequences that branches from that initial action, listing each link in order.",
+      "Check whether the chain contains three or more escalating steps where each later step is more severe or extreme than the prior.",
+      "For each transition between links, search the passage for evidence, causal mechanism, or empirical support justifying that specific step.",
+      "Flag the passage if one or more transitions lack supporting evidence and the final consequence is disproportionately catastrophic relative to the initial action.",
+      "Distinguish this from arguments that explicitly defend each causal link with data, precedent, or mechanism before flagging."
+    ],
+    "when_to_use": "When asked to detect or label an unsupported chain-of-consequences argument in a passage or to evaluate whether a predicted escalation is fallacious.",
+    "constraints": [
+      "Do not flag a chain of consequences if each transition is supported by cited evidence or a stated mechanism.",
+      "Do not flag a single predicted negative outcome; the pattern requires multiple escalating links.",
+      "Do not flag hypothetical reasoning that is explicitly framed as speculative exploration rather than asserted as likely.",
+      "Require both the escalation pattern and the absence of inter-step justification before classifying the argument as fallacious."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "52a3-6d7f-a166-2caf",
+    "name": "confirmation-bias",
+    "description": "A cognitive bias in which one selectively notices, interprets, or recalls evidence consistent with a prior belief while underweighting or ignoring evidence that disconfirms it.",
+    "category": "reasoning",
+    "example": "Positive: A teacher convinced a student is lazy logs every missed homework but overlooks the student's completed extra-credit work and does not track missed homework from other students. Why: The teacher selectively attends to belief-consistent evidence and ignores comparable disconfirming and comparison data.\nNegative: A teacher who believes a student is struggling reviews both the student's failed and passed assignments, compares them to class averages, and updates the assessment accordingly. Why: Evidence is gathered symmetrically and the prior belief is tested against disconfirming data.",
+    "procedure": [
+      "Identify the prior belief, hypothesis, or conclusion held by the actor or narrator in the passage.",
+      "List every piece of evidence the actor notices, cites, or recalls, and mark whether each supports or contradicts that prior belief.",
+      "Search the passage for evidence that is present but ignored, downplayed, or reinterpreted by the actor, especially disconfirming items.",
+      "Check whether the actor applies the same evidentiary standard to comparison cases (other people, other times, alternative hypotheses).",
+      "Conclude the pattern is present only if the actor systematically over-weights belief-consistent evidence and under-weights or fails to seek belief-inconsistent evidence."
+    ],
+    "when_to_use": "When asked to detect, name, or analyze a reasoning flaw in a passage where a character holds a prior belief and evaluates evidence about it.",
+    "constraints": [
+      "Do not flag a case where the actor simply has strong evidence for a correct conclusion; asymmetric attention to evidence must be shown.",
+      "Do not flag mere disagreement or stubbornness without a demonstrated pattern of selective noticing, interpreting, or recalling.",
+      "Require both a supporting-evidence emphasis AND a disconfirming-evidence neglect; one alone is insufficient.",
+      "Do not flag cases where disconfirming evidence is genuinely absent from the actor's environment rather than ignored."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "3adf-3715-fc07-44d6",
+    "name": "anchoring-bias",
+    "description": "A cognitive bias in which an initial reference value disproportionately influences subsequent numerical judgments, even when the anchor is arbitrary or irrelevant to the quantity being judged.",
+    "category": "reasoning",
+    "example": "Positive: A real estate listing is posted at $900K; after negotiation it sells for $850K and is described as a bargain, though comparable homes sold for $700K. Why: The initial listing price pulled the final judgment upward despite being unrelated to true market value.\nNegative: A buyer researches three comparable home sales averaging $700K and offers $710K. Why: The final figure is grounded in independent benchmarks, not pulled toward an arbitrary opening reference.",
+    "procedure": [
+      "Locate every numerical value mentioned in the passage and note the order in which they appear.",
+      "Identify the first numeric reference value introduced (the candidate anchor) and the later judgment, estimate, or negotiated figure.",
+      "Check whether the later figure is described or evaluated in relation to the earlier value (e.g., framed as a discount, concession, increase, or comparison).",
+      "Test whether the earlier value is arbitrary, externally suggested, or unrelated to the true underlying quantity, rather than derived from independent analysis.",
+      "Confirm that the later judgment shifted toward the earlier value compared to what an independent baseline (fair value, market rate, prior estimate) would suggest.",
+      "Only conclude the pattern applies when an early reference, a later dependent judgment, and a directional pull toward that reference are all present."
+    ],
+    "when_to_use": "Apply when asked to detect or explain why a numerical estimate, offer, or judgment in a passage was distorted by an earlier reference number.",
+    "constraints": [
+      "Do not flag cases where the later figure is derived from independent calculation or evidence rather than comparison to the earlier number.",
+      "Do not flag a passage that merely contains multiple numbers without one being used as a reference point for another.",
+      "Require the earlier value to precede and influence the later judgment; co-occurring numbers without directional influence do not qualify.",
+      "Do not flag legitimate comparisons where the reference value is a genuinely relevant benchmark rather than arbitrary or irrelevant."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "667a-f997-f4b8-6c2d",
+    "name": "tu-quoque",
+    "description": "An informal fallacy in which a person's argument is rebutted by accusing them of inconsistency or hypocrisy, rather than addressing the substance of the argument. Latin for 'you also.'",
+    "category": "rhetorical",
+    "example": "Positive: A coach tells an athlete to stop drinking soda before games; the athlete replies, 'You drink soda too, so your advice is worthless.' Why: The athlete dismisses the nutritional claim solely by citing the coach's inconsistent behavior.\nNegative: A coach tells an athlete to stop drinking soda; the athlete replies, 'Recent studies actually show no effect on performance, and I notice you drink it too.' Why: The rebuttal addresses the substantive claim with evidence; the hypocrisy remark is incidental, not the basis for dismissal.",
+    "procedure": [
+      "Locate the original claim or argument being made in the passage and note its actual subject matter.",
+      "Locate the rebuttal or response and identify what it targets: the claim's content, or the claimant's character/behavior.",
+      "Check whether the rebuttal accuses the claimant of inconsistency, hypocrisy, or failing to follow their own advice.",
+      "Verify that the rebuttal does NOT engage with the truth, evidence, or logic of the original claim.",
+      "Confirm the accusation of inconsistency is treated as sufficient to dismiss or weaken the claim itself.",
+      "If all the above hold, mark the exchange as an instance of this pattern; otherwise reject."
+    ],
+    "when_to_use": "Use when asked to detect, label, or evaluate a rebuttal that dismisses an argument by pointing to the arguer's own contrary conduct rather than the argument's merits.",
+    "constraints": [
+      "Do not flag a rebuttal that actually engages with the claim's evidence, even if it also notes the speaker's behavior.",
+      "Do not flag mere observations of hypocrisy that are not used to reject the underlying claim.",
+      "Require both elements: an accusation of inconsistency AND its use as grounds for dismissing the argument.",
+      "Do not flag relevant character challenges where the speaker's conduct is itself the evidence in question (e.g., expert testimony about their own practice)."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "63f7-cc29-31c9-6420",
+    "name": "equivocation",
+    "description": "An informal fallacy in which a word or phrase shifts meaning between premises of an argument, making the conclusion appear to follow when it does not.",
+    "category": "rhetorical",
+    "example": "Positive: An argument states that 'laws of nature must have a lawgiver, and since gravity is a law, gravity must have a lawgiver,' where 'law' shifts from a legislative rule to a scientific regularity. Why: the conclusion only follows if the two distinct senses are treated as one.\nNegative: An argument states that 'all banks charge fees, so this bank charges fees,' using 'bank' twice in the same financial sense. Why: the term keeps a single consistent meaning, so no meaning shift drives the inference.",
+    "procedure": [
+      "Locate the argument's key terms by listing words or phrases that appear in more than one premise or that bridge a premise to the conclusion.",
+      "For each repeated term, write out the meaning it carries in each occurrence using the surrounding context (definitions, modifiers, domain).",
+      "Compare the meanings side by side and mark any term whose sense shifts between occurrences, even subtly.",
+      "Test whether the conclusion depends on treating the shifted term as if it had a single consistent meaning across premises.",
+      "Confirm that, once each occurrence is restricted to its actual meaning, the inference no longer goes through."
+    ],
+    "when_to_use": "Use when asked to detect or diagnose an argument whose apparent validity depends on a single word or phrase being read two different ways across its premises and conclusion.",
+    "constraints": [
+      "Do not flag mere repetition of a word; the meaning must actually differ between occurrences.",
+      "Do not flag genuine polysemy that the speaker openly acknowledges and uses consistently within each premise.",
+      "Require that the meaning shift be load-bearing for the conclusion; incidental wordplay does not qualify.",
+      "Do not flag synonyms or paraphrases across premises as a shift unless one sense is being smuggled in to support the inference."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "e5e6-71b6-0106-b886",
+    "name": "appeal-to-authority",
+    "description": "An informal fallacy in which the testimony of an unqualified or out-of-domain authority is invoked to support a claim. Legitimate appeals to qualified expertise within an authority's actual domain are not fallacious.",
+    "category": "rhetorical",
+    "example": "Positive: A passage argues a new diet prevents heart disease because a famous astrophysicist publicly recommends it. Why: The astrophysicist's credentials lie outside cardiology or nutrition, so the endorsement carries no domain-relevant weight.\nNegative: A passage argues a new diet prevents heart disease by citing a board-certified cardiologist's clinical review. Why: The cited expert's domain matches the claim, so the appeal rests on relevant expertise rather than misplaced authority.",
+    "procedure": [
+      "Locate every sentence in the passage that cites a person, title, award, or institution as grounds for accepting a claim.",
+      "For each citation, identify the specific claim being supported and the topical domain that claim belongs to (e.g., medicine, climate, finance).",
+      "Identify the cited authority's actual field of expertise as stated or implied in the passage.",
+      "Compare the authority's domain against the claim's domain; flag the citation if the domains do not overlap or if no relevant credential is given.",
+      "Confirm the passage uses the citation as a reason to believe the claim, not merely as background or biographical detail.",
+      "Distinguish flagged citations from those where the expert's credential clearly matches the claim's domain, and treat only the mismatched ones as problematic."
+    ],
+    "when_to_use": "when asked to evaluate whether a claim's support relies on an endorsement or testimony from a named figure or credentialed source",
+    "constraints": [
+      "Do not flag a citation when the cited expert's stated specialty directly covers the claim's subject matter.",
+      "Do not flag mere mentions of a person who is not being used as evidentiary support for a claim.",
+      "Require both a credential-based appeal and a domain mismatch (or absent relevant credential) before flagging.",
+      "Do not flag citations of empirical studies or institutional consensus simply because an organization is named."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "4b88-d69b-fc76-6e1b",
+    "name": "appeal-to-emotion",
+    "description": "An informal fallacy in which an argument relies on provoking pity, fear, anger, or other emotional responses in place of providing evidence relevant to the claim.",
+    "category": "rhetorical",
+    "example": "Positive: A speaker urges voters to reject a budget proposal by describing in detail how children will go hungry, without addressing the proposal's actual fiscal provisions. Why: The vivid suffering is offered in place of any analysis of the proposal itself.\nNegative: A speaker urges voters to fund a famine-relief program by describing the suffering of those affected and citing data on how the funds reduce mortality. Why: The emotional content accompanies, rather than replaces, evidence directly supporting the claim.",
+    "procedure": [
+      "Locate the central claim or question the argument is meant to support.",
+      "List the reasons or pieces of support the argument actually offers for that claim.",
+      "For each reason, classify it as either evidence bearing on the claim's truth, or content aimed primarily at evoking pity, fear, anger, guilt, pride, or sympathy.",
+      "Check whether the emotion-evoking content has a logical link to the truth of the claim, or whether it merely shifts attention away from the unaddressed question.",
+      "Flag the argument when emotion-evoking content substitutes for, rather than supplements, evidence relevant to the claim.",
+      "Confirm by asking whether removing the emotional content would leave the claim with no remaining support."
+    ],
+    "when_to_use": "Apply when asked to detect or label arguments that substitute emotional provocation for evidence relevant to a disputed claim.",
+    "constraints": [
+      "Do not flag passages where strong emotional language accompanies, but does not replace, genuine evidence for the claim.",
+      "Do not flag cases where the emotion itself is the legitimate subject of the claim (e.g., establishing harm or suffering as the matter at issue).",
+      "Require both elements: an emotion-evoking move and an absence of relevant evidence on the actual question.",
+      "Do not flag merely vivid or sympathetic descriptions if they remain on-topic and support the claim logically."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "5e45-6215-92ae-43c5",
+    "name": "post-hoc-ergo-propter-hoc",
+    "description": "An informal fallacy in which one event is asserted to have caused another simply because the first preceded the second in time. Latin for 'after this, therefore because of this.'",
+    "category": "rhetorical",
+    "example": "Positive: A blog argues that a new traffic law caused fewer accidents because accidents fell the quarter after it passed, with no other evidence cited. Why: Causation is inferred solely from one event preceding another, ignoring confounders.\nNegative: A study attributes reduced accidents to a new traffic law after comparing matched control regions and citing a behavioral mechanism. Why: The argument provides controlled evidence and mechanism, not just temporal order.",
+    "procedure": [
+      "Locate the causal claim in the passage and identify the asserted cause (event A) and the asserted effect (event B).",
+      "Check whether the only stated link between A and B is temporal sequence (A happened before B).",
+      "Scan the passage for any mention of mechanism, controlled comparison, statistical evidence, or ruling-out of alternatives that would justify causation beyond ordering.",
+      "List any concurrent or prior factors mentioned (or plausibly omitted) that could independently explain B.",
+      "If the argument relies on the temporal sequence alone and ignores alternative explanations, mark it as fitting the pattern; otherwise do not."
+    ],
+    "when_to_use": "Use when asked to detect, name, or evaluate a causal inference that a passage draws between two events linked primarily by their order in time.",
+    "constraints": [
+      "Do not flag a claim that supplies a plausible mechanism or evidence beyond mere sequence.",
+      "Do not flag a passage that explicitly considers and rejects alternative causes on stated grounds.",
+      "Require both elements: an asserted causal link AND reliance on temporal precedence as the justification.",
+      "Mere correlation without a temporal-order argument is a different error and should not be marked here."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "10c5-bd29-f455-9cf2",
+    "name": "circular-reasoning",
+    "description": "An informal fallacy in which the conclusion of an argument is included, explicitly or implicitly, among its premises. Also called begging the question.",
+    "category": "rhetorical",
+    "example": "Positive: An argument claims a policy is just because it is law, and that the law is just because it enacts the policy. Why: Each claim's support depends on accepting the other, with no external grounding.\nNegative: An argument claims a policy is just because it reduces measurable harm, citing independent statistics. Why: The premise is grounded in evidence outside the conclusion, so no loop exists despite the strong advocacy.",
+    "procedure": [
+      "Locate the main conclusion the argument is trying to establish and write it down in your own words.",
+      "List each premise or supporting reason offered for that conclusion.",
+      "For each premise, ask whether it can be accepted as true without already accepting the conclusion; mark any premise that depends on the conclusion.",
+      "Trace chains of justification across multiple sentences: if premise A is supported by B, and B is in turn supported by A or by the conclusion, mark the loop.",
+      "Confirm that no independent, external grounds are offered to break the loop before flagging the argument.",
+      "Identify the specific sentence(s) where the circularity occurs so the pattern can be cited precisely."
+    ],
+    "when_to_use": "Use when asked to evaluate, identify, or diagnose a reasoning flaw in an argument where a conclusion appears to be supported by premises that themselves rely on that conclusion.",
+    "constraints": [
+      "Do not flag an argument merely because a premise and conclusion share vocabulary or topic; require the premise to actually presuppose the conclusion.",
+      "Do not flag valid deductive arguments where the conclusion follows from independently grounded premises, even if the inference feels tight.",
+      "Require the full loop to be present in the text; a single restatement or emphatic repetition is not sufficient.",
+      "Do not confuse this pattern with other fallacies such as appeal to authority or false equivalence unless the supporting reason genuinely re-uses the conclusion."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "50ed-3765-6fa4-ff91",
+    "name": "hasty-generalization",
+    "description": "An informal fallacy in which a broad conclusion is drawn from a sample that is too small, biased, or otherwise unrepresentative to support the inference.",
+    "category": "rhetorical",
+    "example": "Positive: A reviewer eats once at a new restaurant chain, gets a cold meal, and writes that the chain has terrible food nationwide. Why: A single visit to one location cannot support a claim about every location.\nNegative: A researcher surveys 5,000 randomly selected chain customers across 40 cities and concludes most rate the food poorly. Why: The conclusion's scope matches a large, representative evidence base, so the leap is warranted.",
+    "procedure": [
+      "Locate the passage's main conclusion or generalization, especially claims using words like 'all', 'always', 'are', or unqualified group labels.",
+      "Identify the evidence base the speaker uses to support that conclusion: count the instances, note who or what was sampled, and note the time window.",
+      "Compare the scope of the evidence to the scope of the claim — check whether the sample size is small, the cases are anecdotal, or the sampled subgroup is unrepresentative of the population referenced in the conclusion.",
+      "Check for missing controls: ask whether selection bias, a non-random encounter, or a single context could explain the observations without supporting the broad claim.",
+      "If the conclusion's scope clearly exceeds what the evidence can warrant, mark the reasoning as the targeted pattern and pinpoint the specific gap (size, bias, or context) that makes the leap unjustified."
+    ],
+    "when_to_use": "When asked to detect, label, or explain flawed inferences in a passage where someone draws a population-level or universal conclusion from limited personal experience or a small set of cases.",
+    "constraints": [
+      "Do not flag a generalization that is explicitly hedged ('some', 'in my experience', 'a few') as the targeted pattern.",
+      "Do not flag conclusions backed by an explicitly stated large or representative sample, even if the topic is anecdotal in tone.",
+      "Require that both an oversized claim and an undersized or biased evidence base be present; one alone is not sufficient.",
+      "Do not confuse this pattern with other inference errors such as appeals to authority, false cause, or biased framing of a single event."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "9c17-44c9-a28f-40b7",
+    "name": "base-rate-neglect",
+    "description": "A cognitive bias in which prior probability information (the base rate of an event in the population) is ignored or underweighted in favor of specific case information, producing systematically wrong probability judgments.",
+    "category": "reasoning",
+    "example": "Positive: A passage states a security alert system is 95% accurate and that genuine intrusions occur in 1 of 50,000 sessions, then concludes a flagged session is almost certainly an intrusion. Why: The conclusion uses only the accuracy figure and ignores the low prior, which would make false alarms dominate.\nNegative: A passage states a security alert system is 95% accurate and explicitly computes that, given the rarity of intrusions, most alerts are false positives. Why: The reasoning incorporates both the test accuracy and the prior, so the prior is not being neglected.",
+    "procedure": [
+      "Locate any probability, likelihood, or diagnostic claim in the passage and identify the specific evidence (test result, observation, indicator) it relies on.",
+      "Search the passage for prior probability information about the underlying event: prevalence, frequency in the population, or how common/rare the condition is.",
+      "Check whether the reasoning combines the specific evidence WITH the prior, or whether it draws a conclusion from the evidence alone.",
+      "If a base rate is stated or strongly implied, mentally apply Bayes-style reasoning: ask whether a low prior could make false matches outnumber true matches even with high accuracy.",
+      "Flag the reasoning as exhibiting the bias when the conclusion's confidence tracks only the test/evidence accuracy and ignores or underweights the stated prior frequency.",
+      "Distinguish the flagged reasoning from cases where no prior is available or where the prior is genuinely uninformative for the question asked."
+    ],
+    "when_to_use": "When asked to evaluate, detect, or critique a probability or diagnostic judgment in a passage that presents both case-specific evidence (like a test result) and population-level frequency information.",
+    "constraints": [
+      "Do not flag a judgment merely because it sounds confident; the passage must contain or imply prior frequency information that was overlooked.",
+      "Do not flag reasoning that explicitly incorporates the prior, even if the final number seems counterintuitive.",
+      "Require both elements to be present in the passage: case-specific evidence AND a prior probability that the reasoning fails to use.",
+      "Do not flag situations where the prior is irrelevant to the question being asked."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "6cf6-9d40-83a9-69cd",
+    "name": "availability-heuristic",
+    "description": "A cognitive shortcut in which the frequency or likelihood of an event is judged by how easily examples come to mind, leading to overestimation of vivid, recent, or memorable events relative to their actual base rates.",
+    "category": "reasoning",
+    "example": "Positive: A commuter, after reading several articles about plane crashes, refuses to fly and drives cross-country instead, convinced flying is more dangerous despite aviation safety statistics. Why: The risk judgment is anchored to easily recalled vivid reports and contradicts the actual base rates.\nNegative: An epidemiologist cites incidence rates from a published registry to argue that a rare disease is overdiagnosed in her clinic. Why: The frequency claim is grounded in systematic data, not in the ease of recalling memorable cases.",
+    "procedure": [
+      "Locate any sentence in the passage where a character, narrator, or source estimates frequency, probability, risk, or likelihood of an event.",
+      "Identify the evidence basis cited for that estimate: check whether it relies on recalled instances, recent exposure, vivid imagery, or memorable anecdotes rather than statistics or base rates.",
+      "Compare the cited basis against any base-rate, statistical, or systematic data mentioned elsewhere in the passage; note any mismatch in direction or magnitude.",
+      "Confirm that the ease of recalling examples (due to media salience, recency, emotional vividness, or personal experience) is what drives the judgment, not a reasoned analysis of frequency.",
+      "Match the flagged reasoning to the challenge's acceptance criteria, ensuring the passage shows both the recall-based estimation AND a divergence from actual frequency."
+    ],
+    "when_to_use": "When asked to detect or label reasoning in which a probability, risk, or frequency judgment is driven by how easily examples come to mind rather than by statistical evidence.",
+    "constraints": [
+      "Do not flag a frequency estimate that is correctly grounded in cited statistics or base rates, even if vivid examples are also mentioned.",
+      "Do not flag mere emotional reactions or fear responses that make no claim about likelihood or frequency.",
+      "Require both elements to be present: a recall-driven estimation AND an implied or stated mismatch with actual rates or systematic evidence.",
+      "Do not flag accurate intuitions that happen to align with base rates simply because they were formed without explicit data."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "b9db-7bb1-65e3-4b1a",
+    "name": "sunk-cost-fallacy",
+    "description": "A cognitive bias in which past investments of money, time, or effort are used to justify continued investment in a course of action that no longer has positive expected value, ignoring that sunk costs are unrecoverable regardless of the decision.",
+    "category": "reasoning",
+    "example": "Positive: A city has spent six years and $200M building a tunnel that geological surveys now show will be unsafe and unprofitable to operate; council votes to finish it because 'we've come too far to stop.' Why: The justification for continuing rests on prior unrecoverable spend while forward projections are negative.\nNegative: A city has spent six years and $200M on a tunnel; new traffic forecasts show the completed tunnel will generate strong returns, and council votes to finish it citing those projected revenues. Why: The continuation is justified by positive forward-looking expected value, not by the past investment.",
+    "procedure": [
+      "Locate the decision point in the passage where an actor chooses to continue, expand, or abandon a course of action.",
+      "Extract the explicit reasons the actor gives for the decision and separate them into past-oriented (already spent money, time, effort) versus forward-looking (expected future value, probability of success).",
+      "Check whether the forward-looking evidence in the passage indicates negative or non-positive expected value for continuing.",
+      "Confirm that the actor's justification leans on the prior investment as a reason to continue, rather than treating those costs as unrecoverable.",
+      "Verify that abandoning or changing course is a viable alternative the actor is dismissing or under-weighting because of the prior commitment."
+    ],
+    "when_to_use": "When asked to detect or label reasoning in which an actor justifies continued commitment to an option by appealing to resources already spent despite evidence the future return is non-positive.",
+    "constraints": [
+      "Do not flag a continuation decision when the passage shows independent forward-looking evidence that continuing has positive expected value.",
+      "Do not flag mere mention of prior expenditures; the prior expenditure must be cited as a reason for the continuation choice.",
+      "Require that the alternative (stopping or switching) be available; if the actor is contractually or physically forced to continue, the pattern does not apply.",
+      "Do not flag cases where the actor explicitly acknowledges the past costs as unrecoverable and decides on future merits alone."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "668a-9b63-b69b-fd2b",
+    "name": "abductive-reasoning",
+    "description": "A form of inference that selects the hypothesis most likely to explain a set of observations, even when the hypothesis cannot be deductively proven from the observations. Also called inference to the best explanation.",
+    "category": "logical",
+    "example": "Positive: A passage lists three patient symptoms and asks which underlying condition best accounts for all of them together. Why: The task requires choosing the hypothesis that jointly explains multiple observations without deductive proof.\nNegative: A passage gives a premise and asks what conclusion necessarily follows from it. Why: This is deductive entailment from given premises, not selection among competing explanations for observations.",
+    "procedure": [
+      "List every observation, symptom, or data point the passage explicitly presents as needing explanation.",
+      "Enumerate the candidate hypotheses or causes mentioned or implied, including any default assumption.",
+      "For each candidate, check which of the listed observations it accounts for and which it leaves unexplained.",
+      "Eliminate hypotheses that contradict any observation or that explain only a strict subset another candidate also covers.",
+      "Select the remaining hypothesis that explains the largest set of observations with the fewest extra assumptions, and treat it as provisional rather than proven.",
+      "Note what additional test or evidence would confirm or falsify that selected hypothesis."
+    ],
+    "when_to_use": "When asked to identify the most plausible cause, diagnosis, or explanation given a set of observations that no single statement in the passage deductively entails.",
+    "constraints": [
+      "Do not select a hypothesis that explains only one observation when another candidate explains several.",
+      "Do not treat the chosen explanation as logically proven; mark it as the best available inference.",
+      "Do not invent observations or hypotheses absent from the passage to make a candidate fit.",
+      "Require that at least two distinct observations be jointly accounted for before preferring one explanation over another."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "f103-b2d6-21c7-d296",
+    "name": "transitive-inference",
+    "description": "A deductive operation in which an ordering relation that holds between A and B and between B and C is used to conclude the same relation holds between A and C, given the relation is transitive (e.g., taller-than, older-than, before).",
+    "category": "logical",
+    "example": "Positive: The passage states Event X occurred before Event Y, and Event Y occurred before Event Z; the challenge asks the temporal order of X relative to Z. Why: 'before' is transitive and Y is the shared middle term, so the X–Z order follows by composition.\nNegative: The passage states Alice trusts Bob and Bob trusts Carol; the challenge asks whether Alice trusts Carol. Why: 'trusts' is not a transitive relation, so chaining the two statements is invalid even though the surface structure matches.",
+    "procedure": [
+      "Scan the passage for explicit ordering or comparison statements between pairs of entities (e.g., X before Y, X greater than Y, X ancestor of Y).",
+      "Identify the relation word used and verify it is transitive (orderings like before/after, greater/less, contains, ancestor-of) rather than non-transitive (likes, knows, near).",
+      "Build a chain by linking pairs that share a common middle term (A R B and B R C), confirming the relation word is identical or compatible across links.",
+      "Check that the challenge asks about a pair (A, C) whose relation is not stated directly in the passage but can be derived through the shared middle term.",
+      "Derive the relation between the endpoints by composing the chain, and confirm no contradicting direct statement overrides the inferred link."
+    ],
+    "when_to_use": "Use when the challenge asks for a relation between two items not directly compared, but where the passage gives compared pairs sharing a common intermediate item under a transitive relation.",
+    "constraints": [
+      "Do not chain through a relation that is not transitive, even if the wording looks similar across links.",
+      "Require at least two linked pairs sharing a common middle term; a single comparison is insufficient.",
+      "Do not reverse the direction of the relation when composing links; both pairs must point the same way along the order.",
+      "Do not apply the chain if the passage already states the endpoint relation directly or contradicts the derived one."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "645c-de27-b29a-d265",
+    "name": "necessary-and-sufficient-conditions",
+    "description": "A distinction in conditional logic. A necessary condition for X is something without which X cannot occur; a sufficient condition is something that, if present, guarantees X. The two are independent — a condition can be necessary without being sufficient, sufficient without being necessary, both, or neither.",
+    "category": "logical",
+    "example": "Positive: A passage states 'no candidate has ever won without carrying this state', and the challenge asks which scenario would refute the rule. Why: The rule asserts a necessary condition, so the student must look for a winner who did not carry the state, distinguishing necessity from sufficiency.\nNegative: A passage states 'studying hard leads to good grades' and asks the student to summarize the author's advice. Why: Although a conditional is present, the task does not require analyzing the type of condition or its counter-examples.",
+    "procedure": [
+      "Locate any conditional rule, requirement, or claim of the form 'X requires Y', 'Y leads to X', 'without Y, no X', or 'if Y then X' in the passage.",
+      "For each such rule, classify Y as necessary (X cannot occur without Y), sufficient (Y alone guarantees X), both, or neither, based on the exact wording.",
+      "Identify what kind of counter-example would refute the rule: for a necessary-condition claim, find a case of X occurring without Y; for a sufficient-condition claim, find a case of Y occurring without X.",
+      "Check whether the challenge or any answer option conflates the two directions (e.g., treats a necessary condition as if it were sufficient, or vice versa).",
+      "Select or reject candidates based on whether they match the correct direction of conditionality, not merely whether Y and X are mentioned together."
+    ],
+    "when_to_use": "When the passage or challenge involves a conditional rule and the task requires distinguishing what must be present from what guarantees an outcome, or evaluating counter-examples to such a rule.",
+    "constraints": [
+      "Do not assume a stated requirement is also a guarantee unless the wording explicitly establishes both directions.",
+      "Do not treat correlation, frequency, or typical co-occurrence between Y and X as evidence of either direction of conditionality.",
+      "Require that a proposed counter-example match the specific direction of the claim; a counter-example refuting sufficiency does not refute necessity.",
+      "Do not flag every 'if-then' sentence; apply this analysis only when the task hinges on the type of condition involved."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "1eff-cc86-5f77-a994",
+    "name": "enumerative-induction",
+    "description": "A form of inductive reasoning in which a generalization about a population is supported by observations of a sample of its members. The strength of the inference depends on sample size, representativeness, and the absence of disconfirming cases.",
+    "category": "logical",
+    "example": "Positive: A researcher samples 50 lakes in a region, finds each contains a particular algal species, and concludes the species is widespread across lakes in that region. Why: A class-wide generalization is supported by enumerated observations of sampled members.\nNegative: A researcher knows that all lakes above 2000m elevation contain a particular algal species, and concludes a specific lake at 2500m must contain it. Why: This applies a general rule to a specific case rather than building a generalization from observed instances.",
+    "procedure": [
+      "Locate any claim in the passage or challenge that generalizes a property to an entire class, population, or category.",
+      "Identify the supporting evidence and check whether it consists of observations of individual members or a sample drawn from that class.",
+      "Assess the sample's size and representativeness: count how many members were observed and whether they span relevant subgroups, locations, or conditions.",
+      "Scan for any mentioned counterexamples or disconfirming cases, and note whether the generalization is hedged (e.g., 'tentatively', 'pending further data').",
+      "Confirm the inference moves from observed instances upward to a broader rule about unobserved members of the same class, rather than deducing from a prior rule."
+    ],
+    "when_to_use": "When the challenge asks you to detect, evaluate, or apply reasoning that generalizes from observed sample members to a broader population.",
+    "constraints": [
+      "Do not flag arguments that derive a particular conclusion from a general rule; the inference must run from instances to a generalization.",
+      "Do not flag analogical reasoning between two specific cases as the same pattern; the conclusion must concern an entire class.",
+      "Require that observed instances be presented as evidence; a bare generalization without sampled cases does not qualify.",
+      "Do not treat statistical inference with explicit probability calculations as equivalent; this pattern is informal and qualitative."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "9f08-418e-2bb5-a8c1",
+    "name": "analogical-inference",
+    "description": "A form of reasoning in which a property known to hold of one case is transferred to a similar case based on relevant similarities. The strength of the inference depends on which similarities are relevant to the property in question, not surface similarity alone.",
+    "category": "reasoning",
+    "example": "Positive: A passage notes that drug X reduced inflammation via pathway P in mice, and drug Y acts on the same pathway P; the challenge asks whether Y might reduce inflammation. Why: the shared feature (pathway P) is the mechanism behind the property being transferred.\nNegative: A passage notes that drug X reduced inflammation in mice and drug Y is also sold in blue packaging; the challenge asks whether Y reduces inflammation. Why: the shared feature is irrelevant to the property, so no inference is licensed.",
+    "procedure": [
+      "Identify the source case in the passage whose property or outcome is already established.",
+      "Identify the target case the challenge asks you to draw a conclusion about.",
+      "List the specific shared features between source and target, and separately list the property being transferred.",
+      "Check whether the shared features are causally or mechanistically relevant to that property, not merely surface or categorical resemblance.",
+      "Only transfer the property to the target if at least one relevant shared feature plausibly mediates it; otherwise withhold or weaken the inference.",
+      "Note any disanalogies in the passage that could block the transfer and adjust confidence accordingly."
+    ],
+    "when_to_use": "Use when the challenge asks you to extend a known property, outcome, or judgment from one case in the passage to another case based on stated similarities.",
+    "constraints": [
+      "Do not transfer a property based on shared category labels or surface descriptors alone.",
+      "Require that at least one similarity be mechanistically tied to the property in question.",
+      "Do not ignore disanalogies the passage explicitly mentions; they can defeat the inference.",
+      "Do not treat the transferred conclusion as certain; mark it as a hypothesis whose strength depends on relevance."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "3954-a4e3-7c67-2b2c",
+    "name": "counterfactual-reasoning",
+    "description": "A form of reasoning that considers what would have been the case if some past event had been different, holding the rest of the world fixed except for the consequences of the alternative event.",
+    "category": "reasoning",
+    "example": "Positive: A passage describes a fire that spread because a sprinkler failed; the challenge asks whether the building would have burned if the sprinkler had worked, holding ignition source and layout fixed. Why: It isolates one factor and asks about the outcome under that single alteration.\nNegative: A passage describes a fire and the challenge asks what caused the sprinkler to fail. Why: This seeks a forward causal explanation of the actual event, not the outcome under an altered past condition.",
+    "procedure": [
+      "Locate the actual past event or condition described in the passage and the outcome that followed.",
+      "Identify the challenge's hypothetical alteration (e.g., 'what if X had not occurred' or 'would Y have happened if Z had been different').",
+      "Construct a minimal change: alter only the specified factor and hold all other background conditions, actors, and circumstances fixed as stated in the passage.",
+      "Trace the causal consequences of that single change through the passage's stated mechanisms to determine whether the outcome would still occur.",
+      "Compare the counterfactual outcome to the actual outcome to answer the question (e.g., but-for cause, necessary condition, or no causal role).",
+      "Verify your reasoning does not import facts absent from the passage or alter variables the question intended to keep fixed."
+    ],
+    "when_to_use": "When the challenge asks whether an outcome would have occurred under a different past condition, or whether a specific factor was a but-for or necessary cause.",
+    "constraints": [
+      "Do not change variables other than the one specified in the hypothetical.",
+      "Do not treat mere correlation or temporal precedence as sufficient to establish that altering the factor changes the outcome.",
+      "Do not answer based on what actually happened; the question is about an alternative scenario.",
+      "Require that the passage supply the causal mechanism linking the altered factor to the outcome before asserting the counterfactual result."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "109e-d786-de5c-cb1a",
+    "name": "regression-to-the-mean",
+    "description": "A statistical phenomenon in which extreme observations tend to be followed by less extreme ones, because the original measurement included a temporary unusual component. Misattributing this rebound to an intervention is a common error.",
+    "category": "reasoning",
+    "example": "Positive: A clinic enrolls patients with the highest blood pressure readings, gives them a new pamphlet, and reports their readings dropped a month later. Why: Subjects were selected on an extreme noisy measurement and re-measured, so some drop is expected absent any intervention.\nNegative: A clinic randomly assigns patients to receive a pamphlet or not, then compares blood pressure changes between the two groups. Why: Random assignment, not extreme selection, drives group membership, so natural drift toward the average affects both arms equally.",
+    "procedure": [
+      "Locate any claim in the passage that an intervention, treatment, or change caused an observed improvement or decline.",
+      "Check whether the subjects were selected because they scored at an extreme (highest, lowest, best, worst) on a prior measurement.",
+      "Identify whether the outcome measurement is the same noisy variable (or strongly correlated with it) used to select the subjects.",
+      "Ask whether a no-intervention control group is described; if absent, note that part of the change would be expected from random fluctuation alone.",
+      "Flag the causal claim as potentially confounded when extreme selection plus repeat measurement is present without a control comparison.",
+      "Frame your answer around the alternative explanation that extreme values naturally drift toward the average on re-measurement."
+    ],
+    "when_to_use": "When the challenge asks you to evaluate, critique, or identify the flaw in a causal claim where subjects were chosen for being extreme on a measurement and later re-measured.",
+    "constraints": [
+      "Do not raise this concern when subjects were randomly assigned rather than selected for extreme scores.",
+      "Do not raise this concern when the outcome variable is unrelated to the selection variable and has no shared noise component.",
+      "Require both extreme selection and a repeat or correlated measurement to be present; one alone is insufficient.",
+      "Do not dismiss the intervention's effect entirely — only argue that part of the observed change is expected without it."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "6e57-a5a8-4263-6069",
+    "name": "gamblers-fallacy",
+    "description": "A cognitive bias in which past outcomes of an independent random process are believed to influence future outcomes — for example, believing that a streak of one outcome makes the opposite outcome more likely on the next trial, when the trials are in fact independent.",
+    "category": "reasoning",
+    "example": "Positive: After a fair die shows 6 four times in a row, a character argues the next roll is unlikely to be a 6 because 'the odds have to balance out.' Why: The trials are independent, yet past outcomes are used to lower the predicted probability of the next.\nNegative: After a coin lands heads 20 times in a row, a character suspects the coin is biased and predicts more heads. Why: This is a legitimate Bayesian update about an unknown bias parameter, not a claim that independent trials influence each other.",
+    "procedure": [
+      "Locate any claim in the passage that predicts or assigns probability to a future outcome of a repeated process.",
+      "Identify whether the reasoning behind that prediction relies on the recent history or streak of prior outcomes.",
+      "Check whether the underlying process is described (or commonly known) as having independent trials with fixed probabilities — e.g., dice, roulette, coin flips, lottery draws.",
+      "Determine whether the claim asserts that an outcome is 'due,' 'overdue,' or more/less likely because of what just happened, without invoking any mechanism that links trials.",
+      "Flag the reasoning when independence holds but the passage treats past outcomes as evidence about the next trial; otherwise leave it unflagged."
+    ],
+    "when_to_use": "Use when asked to detect or evaluate reasoning that predicts the next outcome of a repeated random process based on its recent streak or history.",
+    "constraints": [
+      "Do not flag predictions about processes where trials are genuinely dependent, such as drawing without replacement or systems with feedback.",
+      "Do not flag updates to a belief about an unknown underlying bias (e.g., suspecting a coin is weighted after many heads); that is legitimate inference, not the bias.",
+      "Require both elements: an independent process AND reasoning that treats past results as changing the next trial's probability.",
+      "Do not flag mere observation or description of a streak when no predictive claim about the next trial is made."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "a7a7-cf89-45b6-3331",
+    "name": "framing-effect",
+    "description": "A cognitive bias in which logically equivalent presentations of the same information lead to different judgments or decisions, depending on whether information is framed in terms of gains or losses, percentages or absolute numbers, and so on.",
+    "category": "reasoning",
+    "example": "Positive: A passage describes one policy as 'saving 200 of 600 lives' and another as 'letting 400 of 600 die,' then notes respondents prefer the first. Why: The two descriptions are logically equivalent and only the gain/loss wording differs, driving the preference shift.\nNegative: A passage describes one treatment with a 90% survival rate and another with a 70% survival rate. Why: The descriptions use the same frame and refer to genuinely different probabilities, so no equivalent-information asymmetry exists.",
+    "procedure": [
+      "Locate every quantitative or evaluative claim in the passage (percentages, counts, probabilities, outcome descriptions).",
+      "For each claim, restate it in its logically equivalent complementary form (e.g., survival↔mortality, gains↔losses, retained↔lost, success rate↔failure rate).",
+      "Compare two or more options or descriptions in the passage to check whether they refer to the same underlying quantity or outcome expressed differently.",
+      "Flag any place where a preference, judgment, or recommendation appears to shift based on how identical information is worded rather than on a difference in substance.",
+      "Check whether the challenge is asking you to identify the wording asymmetry, neutralize it, or predict its effect on a decision, and respond accordingly."
+    ],
+    "when_to_use": "Use when the passage presents two or more descriptions, options, or questions whose numerical or factual content may be equivalent but whose wording emphasizes different aspects (gain vs loss, positive vs negative, absolute vs relative).",
+    "constraints": [
+      "Do not flag wording differences when the underlying quantities or outcomes are genuinely different rather than complementary.",
+      "Require evidence that at least two presentations refer to the same underlying information; a single emotionally charged description alone is not sufficient.",
+      "Do not assume a wording asymmetry changes judgment unless the passage or challenge actually involves a decision, preference, or evaluation.",
+      "Distinguish from simple persuasive language or bias in content; the pattern requires logical equivalence between the contrasting presentations."
+    ],
+    "source": "bench_catalog.procedural-v1",
+    "parent_skill_uid": ""
+  },
+  {
+    "skill_uid": "4694-b3c0-ea52-98b5",
+    "name": "hindsight-bias",
+    "description": "A cognitive bias in which, after an outcome becomes known, people overestimate how predictable that outcome was beforehand. Often expressed as 'I knew it all along.'",
+    "category": "reasoning",
+    "example": "Positive: After an election upset, a pundit lists demographic shifts and candidate missteps as 'obvious indicators' of the result, though the same pundit's pre-election columns called the race a toss-up. Why: The signals are reframed as predictive only after the outcome is known.\nNegative: An analyst published a written forecast six months before a company's bankruptcy citing its debt load and shrinking margins, and after the bankruptcy points back to that forecast. Why: The prediction is documented in advance, so claiming foreseeability is supported rather than reconstructed.",
+    "procedure": [
+      "Locate the outcome being discussed in the passage and note when it became known to the speaker or commentator.",
+      "List every claim about predictability, foreseeability, obviousness, or warning signs made about that outcome.",
+      "For each such claim, check whether the same evidence was actually flagged or interpreted that way before the outcome was known, using only what the passage establishes about the prior state.",
+      "Mark a claim as suspect when prior-state evidence was ambiguous or equally consistent with a different outcome, but the post-outcome account treats it as having clearly pointed to what happened.",
+      "Distinguish genuine prior predictions (documented before the outcome) from retrospective reconstructions made after the outcome is known.",
+      "Report which specific assertions reflect inflated post-hoc predictability versus which are supported by genuine prior evidence."
+    ],
+    "when_to_use": "Use when asked to evaluate, detect, or critique claims that an outcome was predictable, foreseeable, or obvious, made by someone who already knows how the situation turned out.",
+    "constraints": [
+      "Do not flag a claim of foreseeability if the passage shows the speaker actually predicted the outcome before it occurred.",
+      "Do not flag analyses that explicitly acknowledge the prior evidence was ambiguous and only became diagnostic in retrospect.",
+      "Require both elements: knowledge of the outcome AND treatment of prior signals as more diagnostic than they were at the time.",
+      "Do not flag straightforward causal explanations that do not claim the outcome was predictable in advance."
     ],
     "source": "bench_catalog.procedural-v1",
     "parent_skill_uid": ""

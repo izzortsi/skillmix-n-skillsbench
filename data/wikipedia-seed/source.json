@@ -58,5 +58,185 @@
     "name": "folk physics (common knowledge physics)",
     "definition": "The untrained human perception of basic physical phenomena.",
     "example": "'If I roll the pen off of the table, it will fall to the floor.'"
+  },
+  {
+    "category": "logical",
+    "name": "modus tollens",
+    "definition": "A valid argument form: from a conditional P→Q and the negation of Q, infer the negation of P. The contrapositive of modus ponens.",
+    "example": "A botanist states: 'If a sample is from genus Quercus, it has lobed leaves.' A new sample lacks any lobed leaves. By modus tollens, the sample is not from Quercus."
+  },
+  {
+    "category": "logical",
+    "name": "hypothetical syllogism",
+    "definition": "A valid argument form: from P→Q and Q→R, infer P→R. Chains conditional statements transitively to license a longer-range inference.",
+    "example": "If a tree is a Quercus alba, then it has lobed leaves; if it has lobed leaves, then it sheds in autumn. By hypothetical syllogism, if a tree is a Quercus alba, then it sheds in autumn."
+  },
+  {
+    "category": "logical",
+    "name": "disjunctive syllogism",
+    "definition": "A valid argument form: from a disjunction P∨Q and the negation of one disjunct ~P, infer the remaining disjunct Q. Requires the disjunction to be exhaustive.",
+    "example": "A clinician reasons: the patient's pneumonia is either bacterial or viral. The blood culture and procalcitonin rule out bacterial. By disjunctive syllogism, the pneumonia is viral."
+  },
+  {
+    "category": "logical",
+    "name": "contrapositive",
+    "definition": "The transformation of a conditional P→Q into its logically equivalent form ~Q→~P. A statement and its contrapositive have identical truth conditions and license the same inferences.",
+    "example": "The rule 'if a permit is approved, the applicant has paid the fee' has contrapositive 'if the applicant has not paid the fee, the permit is not approved.' Either form supports denying a permit when the fee is unpaid."
+  },
+  {
+    "category": "rhetorical",
+    "name": "ad hominem",
+    "definition": "An informal fallacy in which an argument is rebutted by attacking the character, motive, or attribute of the arguer rather than the substance of the argument itself.",
+    "example": "A senator counters a colleague's deficit analysis by saying 'of course you'd say that — your district benefits from defense contracts.' The substantive numerical claims are not engaged with at all."
+  },
+  {
+    "category": "rhetorical",
+    "name": "straw man",
+    "definition": "An informal fallacy in which an opponent's position is misrepresented in a weaker, easier-to-refute form, and the weakened version is then attacked as if it were the original.",
+    "example": "A scientist argues that a specific pesticide regulation is overly broad. A critic responds: 'so you want to let companies poison the water supply?' — substituting an extreme position for the actual nuanced one."
+  },
+  {
+    "category": "rhetorical",
+    "name": "false dilemma",
+    "definition": "An informal fallacy in which only two options are presented as if they exhaust the alternatives, when in fact additional or intermediate options exist; also called a false dichotomy.",
+    "example": "A speaker insists 'either we ban gas-powered cars by 2030 or we accept catastrophic warming' — ignoring intermediate paths like phased transitions, hybrid adoption, or sectoral reductions."
+  },
+  {
+    "category": "rhetorical",
+    "name": "slippery slope",
+    "definition": "An informal fallacy in which a chain of escalating consequences is asserted to follow from an initial action without adequate evidence that each step in the chain would actually occur.",
+    "example": "A debater claims that allowing same-day voter registration 'will lead to non-citizen voting, then to large-scale election fraud, then to the collapse of representative government' — without evidence linking each transition."
+  },
+  {
+    "category": "reasoning",
+    "name": "confirmation bias",
+    "definition": "A cognitive bias in which one selectively notices, interprets, or recalls evidence consistent with a prior belief while underweighting or ignoring evidence that disconfirms it.",
+    "example": "A manager who already believes a team member is unmotivated notices every late arrival and missed email, but does not notice the same patterns in other team members or the prompt follow-up the team member sent."
+  },
+  {
+    "category": "reasoning",
+    "name": "anchoring bias",
+    "definition": "A cognitive bias in which an initial reference value disproportionately influences subsequent numerical judgments, even when the anchor is arbitrary or irrelevant to the quantity being judged.",
+    "example": "A negotiator opens with $100,000. The counterparty's eventual offer of $80,000 feels like a major concession, even though the fair market value is closer to $50,000 — the opening anchor pulled the final number upward."
+  },
+  {
+    "category": "rhetorical",
+    "name": "tu quoque",
+    "definition": "An informal fallacy in which a person's argument is rebutted by accusing them of inconsistency or hypocrisy, rather than addressing the substance of the argument. Latin for 'you also.'",
+    "example": "A doctor advises a patient to quit smoking. The patient retorts: 'You're a smoker yourself, so your advice doesn't count.' The medical claim about lung damage is unrelated to whether the doctor follows their own advice."
+  },
+  {
+    "category": "rhetorical",
+    "name": "equivocation",
+    "definition": "An informal fallacy in which a word or phrase shifts meaning between premises of an argument, making the conclusion appear to follow when it does not.",
+    "example": "A customer argues: 'The bank's sign says \"free checking,\" so the bank should not charge me for this cashier's check.' The word 'checking' shifts from 'checking account services' to 'any item containing the word check.'"
+  },
+  {
+    "category": "rhetorical",
+    "name": "appeal to authority",
+    "definition": "An informal fallacy in which the testimony of an unqualified or out-of-domain authority is invoked to support a claim. Legitimate appeals to qualified expertise within an authority's actual domain are not fallacious.",
+    "example": "A nutrition advocacy site argues that a high-dose vitamin regimen is safe because a Nobel laureate in physics endorsed it. The laureate's expertise does not extend to nutrition, so the endorsement provides no substantive support for the safety claim."
+  },
+  {
+    "category": "rhetorical",
+    "name": "appeal to emotion",
+    "definition": "An informal fallacy in which an argument relies on provoking pity, fear, anger, or other emotional responses in place of providing evidence relevant to the claim.",
+    "example": "A defense attorney shows the jury photographs of the defendant's young children at home, rather than addressing the forensic evidence linking the defendant to the crime scene. The emotional appeal does not bear on the question of guilt."
+  },
+  {
+    "category": "rhetorical",
+    "name": "post hoc ergo propter hoc",
+    "definition": "An informal fallacy in which one event is asserted to have caused another simply because the first preceded the second in time. Latin for 'after this, therefore because of this.'",
+    "example": "A city's crime rate dropped the year after a new mayor took office. A columnist credits the mayor's policies, ignoring that a federally funded community policing program launched in three high-crime precincts the same year."
+  },
+  {
+    "category": "rhetorical",
+    "name": "circular reasoning",
+    "definition": "An informal fallacy in which the conclusion of an argument is included, explicitly or implicitly, among its premises. Also called begging the question.",
+    "example": "A reviewer argues a textbook is reliable because the author is a respected expert; when asked why the author is respected, the reviewer cites their reliable books. The argument never establishes external grounds for either claim."
+  },
+  {
+    "category": "rhetorical",
+    "name": "hasty generalization",
+    "definition": "An informal fallacy in which a broad conclusion is drawn from a sample that is too small, biased, or otherwise unrepresentative to support the inference.",
+    "example": "A traveler visits Paris for three days, has two rude interactions with waiters, and concludes Parisians are unfriendly. Two encounters cannot ground a population-level claim about a city of two million people."
+  },
+  {
+    "category": "reasoning",
+    "name": "base rate neglect",
+    "definition": "A cognitive bias in which prior probability information (the base rate of an event in the population) is ignored or underweighted in favor of specific case information, producing systematically wrong probability judgments.",
+    "example": "A screening test for a rare disease is 99% accurate. A patient tests positive. Without considering that the disease only affects 1 in 10,000 people, an analyst concludes the patient likely has it — ignoring that most positives in this low-prevalence setting are false positives."
+  },
+  {
+    "category": "reasoning",
+    "name": "availability heuristic",
+    "definition": "A cognitive shortcut in which the frequency or likelihood of an event is judged by how easily examples come to mind, leading to overestimation of vivid, recent, or memorable events relative to their actual base rates.",
+    "example": "After watching repeated news coverage of shark attacks, a vacationer estimates ocean swimming is far riskier than driving the highway to reach the beach. The actual base rates are reversed by orders of magnitude."
+  },
+  {
+    "category": "reasoning",
+    "name": "sunk cost fallacy",
+    "definition": "A cognitive bias in which past investments of money, time, or effort are used to justify continued investment in a course of action that no longer has positive expected value, ignoring that sunk costs are unrecoverable regardless of the decision.",
+    "example": "A studio has spent $40 million on a film and the rough cut tests poorly. The executives approve another $20 million on reshoots, citing the existing investment, even though analysts project the recut version will still lose money."
+  },
+  {
+    "category": "logical",
+    "name": "abductive reasoning",
+    "definition": "A form of inference that selects the hypothesis most likely to explain a set of observations, even when the hypothesis cannot be deductively proven from the observations. Also called inference to the best explanation.",
+    "example": "A mechanic finds the engine misfires under load, the spark plugs are fouled, and the air filter is clean. A failing fuel injector best accounts for all three observations together. The mechanic abductively concludes the injector is the root cause and tests it first."
+  },
+  {
+    "category": "logical",
+    "name": "transitive inference",
+    "definition": "A deductive operation in which an ordering relation that holds between A and B and between B and C is used to conclude the same relation holds between A and C, given the relation is transitive (e.g., taller-than, older-than, before).",
+    "example": "A historian notes Manuscript A predates Manuscript B (carbon dating) and Manuscript B predates Manuscript C (a recorded transcription event). By transitive inference, Manuscript A predates Manuscript C, even without direct comparison."
+  },
+  {
+    "category": "logical",
+    "name": "necessary and sufficient conditions",
+    "definition": "A distinction in conditional logic. A necessary condition for X is something without which X cannot occur; a sufficient condition is something that, if present, guarantees X. The two are independent — a condition can be necessary without being sufficient, sufficient without being necessary, both, or neither.",
+    "example": "In a graduate program, attending all lectures may be necessary to pass (you cannot pass without it) but not sufficient (you must also pass the exam). Identifying which kind of condition a rule states determines what counter-example refutes it."
+  },
+  {
+    "category": "logical",
+    "name": "enumerative induction",
+    "definition": "A form of inductive reasoning in which a generalization about a population is supported by observations of a sample of its members. The strength of the inference depends on sample size, representativeness, and the absence of disconfirming cases.",
+    "example": "A field biologist examines 200 individuals of a newly classified bird species across three breeding sites and finds all are diurnal. By enumerative induction, she tentatively generalizes that the species is diurnal, pending observations from additional populations."
+  },
+  {
+    "category": "reasoning",
+    "name": "analogical inference",
+    "definition": "A form of reasoning in which a property known to hold of one case is transferred to a similar case based on relevant similarities. The strength of the inference depends on which similarities are relevant to the property in question, not surface similarity alone.",
+    "example": "A toxicologist knows compound A causes liver damage in rats and shares the same molecular core and metabolic pathway as compound B. By analogical inference, she hypothesizes B may cause similar damage and prioritizes targeted testing."
+  },
+  {
+    "category": "reasoning",
+    "name": "counterfactual reasoning",
+    "definition": "A form of reasoning that considers what would have been the case if some past event had been different, holding the rest of the world fixed except for the consequences of the alternative event.",
+    "example": "An accident investigator asks: would the collision have occurred if the brake light had been functional? Holding driver behavior, road conditions, and following distance fixed, the answer informs whether the malfunction was a but-for cause."
+  },
+  {
+    "category": "reasoning",
+    "name": "regression to the mean",
+    "definition": "A statistical phenomenon in which extreme observations tend to be followed by less extreme ones, because the original measurement included a temporary unusual component. Misattributing this rebound to an intervention is a common error.",
+    "example": "A school identifies the lowest-scoring 10% of students and gives them tutoring. On the next test, those students score higher on average. Some improvement may be from tutoring, but much would have occurred anyway — extreme low scores tend to drift upward toward the mean."
+  },
+  {
+    "category": "reasoning",
+    "name": "gambler's fallacy",
+    "definition": "A cognitive bias in which past outcomes of an independent random process are believed to influence future outcomes — for example, believing that a streak of one outcome makes the opposite outcome more likely on the next trial, when the trials are in fact independent.",
+    "example": "A roulette table has shown red on the last seven spins. A bettor reasons that black is 'due' and bets heavily on it. The wheel has no memory; each spin remains 18/38 for either color regardless of history."
+  },
+  {
+    "category": "reasoning",
+    "name": "framing effect",
+    "definition": "A cognitive bias in which logically equivalent presentations of the same information lead to different judgments or decisions, depending on whether information is framed in terms of gains or losses, percentages or absolute numbers, and so on.",
+    "example": "A treatment described as having '90% survival' is preferred more often than the same treatment described as having '10% mortality,' even by the same patients. The underlying probabilities are identical; only the frame differs."
+  },
+  {
+    "category": "reasoning",
+    "name": "hindsight bias",
+    "definition": "A cognitive bias in which, after an outcome becomes known, people overestimate how predictable that outcome was beforehand. Often expressed as 'I knew it all along.'",
+    "example": "After a startup fails, commentators describe the warning signs as obvious — crowded niche, inexperienced founder, short runway. Before the failure, those same signs were equally consistent with eventual success and were not flagged by the same commentators."
   }
 ]

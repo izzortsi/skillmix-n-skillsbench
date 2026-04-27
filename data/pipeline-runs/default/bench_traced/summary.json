@@ -1,23 +1,4024 @@
 {
-  "tasks_attempted": 100,
-  "episodes_produced": 200,
+  "tasks_attempted": 400,
+  "episodes_produced": 800,
   "api_failures": 0,
   "per_condition": {
     "baseline": {
-      "n": 100,
-      "passed": 83,
-      "pass_rate": 0.83,
-      "mean_score": 0.811
+      "n": 400,
+      "passed": 354,
+      "pass_rate": 0.885,
+      "mean_score": 0.8576
     },
     "curated": {
-      "n": 100,
-      "passed": 81,
-      "pass_rate": 0.81,
-      "mean_score": 0.8095
+      "n": 400,
+      "passed": 353,
+      "pass_rate": 0.8825,
+      "mean_score": 0.8801
     }
   },
+  "per_task_uplift": [
+    {
+      "task_uid": "c83d-e11b-39c3-bc87",
+      "skill": "self-serving-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "d13e-96b8-b8b6-74ff",
+      "skill": "self-serving-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "bfc6-fcf7-b252-62b4",
+      "skill": "self-serving-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "f033-fc26-b84b-70e8",
+      "skill": "self-serving-bias",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "53e4-3646-9466-c7bc",
+      "skill": "self-serving-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "dbdd-832b-f6dc-4011",
+      "skill": "self-serving-bias",
+      "baseline_passed": false,
+      "curated_passed": true,
+      "baseline_score": 0.0,
+      "curated_score": 1.0,
+      "delta_passed": 1,
+      "delta_score": 1.0
+    },
+    {
+      "task_uid": "04a9-f8b4-99f0-4b6c",
+      "skill": "self-serving-bias",
+      "baseline_passed": false,
+      "curated_passed": true,
+      "baseline_score": 0.0,
+      "curated_score": 1.0,
+      "delta_passed": 1,
+      "delta_score": 1.0
+    },
+    {
+      "task_uid": "d203-e8d8-b5df-e314",
+      "skill": "self-serving-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "55e3-ef29-63ed-d821",
+      "skill": "self-serving-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "b7a2-1e30-fc13-962f",
+      "skill": "self-serving-bias",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "41d7-85f8-7e6c-b79a",
+      "skill": "accident-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "b5b3-a792-8fef-8f8a",
+      "skill": "accident-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "f97a-df74-9b5f-5b2e",
+      "skill": "accident-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "7524-8f7b-0375-05f7",
+      "skill": "accident-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "5675-15c5-2038-f3a2",
+      "skill": "accident-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "0670-6c4b-cb15-dcf5",
+      "skill": "accident-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "87e0-9efd-bdf2-23d1",
+      "skill": "accident-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "476b-baeb-dca4-5c59",
+      "skill": "accident-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "a2e9-fa22-554b-8bfc",
+      "skill": "accident-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "16c6-035e-f6bd-5be9",
+      "skill": "accident-fallacy",
+      "baseline_passed": true,
+      "curated_passed": false,
+      "baseline_score": 1.0,
+      "curated_score": 0.0,
+      "delta_passed": -1,
+      "delta_score": -1.0
+    },
+    {
+      "task_uid": "35dc-149a-cd59-48c2",
+      "skill": "complex-question-loaded-question-with-implicit-assumption",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.85,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.15
+    },
+    {
+      "task_uid": "5c9c-5ab4-4af8-fd86",
+      "skill": "complex-question-loaded-question-with-implicit-assumption",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "2896-f332-be60-1687",
+      "skill": "complex-question-loaded-question-with-implicit-assumption",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "7a67-591b-f454-f989",
+      "skill": "complex-question-loaded-question-with-implicit-assumption",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.6,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.4
+    },
+    {
+      "task_uid": "ecc9-831c-d3dd-3bf0",
+      "skill": "complex-question-loaded-question-with-implicit-assumption",
+      "baseline_passed": false,
+      "curated_passed": true,
+      "baseline_score": 0.0,
+      "curated_score": 1.0,
+      "delta_passed": 1,
+      "delta_score": 1.0
+    },
+    {
+      "task_uid": "fa2e-6ee3-c80b-0379",
+      "skill": "complex-question-loaded-question-with-implicit-assumption",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "bd2a-6197-0f20-0491",
+      "skill": "complex-question-loaded-question-with-implicit-assumption",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.7,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.3
+    },
+    {
+      "task_uid": "feda-e48d-8775-a804",
+      "skill": "complex-question-loaded-question-with-implicit-assumption",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "dbbc-4be8-b71b-bd09",
+      "skill": "complex-question-loaded-question-with-implicit-assumption",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "a79e-6f53-339b-2bff",
+      "skill": "complex-question-loaded-question-with-implicit-assumption",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.9,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.1
+    },
+    {
+      "task_uid": "2c55-e58a-f555-933d",
+      "skill": "red-herring",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "7384-4f32-2b32-c231",
+      "skill": "red-herring",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "53ef-229c-dfc6-373d",
+      "skill": "red-herring",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "e80e-b1f2-59c9-29b2",
+      "skill": "red-herring",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "bcae-1b87-cbc8-3363",
+      "skill": "red-herring",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "e1a6-7784-84fe-c9fb",
+      "skill": "red-herring",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "a435-9a58-49b9-fef0",
+      "skill": "red-herring",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "181b-6f3e-68d9-bbc0",
+      "skill": "red-herring",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "a909-4ec3-c345-55fd",
+      "skill": "red-herring",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "d6c9-b60a-3278-b5eb",
+      "skill": "red-herring",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "2ab1-e7d5-bf1d-bb3c",
+      "skill": "metaphor",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.85,
+      "curated_score": 0.95,
+      "delta_passed": 0,
+      "delta_score": 0.1
+    },
+    {
+      "task_uid": "026a-9737-9749-a25e",
+      "skill": "metaphor",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.75,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.25
+    },
+    {
+      "task_uid": "01ae-39e9-3945-9a72",
+      "skill": "metaphor",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "e58e-dcf6-8c77-0c66",
+      "skill": "metaphor",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "e660-b24f-5baa-e53f",
+      "skill": "metaphor",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "e6a5-19ef-37bd-48db",
+      "skill": "metaphor",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.85,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.15
+    },
+    {
+      "task_uid": "8108-fdd1-fbc1-1d8b",
+      "skill": "metaphor",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "8360-ee29-f69d-c911",
+      "skill": "metaphor",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "e916-05ca-9a37-6c7f",
+      "skill": "metaphor",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "eb10-6a4b-dbe5-b517",
+      "skill": "metaphor",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "5468-5fa2-3862-9eb4",
+      "skill": "spatial-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "9e42-6b44-e734-695b",
+      "skill": "spatial-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "5521-e672-6be6-d6af",
+      "skill": "spatial-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "a0d1-ab22-b23d-6ad0",
+      "skill": "spatial-reasoning",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "581d-756a-b37f-69b4",
+      "skill": "spatial-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "acda-831f-60f1-ae29",
+      "skill": "spatial-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "b279-df7c-e7d9-27d0",
+      "skill": "spatial-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "b34d-afb5-b642-490e",
+      "skill": "spatial-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "0693-acac-2646-cd3e",
+      "skill": "spatial-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "877f-24d3-b058-f926",
+      "skill": "spatial-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "08cc-1609-c81f-c2fd",
+      "skill": "modus-ponens",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "0cb1-9d19-2aa2-014b",
+      "skill": "modus-ponens",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "cfe2-0b68-cac3-29ff",
+      "skill": "modus-ponens",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "90b3-f80c-ef9a-d868",
+      "skill": "modus-ponens",
+      "baseline_passed": true,
+      "curated_passed": false,
+      "baseline_score": 1.0,
+      "curated_score": 0.0,
+      "delta_passed": -1,
+      "delta_score": -1.0
+    },
+    {
+      "task_uid": "e254-f0a6-299f-270e",
+      "skill": "modus-ponens",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "1fa0-9767-4ef3-768d",
+      "skill": "modus-ponens",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "fc21-7f29-3b6f-2e0d",
+      "skill": "modus-ponens",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "2b51-f0cd-c31e-ca78",
+      "skill": "modus-ponens",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.85,
+      "curated_score": 0.9,
+      "delta_passed": 0,
+      "delta_score": 0.05
+    },
+    {
+      "task_uid": "c966-fe25-9e8d-46f6",
+      "skill": "modus-ponens",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "8c75-ae28-dd40-fe99",
+      "skill": "modus-ponens",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "f9c6-9a7b-9d37-efac",
+      "skill": "statistical-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.9,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.1
+    },
+    {
+      "task_uid": "a706-8f84-f8a4-d8ab",
+      "skill": "statistical-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "4d34-8678-1ee7-4a1f",
+      "skill": "statistical-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.9,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.1
+    },
+    {
+      "task_uid": "f7ce-1e43-f1ad-f406",
+      "skill": "statistical-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "2cbc-01bd-f7ac-207e",
+      "skill": "statistical-syllogism",
+      "baseline_passed": true,
+      "curated_passed": false,
+      "baseline_score": 1.0,
+      "curated_score": 0.0,
+      "delta_passed": -1,
+      "delta_score": -1.0
+    },
+    {
+      "task_uid": "52d0-b398-0c56-7c13",
+      "skill": "statistical-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "694a-cdb6-7db4-4070",
+      "skill": "statistical-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "2d33-ac56-c54e-0689",
+      "skill": "statistical-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.9,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.1
+    },
+    {
+      "task_uid": "f4db-6a16-0511-aedc",
+      "skill": "statistical-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "4e40-4b34-bbbf-d98b",
+      "skill": "statistical-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "712f-ee96-fd68-7c84",
+      "skill": "emotional-self-regulation",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "0aa1-f0f1-8ec0-c75d",
+      "skill": "emotional-self-regulation",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "6d0e-8e0f-79bf-95bc",
+      "skill": "emotional-self-regulation",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.3,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.7
+    },
+    {
+      "task_uid": "3476-62d3-ac14-2254",
+      "skill": "emotional-self-regulation",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "366f-55f1-21fc-b58d",
+      "skill": "emotional-self-regulation",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "214b-4234-16ca-47aa",
+      "skill": "emotional-self-regulation",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.9,
+      "curated_score": 0.95,
+      "delta_passed": 0,
+      "delta_score": 0.05
+    },
+    {
+      "task_uid": "0e06-3477-088a-b15f",
+      "skill": "emotional-self-regulation",
+      "baseline_passed": false,
+      "curated_passed": true,
+      "baseline_score": 0.0,
+      "curated_score": 1.0,
+      "delta_passed": 1,
+      "delta_score": 1.0
+    },
+    {
+      "task_uid": "5724-9893-444c-8d5f",
+      "skill": "emotional-self-regulation",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "aa59-b7e6-f2b8-aba0",
+      "skill": "emotional-self-regulation",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.6,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.4
+    },
+    {
+      "task_uid": "cc4f-9980-a7ac-c9dc",
+      "skill": "emotional-self-regulation",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "a665-882f-06a0-efc8",
+      "skill": "folk-physics-common-knowledge-physics",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "88d1-e0aa-8006-5818",
+      "skill": "folk-physics-common-knowledge-physics",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "69ac-bf76-17e1-e47f",
+      "skill": "folk-physics-common-knowledge-physics",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "9342-1435-8b5d-8b10",
+      "skill": "folk-physics-common-knowledge-physics",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "044e-6aa6-c687-6fdf",
+      "skill": "folk-physics-common-knowledge-physics",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 0.9,
+      "delta_passed": 0,
+      "delta_score": -0.1
+    },
+    {
+      "task_uid": "d3f4-aea1-010c-9969",
+      "skill": "folk-physics-common-knowledge-physics",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "099a-893d-8c3e-b808",
+      "skill": "folk-physics-common-knowledge-physics",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "4a8d-5ccc-19be-92c5",
+      "skill": "folk-physics-common-knowledge-physics",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.5,
+      "curated_score": 0.9,
+      "delta_passed": 0,
+      "delta_score": 0.4
+    },
+    {
+      "task_uid": "8e34-7b91-1c51-2ee0",
+      "skill": "folk-physics-common-knowledge-physics",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "a701-bd45-6152-379b",
+      "skill": "folk-physics-common-knowledge-physics",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "a534-9e8f-1da7-1401",
+      "skill": "modus-tollens",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "372e-a49b-c0b1-b4d3",
+      "skill": "modus-tollens",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "1dba-c692-8337-9ab0",
+      "skill": "modus-tollens",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "fa2f-755c-a7e0-c178",
+      "skill": "modus-tollens",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "7090-e723-ccc8-e6a4",
+      "skill": "modus-tollens",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "c7c0-16de-3aa9-d220",
+      "skill": "modus-tollens",
+      "baseline_passed": true,
+      "curated_passed": false,
+      "baseline_score": 1.0,
+      "curated_score": 0.0,
+      "delta_passed": -1,
+      "delta_score": -1.0
+    },
+    {
+      "task_uid": "6b0a-b478-d35c-7268",
+      "skill": "modus-tollens",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "ca79-624d-2306-2f04",
+      "skill": "modus-tollens",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "d472-fd65-a4e9-e800",
+      "skill": "modus-tollens",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "2b72-c8be-9bd8-74c1",
+      "skill": "modus-tollens",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "c476-04da-04c7-3cc3",
+      "skill": "hypothetical-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.85,
+      "curated_score": 0.85,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "4f85-9881-7afa-898a",
+      "skill": "hypothetical-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "598a-d37d-486f-f1ee",
+      "skill": "hypothetical-syllogism",
+      "baseline_passed": true,
+      "curated_passed": false,
+      "baseline_score": 1.0,
+      "curated_score": 0.0,
+      "delta_passed": -1,
+      "delta_score": -1.0
+    },
+    {
+      "task_uid": "86d3-65b7-b92b-4302",
+      "skill": "hypothetical-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "a42f-cfdf-6e70-da64",
+      "skill": "hypothetical-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "b0e9-b411-434e-0750",
+      "skill": "hypothetical-syllogism",
+      "baseline_passed": true,
+      "curated_passed": false,
+      "baseline_score": 1.0,
+      "curated_score": 0.0,
+      "delta_passed": -1,
+      "delta_score": -1.0
+    },
+    {
+      "task_uid": "f358-f3b9-9c12-6089",
+      "skill": "hypothetical-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "42d2-4ede-17fe-87cf",
+      "skill": "hypothetical-syllogism",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "d36c-8cba-0eeb-daa7",
+      "skill": "hypothetical-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "8926-0a43-8164-427d",
+      "skill": "hypothetical-syllogism",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "4675-6a40-38d2-efbb",
+      "skill": "disjunctive-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.7,
+      "curated_score": 0.9,
+      "delta_passed": 0,
+      "delta_score": 0.2
+    },
+    {
+      "task_uid": "242f-f1d9-f168-e167",
+      "skill": "disjunctive-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.75,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.25
+    },
+    {
+      "task_uid": "e025-743c-5784-a3af",
+      "skill": "disjunctive-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "a874-1725-ea75-8113",
+      "skill": "disjunctive-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.75,
+      "curated_score": 0.9,
+      "delta_passed": 0,
+      "delta_score": 0.15
+    },
+    {
+      "task_uid": "551a-df17-7e17-85e6",
+      "skill": "disjunctive-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "ccb2-3c95-6745-2fe8",
+      "skill": "disjunctive-syllogism",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "8de7-c05d-8f54-31ff",
+      "skill": "disjunctive-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "dc40-be2b-ecf6-fc79",
+      "skill": "disjunctive-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.6,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.4
+    },
+    {
+      "task_uid": "5bd3-5bed-c2d9-2598",
+      "skill": "disjunctive-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.75,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.25
+    },
+    {
+      "task_uid": "398b-c209-3e99-f00f",
+      "skill": "disjunctive-syllogism",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.85,
+      "curated_score": 0.9,
+      "delta_passed": 0,
+      "delta_score": 0.05
+    },
+    {
+      "task_uid": "35cc-7bb7-c04f-65d7",
+      "skill": "contrapositive",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "9742-4285-a20f-b260",
+      "skill": "contrapositive",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "2323-9d22-d06b-02ca",
+      "skill": "contrapositive",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "7cf1-116b-f012-8712",
+      "skill": "contrapositive",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "d60c-7943-cf2c-2dd9",
+      "skill": "contrapositive",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "4585-3b84-2cb0-f4b7",
+      "skill": "contrapositive",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "394f-dd1b-fea4-fe47",
+      "skill": "contrapositive",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "0c9d-25dc-66a8-8a69",
+      "skill": "contrapositive",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "5605-8005-5e77-7942",
+      "skill": "contrapositive",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "9105-6222-fba4-d1da",
+      "skill": "contrapositive",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "d1e7-4d14-cb49-97ec",
+      "skill": "ad-hominem",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "fc19-9d24-8115-819e",
+      "skill": "ad-hominem",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "26b9-c643-6cc8-f32b",
+      "skill": "ad-hominem",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "0ecc-6390-334d-3fd9",
+      "skill": "ad-hominem",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "2ce5-4001-fe08-47c2",
+      "skill": "ad-hominem",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "ae8a-c00c-4626-7593",
+      "skill": "ad-hominem",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "7ee2-19ef-835a-cbbe",
+      "skill": "ad-hominem",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "93cd-a6c4-d6be-0977",
+      "skill": "ad-hominem",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "aec0-000b-6084-2bb2",
+      "skill": "ad-hominem",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "e382-ef72-5c0b-be89",
+      "skill": "ad-hominem",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "6911-18b5-800b-4692",
+      "skill": "straw-man",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "ecf3-b93d-943d-1dcc",
+      "skill": "straw-man",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "94fd-0d2b-f543-f353",
+      "skill": "straw-man",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "51a9-232e-1894-aad5",
+      "skill": "straw-man",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "5760-9c12-4237-d5b6",
+      "skill": "straw-man",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "eae9-62fb-c07b-4144",
+      "skill": "straw-man",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "fcfe-a909-66f9-c708",
+      "skill": "straw-man",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "6d75-7006-6dec-a8f4",
+      "skill": "straw-man",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "7907-c6a2-5715-6c9a",
+      "skill": "straw-man",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "4f0d-bf2a-9c35-08b7",
+      "skill": "straw-man",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "3de5-a731-ec64-7c18",
+      "skill": "false-dilemma",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "fb96-788f-7eb4-ac6a",
+      "skill": "false-dilemma",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "407e-02f0-243d-7c2a",
+      "skill": "false-dilemma",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "e5b0-addc-6dbc-be19",
+      "skill": "false-dilemma",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "8e6b-23e9-7a67-02a7",
+      "skill": "false-dilemma",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "05d4-0a83-6909-d21d",
+      "skill": "false-dilemma",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "07f8-f7c5-dadc-3661",
+      "skill": "false-dilemma",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "5414-ec19-0acb-f4e6",
+      "skill": "false-dilemma",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "7db7-9c4e-ff91-e689",
+      "skill": "false-dilemma",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "2f16-71a8-6969-926e",
+      "skill": "false-dilemma",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "6798-b90e-fff5-138d",
+      "skill": "slippery-slope",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "d0a8-bfb7-5c62-2bc1",
+      "skill": "slippery-slope",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "b495-d45d-126c-ea5d",
+      "skill": "slippery-slope",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "d3e5-94ae-8d3c-52fe",
+      "skill": "slippery-slope",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "5d9e-5a09-084a-3038",
+      "skill": "slippery-slope",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "896e-5fe4-5e48-f4f6",
+      "skill": "slippery-slope",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "6102-62d0-b18a-259c",
+      "skill": "slippery-slope",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "a9ad-2545-98d5-16e0",
+      "skill": "slippery-slope",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "0da0-d373-f016-2522",
+      "skill": "slippery-slope",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "99f0-b80f-d041-4069",
+      "skill": "slippery-slope",
+      "baseline_passed": false,
+      "curated_passed": true,
+      "baseline_score": 0.0,
+      "curated_score": 1.0,
+      "delta_passed": 1,
+      "delta_score": 1.0
+    },
+    {
+      "task_uid": "c05d-7adb-0260-82a5",
+      "skill": "confirmation-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "aa23-303f-08ef-9427",
+      "skill": "confirmation-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "3397-cb24-c984-f2ce",
+      "skill": "confirmation-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "fc8d-a614-a3d1-bb5d",
+      "skill": "confirmation-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "67a2-9121-58a9-30e1",
+      "skill": "confirmation-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "147d-eec7-40bd-4394",
+      "skill": "confirmation-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "24ef-8542-9d5b-2ae8",
+      "skill": "confirmation-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "314d-14cd-2bd7-6923",
+      "skill": "confirmation-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "07dc-1430-cb41-3359",
+      "skill": "confirmation-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "95bc-c18f-65a0-daaa",
+      "skill": "confirmation-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "af82-3066-ce43-13d6",
+      "skill": "anchoring-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "9be0-9ab7-a4ca-e830",
+      "skill": "anchoring-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "62bc-4d1f-96bf-11c7",
+      "skill": "anchoring-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "8de0-7bea-85bb-8336",
+      "skill": "anchoring-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "a8e4-a382-70b4-4da1",
+      "skill": "anchoring-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "be1b-44ab-44e6-946e",
+      "skill": "anchoring-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "d611-07fd-f8c8-8417",
+      "skill": "anchoring-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "8b8d-5c9d-5abb-7a1c",
+      "skill": "anchoring-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "bb68-948d-d188-7e28",
+      "skill": "anchoring-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "307f-c684-cec1-45c1",
+      "skill": "anchoring-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "5606-f45b-e5fb-a44c",
+      "skill": "tu-quoque",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "80b9-7a35-9ffc-2533",
+      "skill": "tu-quoque",
+      "baseline_passed": false,
+      "curated_passed": true,
+      "baseline_score": 0.0,
+      "curated_score": 1.0,
+      "delta_passed": 1,
+      "delta_score": 1.0
+    },
+    {
+      "task_uid": "13e0-65a1-28f2-e063",
+      "skill": "tu-quoque",
+      "baseline_passed": false,
+      "curated_passed": true,
+      "baseline_score": 0.0,
+      "curated_score": 1.0,
+      "delta_passed": 1,
+      "delta_score": 1.0
+    },
+    {
+      "task_uid": "5b87-6911-d4e4-a556",
+      "skill": "tu-quoque",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "d7cc-8892-b6a2-7465",
+      "skill": "tu-quoque",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "21cd-9862-3888-f998",
+      "skill": "tu-quoque",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "0cc6-47cc-ab7f-aaff",
+      "skill": "tu-quoque",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "0a08-c91c-a581-1974",
+      "skill": "tu-quoque",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "47b6-5087-42cc-f1f1",
+      "skill": "tu-quoque",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "368f-aa48-b62b-e88e",
+      "skill": "tu-quoque",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "171b-4c00-e30b-d7ca",
+      "skill": "equivocation",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "2b6a-ce60-2f21-bb28",
+      "skill": "equivocation",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "64cc-6ef2-107a-f4a6",
+      "skill": "equivocation",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "edc3-55de-27dd-5917",
+      "skill": "equivocation",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "549f-cc5d-3626-64c6",
+      "skill": "equivocation",
+      "baseline_passed": false,
+      "curated_passed": true,
+      "baseline_score": 0.0,
+      "curated_score": 1.0,
+      "delta_passed": 1,
+      "delta_score": 1.0
+    },
+    {
+      "task_uid": "f0a4-4801-a7f9-142e",
+      "skill": "equivocation",
+      "baseline_passed": true,
+      "curated_passed": false,
+      "baseline_score": 1.0,
+      "curated_score": 0.0,
+      "delta_passed": -1,
+      "delta_score": -1.0
+    },
+    {
+      "task_uid": "640a-8e68-b47d-7bac",
+      "skill": "equivocation",
+      "baseline_passed": true,
+      "curated_passed": false,
+      "baseline_score": 1.0,
+      "curated_score": 0.0,
+      "delta_passed": -1,
+      "delta_score": -1.0
+    },
+    {
+      "task_uid": "e0a8-9ecc-3545-da4e",
+      "skill": "equivocation",
+      "baseline_passed": false,
+      "curated_passed": true,
+      "baseline_score": 0.0,
+      "curated_score": 1.0,
+      "delta_passed": 1,
+      "delta_score": 1.0
+    },
+    {
+      "task_uid": "60ac-4cf0-c59c-4246",
+      "skill": "equivocation",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "d547-0584-1bbc-e405",
+      "skill": "equivocation",
+      "baseline_passed": false,
+      "curated_passed": true,
+      "baseline_score": 0.0,
+      "curated_score": 1.0,
+      "delta_passed": 1,
+      "delta_score": 1.0
+    },
+    {
+      "task_uid": "acd0-9611-0b3e-2be3",
+      "skill": "appeal-to-emotion",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "4d84-3403-f924-13e8",
+      "skill": "appeal-to-emotion",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "0337-ee76-9a1f-b931",
+      "skill": "appeal-to-emotion",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "9afc-2393-94d2-7cb3",
+      "skill": "appeal-to-emotion",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "56ce-5e4a-d609-a354",
+      "skill": "appeal-to-emotion",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "c2e7-c38b-ca62-6d10",
+      "skill": "appeal-to-emotion",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "6c99-3f5c-8647-713b",
+      "skill": "appeal-to-emotion",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "68ad-0bc4-b9fe-3f0c",
+      "skill": "appeal-to-emotion",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "67dd-33b5-7bfc-2b0a",
+      "skill": "appeal-to-emotion",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "b7c2-e5dc-885b-17b2",
+      "skill": "appeal-to-emotion",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "0f74-1ae3-617d-677d",
+      "skill": "post-hoc-ergo-propter-hoc",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "bcc2-28f6-9793-6ff1",
+      "skill": "post-hoc-ergo-propter-hoc",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "4afb-38e2-0b85-4e69",
+      "skill": "post-hoc-ergo-propter-hoc",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "35eb-6400-b3e5-8bd1",
+      "skill": "post-hoc-ergo-propter-hoc",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "cf36-3bd6-25c7-9a2c",
+      "skill": "post-hoc-ergo-propter-hoc",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.4,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.6
+    },
+    {
+      "task_uid": "17b5-e029-5911-5eb9",
+      "skill": "post-hoc-ergo-propter-hoc",
+      "baseline_passed": false,
+      "curated_passed": true,
+      "baseline_score": 0.0,
+      "curated_score": 1.0,
+      "delta_passed": 1,
+      "delta_score": 1.0
+    },
+    {
+      "task_uid": "9486-dc41-c76f-c802",
+      "skill": "post-hoc-ergo-propter-hoc",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "da96-06ed-db77-7546",
+      "skill": "post-hoc-ergo-propter-hoc",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "766e-4c93-f62d-f038",
+      "skill": "post-hoc-ergo-propter-hoc",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "7fa7-1a8a-ffdc-23fa",
+      "skill": "post-hoc-ergo-propter-hoc",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.85,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.15
+    },
+    {
+      "task_uid": "8a1c-9c61-bca3-b119",
+      "skill": "circular-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "5480-9a12-06c7-36a2",
+      "skill": "circular-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.6,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.4
+    },
+    {
+      "task_uid": "db6a-3b2a-d303-25c1",
+      "skill": "circular-reasoning",
+      "baseline_passed": true,
+      "curated_passed": false,
+      "baseline_score": 1.0,
+      "curated_score": 0.0,
+      "delta_passed": -1,
+      "delta_score": -1.0
+    },
+    {
+      "task_uid": "6f80-bd6f-eff6-55b9",
+      "skill": "circular-reasoning",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "f39c-5ada-7cdd-64e0",
+      "skill": "circular-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "eaa5-602c-57f2-0144",
+      "skill": "circular-reasoning",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "f940-1413-f2bf-18d7",
+      "skill": "circular-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "5478-e408-4368-2172",
+      "skill": "circular-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.9,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.1
+    },
+    {
+      "task_uid": "f6bd-9ef0-3fcf-5661",
+      "skill": "circular-reasoning",
+      "baseline_passed": false,
+      "curated_passed": true,
+      "baseline_score": 0.0,
+      "curated_score": 1.0,
+      "delta_passed": 1,
+      "delta_score": 1.0
+    },
+    {
+      "task_uid": "aaf1-4fc7-6f9d-2427",
+      "skill": "circular-reasoning",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "7063-2239-549e-426a",
+      "skill": "hasty-generalization",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "df0f-834f-1c9f-180d",
+      "skill": "hasty-generalization",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "dac9-d47e-9221-d2ab",
+      "skill": "hasty-generalization",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "9df9-f1b4-6e22-0bd5",
+      "skill": "hasty-generalization",
+      "baseline_passed": true,
+      "curated_passed": false,
+      "baseline_score": 1.0,
+      "curated_score": 0.0,
+      "delta_passed": -1,
+      "delta_score": -1.0
+    },
+    {
+      "task_uid": "ee91-4547-85dd-f4a5",
+      "skill": "hasty-generalization",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "ea99-a08b-7b24-62be",
+      "skill": "hasty-generalization",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "71a1-8d3b-863b-42bc",
+      "skill": "hasty-generalization",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "f89c-36da-422b-d2dc",
+      "skill": "hasty-generalization",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "c0bd-a7c1-9568-0c56",
+      "skill": "hasty-generalization",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "f7b8-a2a6-35bc-4416",
+      "skill": "hasty-generalization",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "9fa0-9bd0-7a6b-0ba8",
+      "skill": "base-rate-neglect",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "450f-3c5f-0039-5936",
+      "skill": "base-rate-neglect",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "027f-8449-3bdf-c88d",
+      "skill": "base-rate-neglect",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "6a24-2be1-03ec-e192",
+      "skill": "base-rate-neglect",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "8653-f2a5-5c35-e664",
+      "skill": "base-rate-neglect",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "3f08-4f22-86a3-a416",
+      "skill": "base-rate-neglect",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "e804-6e53-44c2-cbb6",
+      "skill": "base-rate-neglect",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "c890-0a00-644a-ec31",
+      "skill": "base-rate-neglect",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "5617-3054-a03b-cc8f",
+      "skill": "base-rate-neglect",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "e3ac-3e47-0adb-19a0",
+      "skill": "base-rate-neglect",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "52a8-956f-c46d-a15d",
+      "skill": "availability-heuristic",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "d95d-b375-d0e8-e26f",
+      "skill": "availability-heuristic",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "0f49-88e7-749b-2fce",
+      "skill": "availability-heuristic",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "58fe-4b9c-9070-c3c1",
+      "skill": "availability-heuristic",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "76fe-4b8b-5ee0-d9e0",
+      "skill": "availability-heuristic",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "1549-aed2-4651-ce35",
+      "skill": "availability-heuristic",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "59d7-eb2e-f5b2-2380",
+      "skill": "availability-heuristic",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "fb56-6fd3-b669-127f",
+      "skill": "availability-heuristic",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "b1bc-5f05-936f-9809",
+      "skill": "availability-heuristic",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "8b2d-4744-b438-b7fc",
+      "skill": "availability-heuristic",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "9836-ffea-e562-a9b2",
+      "skill": "sunk-cost-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "edc3-2c29-f953-a15e",
+      "skill": "sunk-cost-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "c6a6-c217-fb3b-805a",
+      "skill": "sunk-cost-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "30d9-56bc-e4ce-566c",
+      "skill": "sunk-cost-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "7ceb-38b9-cfed-a482",
+      "skill": "sunk-cost-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "df18-9563-3add-9b4a",
+      "skill": "sunk-cost-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "e474-a985-18b8-fc21",
+      "skill": "sunk-cost-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "8b3e-a4b9-86ec-037b",
+      "skill": "sunk-cost-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.9,
+      "curated_score": 0.95,
+      "delta_passed": 0,
+      "delta_score": 0.05
+    },
+    {
+      "task_uid": "dba8-b805-d7c2-6344",
+      "skill": "sunk-cost-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "cf20-d81f-c6c0-6ac3",
+      "skill": "sunk-cost-fallacy",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "a40a-6071-d8a8-bff0",
+      "skill": "abductive-reasoning",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "5fd7-9b56-bd21-b617",
+      "skill": "abductive-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.25,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.75
+    },
+    {
+      "task_uid": "5e49-4382-af4a-ae88",
+      "skill": "abductive-reasoning",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "375b-5887-9d79-e89b",
+      "skill": "abductive-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.85,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.15
+    },
+    {
+      "task_uid": "5ffb-bce3-ed6d-d9a3",
+      "skill": "abductive-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.6,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.4
+    },
+    {
+      "task_uid": "19bd-39ea-0877-19ad",
+      "skill": "abductive-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.8,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.2
+    },
+    {
+      "task_uid": "9567-a5de-2d1f-550d",
+      "skill": "abductive-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.85,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.15
+    },
+    {
+      "task_uid": "c132-3f6a-3298-9ddb",
+      "skill": "abductive-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "b9e5-0f62-3fc7-04cc",
+      "skill": "abductive-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "ec0b-605f-3773-ab28",
+      "skill": "abductive-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "1ac7-927e-00ed-3e3d",
+      "skill": "transitive-inference",
+      "baseline_passed": true,
+      "curated_passed": false,
+      "baseline_score": 1.0,
+      "curated_score": 0.0,
+      "delta_passed": -1,
+      "delta_score": -1.0
+    },
+    {
+      "task_uid": "5b38-8de0-3298-430b",
+      "skill": "transitive-inference",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "0b35-0214-7838-1f07",
+      "skill": "transitive-inference",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "33b5-bfba-5e84-0db9",
+      "skill": "transitive-inference",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "9559-bfc5-1637-a969",
+      "skill": "transitive-inference",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "0d8a-409d-30ed-2f00",
+      "skill": "transitive-inference",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "23d8-a5db-60a3-fb63",
+      "skill": "transitive-inference",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "6484-224b-cf69-e235",
+      "skill": "transitive-inference",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "b1ce-ceac-b70a-b371",
+      "skill": "transitive-inference",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "cd49-23a2-bbcd-91e3",
+      "skill": "transitive-inference",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "3f47-1c7b-2e5d-9b8a",
+      "skill": "necessary-and-sufficient-conditions",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "9395-1ae0-bf14-f1ed",
+      "skill": "necessary-and-sufficient-conditions",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "5f3d-dca0-fbb6-09f7",
+      "skill": "necessary-and-sufficient-conditions",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "f03f-5757-93ca-a5bc",
+      "skill": "necessary-and-sufficient-conditions",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "91d1-347d-4307-2348",
+      "skill": "necessary-and-sufficient-conditions",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "5aa5-4330-4c57-9607",
+      "skill": "necessary-and-sufficient-conditions",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "e986-6208-6342-1269",
+      "skill": "necessary-and-sufficient-conditions",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "044e-11df-10b4-6da1",
+      "skill": "necessary-and-sufficient-conditions",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "df16-a9d4-082c-5fd3",
+      "skill": "necessary-and-sufficient-conditions",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "294a-2e81-290e-97f5",
+      "skill": "necessary-and-sufficient-conditions",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "3328-81a2-0056-4519",
+      "skill": "enumerative-induction",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "37ab-9278-ea12-2e88",
+      "skill": "enumerative-induction",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "4ac3-b34b-ac5a-835b",
+      "skill": "enumerative-induction",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "f190-1ec1-955b-cb61",
+      "skill": "enumerative-induction",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.5,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.5
+    },
+    {
+      "task_uid": "536a-3cab-76cc-f200",
+      "skill": "enumerative-induction",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "83fd-45c0-2970-b355",
+      "skill": "enumerative-induction",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "fccb-b4cb-5fd5-3064",
+      "skill": "enumerative-induction",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "6edc-a9ef-93c1-148b",
+      "skill": "enumerative-induction",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.85,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.15
+    },
+    {
+      "task_uid": "9188-c6c3-bc42-5712",
+      "skill": "enumerative-induction",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "878e-8101-bafd-19df",
+      "skill": "enumerative-induction",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "b808-5b7e-796b-ad24",
+      "skill": "analogical-inference",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "2906-c0cc-eba7-1893",
+      "skill": "analogical-inference",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "10fd-764f-9d96-351a",
+      "skill": "analogical-inference",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "36c2-3a9c-7790-976b",
+      "skill": "analogical-inference",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "936c-76d1-0f20-8aa5",
+      "skill": "analogical-inference",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "7984-d630-120a-0018",
+      "skill": "analogical-inference",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "112a-efd6-d622-15c1",
+      "skill": "analogical-inference",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "6563-a5bf-93a5-067a",
+      "skill": "analogical-inference",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "37cd-f8f1-24f6-c5c2",
+      "skill": "analogical-inference",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "673d-3322-2481-a6c5",
+      "skill": "analogical-inference",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "f167-7c12-ccaf-c033",
+      "skill": "counterfactual-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "93d7-ed27-8841-5c03",
+      "skill": "counterfactual-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "2b90-af4d-3f7c-7a83",
+      "skill": "counterfactual-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "1135-e2ce-f26e-ff2a",
+      "skill": "counterfactual-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "34cd-ceae-985e-f86a",
+      "skill": "counterfactual-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "c78f-6e80-95c6-b109",
+      "skill": "counterfactual-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "9e22-561b-d2f8-27d9",
+      "skill": "counterfactual-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "9514-443c-5315-c2c2",
+      "skill": "counterfactual-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "8f04-57b9-0f30-c33e",
+      "skill": "counterfactual-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "a6c4-f78b-4cd6-2c98",
+      "skill": "counterfactual-reasoning",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "b35e-681c-59e5-f342",
+      "skill": "regression-to-the-mean",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "b78e-99fe-e106-a8d5",
+      "skill": "regression-to-the-mean",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "b015-abca-c7c1-62a2",
+      "skill": "regression-to-the-mean",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.9,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.1
+    },
+    {
+      "task_uid": "a9ff-f702-dc97-7322",
+      "skill": "regression-to-the-mean",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "beb9-70ae-da59-10c4",
+      "skill": "regression-to-the-mean",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.3,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.7
+    },
+    {
+      "task_uid": "dd5f-b6b1-93a9-0d7d",
+      "skill": "regression-to-the-mean",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "ecdf-7877-9db8-49d5",
+      "skill": "regression-to-the-mean",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "4e8c-17c2-29bc-bb5b",
+      "skill": "regression-to-the-mean",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.7,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.3
+    },
+    {
+      "task_uid": "e41b-3524-2f41-f4af",
+      "skill": "regression-to-the-mean",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "d3bd-2ade-241d-93aa",
+      "skill": "regression-to-the-mean",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.3,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.7
+    },
+    {
+      "task_uid": "15d6-9e0a-4c51-4e7c",
+      "skill": "gamblers-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "fd7f-7528-728c-46a5",
+      "skill": "gamblers-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "f025-5225-52bc-c91b",
+      "skill": "gamblers-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "0311-026b-9371-6372",
+      "skill": "gamblers-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "4e10-f32e-bb9f-e24d",
+      "skill": "gamblers-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "80c8-3f38-0325-c4ca",
+      "skill": "gamblers-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "c601-09b7-a7ae-e9cb",
+      "skill": "gamblers-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "0596-411a-54c1-425d",
+      "skill": "gamblers-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "149e-8b06-eab8-a380",
+      "skill": "gamblers-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "fabd-d516-8a78-c988",
+      "skill": "gamblers-fallacy",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "5955-500a-48c9-eec6",
+      "skill": "framing-effect",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "e83b-a3a3-fa55-974a",
+      "skill": "framing-effect",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "cec2-8874-0089-0456",
+      "skill": "framing-effect",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "61a5-763e-b639-9452",
+      "skill": "framing-effect",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "bc00-6b79-65a2-7f09",
+      "skill": "framing-effect",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "1ea9-140f-8b9f-670f",
+      "skill": "framing-effect",
+      "baseline_passed": false,
+      "curated_passed": false,
+      "baseline_score": 0.0,
+      "curated_score": 0.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "845b-d147-431f-9dbd",
+      "skill": "framing-effect",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "ae1f-1773-02e7-cda7",
+      "skill": "framing-effect",
+      "baseline_passed": true,
+      "curated_passed": false,
+      "baseline_score": 1.0,
+      "curated_score": 0.0,
+      "delta_passed": -1,
+      "delta_score": -1.0
+    },
+    {
+      "task_uid": "52e6-c2e2-8217-4ae6",
+      "skill": "framing-effect",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "02b4-7f40-7391-9f55",
+      "skill": "framing-effect",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "5968-eca3-4624-551d",
+      "skill": "hindsight-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "2214-051c-73eb-a7a5",
+      "skill": "hindsight-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 0.9,
+      "curated_score": 0.95,
+      "delta_passed": 0,
+      "delta_score": 0.05
+    },
+    {
+      "task_uid": "7720-a77d-4c49-a539",
+      "skill": "hindsight-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "6030-c58a-5e97-31fa",
+      "skill": "hindsight-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "b55c-edf0-000b-334e",
+      "skill": "hindsight-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "190d-100e-039a-a5c9",
+      "skill": "hindsight-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "f46f-7a6f-f121-e2c2",
+      "skill": "hindsight-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "b2eb-6e49-2b26-b81c",
+      "skill": "hindsight-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "cd6f-3555-222a-85f3",
+      "skill": "hindsight-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "dac2-fed3-7251-6c89",
+      "skill": "hindsight-bias",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "6367-9f2b-d671-6b2c",
+      "skill": "appeal-to-authority",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "7554-62d1-7878-6466",
+      "skill": "appeal-to-authority",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "1b06-8fc6-3a41-9865",
+      "skill": "appeal-to-authority",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "f106-34d9-b15d-f1f8",
+      "skill": "appeal-to-authority",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "dafb-3ce0-c5b5-2369",
+      "skill": "appeal-to-authority",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "2885-1b31-cfa2-a3ac",
+      "skill": "appeal-to-authority",
+      "baseline_passed": true,
+      "curated_passed": false,
+      "baseline_score": 1.0,
+      "curated_score": 0.0,
+      "delta_passed": -1,
+      "delta_score": -1.0
+    },
+    {
+      "task_uid": "4d40-6955-a9e8-3dbf",
+      "skill": "appeal-to-authority",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "6777-249e-a454-cca2",
+      "skill": "appeal-to-authority",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "6ba7-311f-9e6a-950a",
+      "skill": "appeal-to-authority",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    },
+    {
+      "task_uid": "542b-e6d8-506b-695c",
+      "skill": "appeal-to-authority",
+      "baseline_passed": true,
+      "curated_passed": true,
+      "baseline_score": 1.0,
+      "curated_score": 1.0,
+      "delta_passed": 0,
+      "delta_score": 0.0
+    }
+  ],
   "model": "claude-opus-4-7",
   "thinking_budget": 4096,
-  "extraction_method": "s4.m4.skill-injection-trace-v1",
-  "rejudge_note": "verdicts re-derived from response text after _score_deterministic bug fix"
+  "extraction_method": "s4.m4.skill-injection-trace-v1"
 }

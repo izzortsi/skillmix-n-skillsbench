@@ -1,166 +1,334 @@
-# llm-skills
+# skillmix-n-skillsbench
 
-Faithful implementation of [`PROJECT_SPECS.md`](PROJECT_SPECS.md). Every method
-in the spec has a corresponding module; names are 1:1 so the correspondence is
-obvious at a glance. 10 of 14 spec methods are FULL; the 4 remaining are OOS
-(out of scope: training infrastructure or mechanistic interpretability).
+Skill extraction, evaluation, and SFT-corpus generation for LLMs. Implements
+the 14-method [`PROJECT_SPECS.md`](PROJECT_SPECS.md) plus the downstream
+pieces — procedural-skill rewrite, task synthesis, bench harness, SFT row
+emission, training scripts — needed to take a base student model from "no
+SFT" to "trained on Opus demonstrations and re-evaluated on held-out tasks."
+
+11 of 14 spec methods are FULL; 3 are OOS (training infrastructure or
+mechanistic interpretability). One non-spec method (`s3.m5`) was added to
+bridge `s3` example output to the bench harness's task input format.
+
+## two skill paradigms
+
+The codebase carries both, deliberately. They are different objects with the
+same name and produce different evaluations.
+
+| | Arora's *skill* | SkillsBench's *skill* |
+|---|---|---|
+| Where it lives | Latent in model weights | External text block in system prompt |
+| Access | Reference by name (`modus_ponens`) | Inject procedural text (when_to_use / procedure / constraints / example) |
+| Test | Compositional generation (k random skills → coherent text) | Task pass-rate Δ between baseline (no skill in system) and curated (skill block injected) |
+| In this repo | `data/pipeline-runs/.../catalog/skills.json` (declarative) | `data/pipeline-runs/.../bench_catalog/skills.json` (procedural) |
+| Used by | `s2.m2` Skill-Mix evaluator | `b2_benchmarks/skillsbench/` + `s4.m4 --mode inject` (SFT path) |
+
+The **declarative catalog** is what `s2.m1` (Wikipedia seeder) and `s1.m1-m3`
+produce. The **procedural catalog** is the same set of skills rewritten by
+`b2_benchmarks/skillsbench/procedural_catalog.py` via Opus, adding numbered
+procedures, constraints, and dual positive/negative examples.
+
+For SFT, the procedural form is what gets injected into the student's system
+prompt during corpus generation; the declarative form is what `s2.m2` uses
+to probe latent skills via composition.
+
+## pipeline (end-to-end)
+
+```
+              ┌──────────────────────────────┐
+              │  data/wikipedia-seed/        │  curated source list
+              │  source.json (40 entries)    │  (or s1.m1/m2/m3 output)
+              └──────────────┬───────────────┘
+                             │ s2.m1 wikipedia_seeder
+                             ▼
+              ┌──────────────────────────────┐
+              │  catalog/skills.json         │  Skill (declarative form)
+              │  40 records                  │  → consumed by s2.m2 Skill-Mix
+              └──────────────┬───────────────┘
+                             │ b2_benchmarks/skillsbench/procedural_catalog.py
+                             │ (Opus rewrites each skill into procedural form)
+                             ▼
+              ┌──────────────────────────────┐
+              │  bench_catalog/skills.json   │  Skill (procedural form)
+              │  40 records                  │  when_to_use + procedure + constraints
+              └──────────────┬───────────────┘
+                             │ s3.m5 task_synthesis
+                             │ (Opus generates N tasks per skill)
+                             ▼
+              ┌──────────────────────────────┐
+              │  synthesis/tasks.json        │  ExtractedTask, tagged with
+              │  N×40 records                │  skill_uid in acceptance_criteria
+              │  + task_skill_map.json       │
+              └──────────────┬───────────────┘
+                             │ split: 10/skill train, 5/skill eval
+                             ▼
+                   ┌─────────┴─────────┐
+                   ▼                   ▼
+              ┌─────────┐         ┌─────────┐
+              │  train  │         │  eval   │
+              │  set    │         │  set    │
+              └────┬────┘         └────┬────┘
+                   │                   │
+   s4.m4 --mode    │                   │ corpus_harness or
+   inject (Opus)   │                   │ training/eval_qwen35_lora.py
+                   ▼                   ▼
+              ┌─────────┐         ┌──────────────┐
+              │ bench_  │         │  bench-eval- │
+              │ traced/ │         │  pre-sft/    │  ← multi-student
+              │ episodes│         │  episodes    │    characterization
+              └────┬────┘         └──────────────┘
+                   │ sft_dataset filter
+                   ▼
+              ┌─────────────────────────────┐
+              │ sft_dataset/dataset.jsonl   │  curated-passing chat-format rows
+              └────┬────────────────────────┘
+                   │ training/train_qwen35_lora.py
+                   ▼
+              ┌─────────────────────────────┐
+              │  qwen35-0.8b-skill-lora/    │  LoRA adapter
+              └────┬────────────────────────┘
+                   │ training/eval_qwen35_lora.py (post-SFT)
+                   ▼
+              ┌─────────────────────────────┐
+              │  bench-eval-post-sft/       │  same shape as pre-SFT
+              │  episodes                   │  → compare_pre_post.py
+              └─────────────────────────────┘
+```
 
 ## layout
 
 ```
-llm-skills/
-├── PROJECT_SPECS.md                           # authoritative spec (4 sections, 14 methods)
-├── cli.py                                     # python -m cli <method>
-├── core/                                      # single canonical schemas + utilities
-│   ├── schemas.py       Skill, Topic, SkillExample, SkillMixTrial, ExtractedTask
-│   ├── providers.py     AnthropicProvider (OAuth bridge), MockProvider
-│   ├── judge.py         per_skill_rubric_judge, task_acceptance_judge
+skillmix-n-skillsbench/
+├── PROJECT_SPECS.md                           authoritative 14-method spec
+├── cli.py                                     python cli.py <method>
+├── core/
+│   ├── schemas.py       Skill, ExtractedTask, SkillExample, SkillMixTrial
+│   ├── providers.py     AnthropicProvider (OAuth bridge), Ollama, Mock
+│   ├── judge.py         per_skill_rubric_judge
 │   ├── formatters.py    skill/task <-> markdown converters
-│   └── operators.py     seq / par / cond / sem composition (k-way)
-├── harness/                                   # streaming LinearAgent + transcript capture
-│   ├── agent.py         LinearAgent, OAuth wire path
-│   ├── transcript.py    Transcript + record() for thinking-block capture
-│   ├── events.py        14 typed stream events
-│   └── ollama_agent.py  OllamaAgent (no tools, no thinking)
-├── s1_extracting_skill_names/                 # §1 — Extracting Skills (Names)
-│   ├── m1_task_based_labeling.py              [FULL]
-│   ├── m2_direct_elicitation.py               [FULL]
-│   └── m3_catalog_generation.py               [FULL]
-├── s2_extracting_skills_from_text/            # §2 — Extracting Skills from Text
-│   ├── m1_wikipedia_seeder.py                 [FULL]
-│   ├── m2_skill_mix_evaluation.py             [FULL]  true Yu et al. replication
-│   └── m3_mini_theories.py                    [OOS]   mechanistic interpretability
-├── s3_generating_skill_examples/              # §3 — Generating Skill Examples
-│   ├── m1_random_pair_composition.py          [FULL]  k=1..5, same-category supported
-│   ├── m2_domain_specific_combination.py      [FULL]
-│   ├── m3_synthetic_construction.py           [FULL]
-│   └── m4_agentic_answer_verification.py      [FULL]  verify + refine
-├── s4_extracting_skill_usage_instances/       # §4 — Skill Usage Instances from Text
-│   ├── m1_context_enhanced_learning.py        [OOS]   training infra
-│   ├── m2_curriculum_internalization.py       [OOS]   training infra
-│   ├── m3_mechanistic_analysis.py             [OOS]   interp tooling
-│   └── m4_skill_composition_testing.py        [FULL]  eval half (solver + trace adapter)
-├── b2_benchmarks/skillsbench/                 # SkillsBench-style corpus evaluation
+│   └── operators.py     k-way composition operators
+├── harness/                                   streaming LinearAgent + transcript
+│   ├── agent.py         LinearAgent with thinking-block capture
+│   ├── transcript.py    Transcript + record()
+│   └── ollama_agent.py  OllamaAgent
+│
+│ ── PROJECT_SPECS methods ───────────────────────────────
+├── s1_extracting_skill_names/
+│   ├── m1_task_based_labeling.py              FULL
+│   ├── m2_direct_elicitation.py               FULL
+│   └── m3_catalog_generation.py               FULL
+├── s2_extracting_skills_from_text/
+│   ├── m1_wikipedia_seeder.py                 FULL
+│   ├── m2_skill_mix_evaluation.py             FULL  Yu et al. replication
+│   └── m3_mini_theories.py                    OOS   needs interp tooling
+├── s3_generating_skill_examples/
+│   ├── m1_random_pair_composition.py          FULL  k=1..5
+│   ├── m2_domain_specific_combination.py      FULL
+│   ├── m3_synthetic_construction.py           FULL
+│   ├── m4_agentic_answer_verification.py      FULL  verify + refine
+│   └── m5_extracted_task_synthesis.py         NEW  bridges procedural skill → ExtractedTask
+├── s4_extracting_skill_usage_instances/
+│   ├── m1_context_enhanced_learning.py        OOS   training infra
+│   ├── m2_curriculum_internalization.py       OOS   training infra
+│   ├── m3_mechanistic_analysis.py             OOS   interp tooling
+│   └── m4_skill_composition_testing.py        FULL  --mode solve | --mode inject
+│
+│ ── beyond the spec ─────────────────────────────────────
+├── b2_benchmarks/skillsbench/
 │   ├── corpus_harness.py     run_singlecall / run_guided episodes
-│   ├── llm_judge.py          LLMJudgeEvaluator
+│   ├── procedural_catalog.py declarative → procedural rewrite (Opus)
 │   ├── skill_injection.py    format_skill_as_system
-│   └── effectiveness.py      bootstrap CI, permutation test, aggregations
+│   ├── llm_judge.py          LLMJudgeEvaluator (deterministic + LLM judge paths)
+│   ├── sft_dataset.py        bench_traced episodes → SFT chat-format rows
+│   ├── effectiveness.py      bootstrap CI, permutation test
+│   ├── visualization.py      heatmaps + summary charts
+│   └── rescore.py            post-hoc verdict re-derivation
+├── training/
+│   ├── train_qwen35_lora.py        LoRA SFT (HF transformers + TRL + peft)
+│   ├── eval_qwen35_lora.py         post-SFT eval, emits bench-shape episodes.json
+│   ├── patch_qwen35_template.py    chat-template patcher for assistant_only_loss
+│   └── compare_pre_post.py         per-skill diff between pre/post-SFT eval
+├── cli/                                       orchestrator (older, separate)
+│   ├── cli/             command_run, command_setup, etc.
+│   ├── config/          PipelineProfile, stage_registry
+│   ├── orchestration/   stage_output_wirer, pipeline_executor
+│   └── profiles/        default.yaml
 ├── data/
-│   ├── wikipedia-seed/source.json             # 10 Yu et al. skills (paper Table 5)
-│   ├── wikipedia-seed/skills.json             # seeded Skill records
-│   └── topics/topics.json                     # 10 Yu et al. topics (paper Table 6)
-├── b1.reports/                                # dated engineering reports
-├── resources/                                 # papers + meta-analysis
-└── .gitignore
+│   ├── wikipedia-seed/source.json             40 named language skills (curated)
+│   ├── topics/topics.json                     10 topics (Yu et al. Table 6)
+│   ├── mini-tasks.json                        8 hand-written ExtractedTasks
+│   └── pipeline-runs/default/                 catalog/, bench_catalog/, synthesis/,
+│                                              bench_traced/, sft_dataset/, bench-eval-*
+├── b1.reports/                                dated engineering reports
+├── resources/                                 papers + meta-analysis
+└── PROJECT_SPECS.md
 ```
-
-Status legend:
-- **FULL** — implemented end-to-end, runnable.
-- **OOS** — out of scope. Needs infrastructure beyond inference (training
-  harness, mechanistic interpretability tooling). Left as docstring stubs so
-  the PROJECT_SPECS ↔ code mapping stays 1:1.
-
-## single canonical schema
-
-Every method imports dataclasses from `core/schemas.py`. Six types, deduped:
-
-| Type              | Where produced              | Where consumed                          |
-|-------------------|-----------------------------|-----------------------------------------|
-| `Skill`           | s1.m1/m2/m3, s2.m1          | every generator + eval                  |
-| `Topic`           | s2.m1 (from topics.json)    | s2.m2, s3.m3                            |
-| `SkillExample`    | s3.m1/m2/m3                 | s3.m4 (verify/refine)                   |
-| `SkillMixTrial`   | s2.m2                       | (terminal)                              |
-| `ExtractedTask`   | s3 generators, b2 consumers | s4.m4, b2 skillsbench                   |
-| *(helpers)*       | `stable_uid`, `to_kebab`, `save_json`, `load_*`, `validate_free_form_single_answer` |
-
-Methods attribute their origin via the `source` field on `Skill` (e.g.
-`"s2.m1.wikipedia-seed"`, `"s1.m3.catalog"`).
-
-## providers
-
-`core/providers.py` wraps the [anthropic-oauth](https://github.com/anthropics/anthropic-oauth)
-package so API calls reuse Claude Code's local credentials at
-`~/.claude/.credentials.json` (no extra setup; falls back to `ANTHROPIC_API_KEY`
-and then `CLAUDE_CODE_OAUTH_TOKEN`). The `system` field is converted to the
-two-block array the OAuth endpoint requires — without this, Opus/Sonnet
-requests return HTTP 429 (see `b1.reports/260421.frontier-extraction-pipeline.txt`
-ADDENDUM A for the full story).
-
-`MockProvider` is available for tests that must not hit the network.
-
-For streaming + thinking-block capture, use `harness.LinearAgent` instead —
-same OAuth path, but yields typed events (`ThinkingStart/Delta/Stop`,
-`ToolUseStart/InputDelta/Stop`, etc.) through `record()` into a `Transcript`.
-`s4.m4` is the only method that uses it directly; everything else goes
-through `core.providers`.
 
 ## quickstart
 
-Run from the repo root (data paths are relative):
-
 ```bash
-cd /workspace/llm-skills
+# List all PROJECT_SPECS methods + status
+python cli.py
 
-# List all methods + status
-python -m cli
+# Seed 40 Wikipedia-style skills into catalog/skills.json
+python cli.py s2.m1 --source data/wikipedia-seed/source.json \
+                    --out data/pipeline-runs/default/catalog/skills.json
 
-# Seed 10 Yu et al. skills (Wikipedia-style)
-python -m cli s2.m1
+# Rewrite catalog → procedural form (~$5, ~10 min on 40 skills)
+python -m b2_benchmarks.skillsbench.procedural_catalog \
+  --input-catalog data/pipeline-runs/default/catalog/skills.json \
+  --out           data/pipeline-runs/default/bench_catalog/skills.json \
+  --provider anthropic:claude-opus-4-7
 
-# Yu Skill-Mix at k=2 with Sonnet as student, Opus as judge
-python -m cli s2.m2 --k 2 --trials 5 --verbose
+# Synthesize ExtractedTasks from procedural skills (15 per skill = 600 total)
+python cli.py s3.m5 \
+  --catalog data/pipeline-runs/default/bench_catalog/skills.json \
+  --out     data/pipeline-runs/default/synthesis/tasks.json \
+  --n 15 --provider anthropic:claude-opus-4-7
 
-# Dry-run with mock providers (no API calls)
-python -m cli s2.m2 --student mock: --judge mock: --k 2 --trials 2 --verbose
+# Run Skill-Mix evaluation (Yu et al.) — uses declarative catalog
+python cli.py s2.m2 --skills data/pipeline-runs/default/catalog/skills.json \
+                    --topics data/topics/topics.json \
+                    --k 2 --trials 5 \
+                    --student anthropic:claude-sonnet-4-6 \
+                    --judge   anthropic:claude-opus-4-7
 
-# Generate k=3 same-category Q&A pairs from the Wikipedia seed
-python -m cli s3.m1 --k 3 --same-category --n 10
-
-# Agentic verify + refine the s3.m1 output
-python -m cli s3.m4 --examples data/s3-m1-examples.json \
-                    --catalog data/wikipedia-seed/skills.json \
-                    --out-dir data/s3-m4-out
-
-# Generate a ~200-skill catalog with 3-way concurrency
-python -m cli s1.m3 --target-size 200 --categories 10 --concurrency 3
+# Dry-run anything with mocks (no API calls)
+python cli.py s2.m2 --student mock: --judge mock: --k 2 --trials 2
 ```
 
-## composition operators
+## SFT pipeline (the longer story)
 
-`core/operators.py` provides `compose_seq`, `compose_par`, `compose_cond`, and
-`compose_sem` (LLM-fused) — non-PROJECT_SPECS utilities that turn a list of
-`Skill` records into a `ComposedSkill`. `generate_all_compositions(skills,
-max_k)` enumerates every `itertools.combinations` k-tuple and builds seq/par/
-cond versions of each.
+For the full chain `procedural-catalog → tasks → bench_traced → SFT corpus →
+LoRA-trained student → post-SFT eval`, see
+[`b1.reports/260427.sft-v1-experiment-specification.txt`](b1.reports/260427.sft-v1-experiment-specification.txt)
+which formally specifies every stage as `(state, inputs, outputs, metrics,
+transitions)` and reports SFT v1 outcomes.
 
-## b2_benchmarks/skillsbench
-
-Outside the spec grid but the only end-to-end measurement of "do extracted
-skills actually improve a solver model?":
+Concrete commands:
 
 ```bash
-python -m b2_benchmarks.skillsbench.corpus_harness \
-    --tasks     data/holdout-tasks.json \
-    --catalog   data/wikipedia-seed/skills.json \
-    --out-dir   data/skillsbench-out \
-    --provider  anthropic:claude-haiku-4-5-20251001 \
-    --judge     anthropic:claude-opus-4-7 \
-    --mode      singlecall --cross-task
+# Generate the SFT corpus (Opus solver + judge over 400 train tasks)
+python cli.py s4.m4 --mode inject \
+  --tasks    data/pipeline-runs/default/synthesis/tasks_train.json \
+  --catalog  data/pipeline-runs/default/bench_catalog/skills.json \
+  --task-skill-map data/pipeline-runs/default/synthesis/task_skill_map_train.json \
+  --out-dir  data/pipeline-runs/default/bench_traced/ \
+  --judge    anthropic:claude-opus-4-7 \
+  --model    claude-opus-4-7 --thinking-budget 4096
+
+# Filter passing curated episodes into SFT chat-format rows
+python -m b2_benchmarks.skillsbench.sft_dataset \
+  --episodes data/pipeline-runs/default/bench_traced/episodes.jsonl \
+  --out      data/pipeline-runs/default/sft_dataset/dataset.jsonl \
+  --conditions curated --skip-skills <ceiling-skills>
+
+# Patch the chat template so TRL ≥0.18 can mask loss to assistant tokens only
+python training/patch_qwen35_template.py \
+  --model Qwen/Qwen3.5-0.8B \
+  --out   ./qwen35-0.8b-tokenizer-patched
+
+# LoRA fine-tune on host with GPU
+python training/train_qwen35_lora.py \
+  --data           data/pipeline-runs/default/sft_dataset/dataset.jsonl \
+  --model          Qwen/Qwen3.5-0.8B \
+  --tokenizer-path ./qwen35-0.8b-tokenizer-patched \
+  --output-dir     ./qwen35-0.8b-skill-lora
+
+# Eval on the held-out 200 tasks; produces bench-shape episodes.json
+python training/eval_qwen35_lora.py \
+  --base           Qwen/Qwen3.5-0.8B \
+  --tokenizer-path ./qwen35-0.8b-tokenizer-patched \
+  --adapter        ./qwen35-0.8b-skill-lora \
+  --tasks          data/pipeline-runs/default/synthesis/tasks_eval.json \
+  --catalog        data/pipeline-runs/default/bench_catalog/skills.json \
+  --task-skill-map data/pipeline-runs/default/synthesis/task_skill_map_eval.json \
+  --out-dir        data/pipeline-runs/default/bench-eval-post-sft \
+  --judge anthropic:claude-opus-4-7
+
+# Per-skill diff vs pre-SFT
+python training/compare_pre_post.py
 ```
 
-Outputs `episodes.json` and `summary.json` (baseline vs curated pass rate +
-bootstrap CI + permutation p-value).
+## canonical schemas
 
-## out of scope (OOS)
+Every method imports dataclasses from `core/schemas.py`. The five user-facing
+types:
 
-The spec lists four methods this repo cannot build:
+| Type            | Where produced              | Where consumed                       |
+|-----------------|-----------------------------|--------------------------------------|
+| `Skill`         | s1.m1/m2/m3, s2.m1, bench_catalog rewrite | every generator + eval |
+| `Topic`         | s2.m1 (from topics.json)    | s2.m2, s3.m3                         |
+| `SkillExample`  | s3.m1/m2/m3                 | s3.m4 (verify/refine)                |
+| `SkillMixTrial` | s2.m2                       | (terminal)                           |
+| `ExtractedTask` | s3.m5, hand-written         | s4.m4, b2 skillsbench, training/eval |
 
-| id    | name                                    | reason |
-|-------|-----------------------------------------|--------|
-| s2.m3 | Mini-theories / context analysis        | Needs mechanistic interpretability tooling (white-box activations, circuit probes). |
-| s4.m1 | Context-enhanced learning               | Needs SFT training harness + GPU. |
-| s4.m2 | Curriculum internalization              | Same as s4.m1. |
-| s4.m3 | Mechanistic analysis of skill storage   | Same as s2.m3. |
+`stable_uid(seed)` produces deterministic 16-hex identifiers. Skills carry a
+`source` field (e.g. `"s2.m1.wikipedia-seed"`, `"bench_catalog.procedural-v1"`)
+for provenance.
 
-Each OOS module is a docstring stub explaining what the method would do and
-what infrastructure it needs, so the PROJECT_SPECS ↔ code map stays complete.
+## providers
+
+`core/providers.py` wraps three:
+
+| provider     | spec                                | source                                    |
+|--------------|-------------------------------------|-------------------------------------------|
+| `anthropic`  | `anthropic:claude-opus-4-7`         | OAuth via `~/.claude/.credentials.json`, falls back to `ANTHROPIC_API_KEY` |
+| `ollama`     | `ollama:qwen3.5:0.8b`               | local Ollama daemon at `$OLLAMA_HOST`     |
+| `mock`       | `mock:`                             | always available, canned responses        |
+
+`AnthropicProvider` includes the system-array OAuth wire fix (without it,
+Opus/Sonnet 429s — see
+[`b1.reports/260421.frontier-extraction-pipeline.txt`](b1.reports/260421.frontier-extraction-pipeline.txt)
+ADDENDUM A). `OllamaProvider` sets `think: false` and `keep_alive: "0"` for
+sweep memory eviction. Increase `max_tokens` via `create_provider(...,
+max_tokens=N)` for prompts that ask for many records in one call (s3.m5 sets
+16384).
+
+For streaming + native thinking-block capture, use `harness.LinearAgent`
+directly (`s4.m4` is the only spec method that does).
+
+## status (live)
+
+- **Pipeline**: catalog → procedural rewrite → task synthesis → bench_traced →
+  sft_dataset all functional. `data/pipeline-runs/default/` contains a full
+  v2 run (40 skills × 15 tasks = 600 tasks).
+- **SFT v1** (curated-only training, 353 rows, qwen3.5:0.8b LoRA): trained
+  cleanly. Eval result: **baseline +12.5pp, curated flat, Δ flipped sign**.
+  Findings in
+  [`b1.reports/260427.sft-v1-experiment-specification.txt`](b1.reports/260427.sft-v1-experiment-specification.txt).
+- **SFT v1.5** (added baseline rows + dropped 5 ceiling skills + chat-template
+  patch): worse than v1. Contrastive-rows hypothesis falsified.
+- **SFT v1.6** (curated-only + drop ceiling + chat patch — isolates the patch
+  effect): in flight at last check-in.
+
+The
+[`b1.reports/`](b1.reports/) directory is the running engineering log; each
+report is a self-contained snapshot at the date in its filename
+(`yymmdd.description.txt`).
+
+## relevant papers
+
+- Yu et al. "Skill-Mix: A Flexible and Expandable Family of Evaluations for
+  AI Models" (NeurIPS 2024) — `data/topics/topics.json` and the original 12
+  skills come from Table 5 / 6.
+- Arora & Goyal "A Theory for Emergence of Complex Skills in Language Models"
+  (2023) — the latent-skill / compositional framing the catalog uses.
+- Li et al. "SkillsBench: Benchmarking the Effectiveness of Skill Injection
+  on LLMs" (2026) — the procedural-injection framing `bench_traced` uses.
+
+Copies and a meta-analysis are in [`resources/`](resources/).
+
+## out of scope
+
+The three OOS methods need infrastructure beyond inference:
+
+| id    | name                               | reason                                    |
+|-------|------------------------------------|-------------------------------------------|
+| s2.m3 | Mini-theories / context analysis   | Needs mechanistic interpretability        |
+| s4.m1 | Context-enhanced learning          | Needs SFT training harness (now exists for `s4.m4 --mode inject`; not retrofitted to s4.m1's pre-training framing) |
+| s4.m2 | Curriculum internalization         | Same as s4.m1                             |
+| s4.m3 | Mechanistic analysis of storage    | Same as s2.m3                             |
+
+Each OOS module is a docstring stub explaining what the method would do, so
+the PROJECT_SPECS ↔ code map stays complete.

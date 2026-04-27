@@ -373,8 +373,10 @@ def main() -> None:
     print(f"Loaded {len(catalog)} skills from {args.catalog}")
 
     p_name, p_model = _parse_provider_spec(args.provider)
-    provider = create_provider(p_name, p_model)
-    print(f"Provider: {args.provider}")
+    # Bump max_tokens — N tasks in one call can need 4-6K output tokens.
+    # Default 4096 truncates JSON mid-record on n>=10, causing parse failures.
+    provider = create_provider(p_name, p_model, max_tokens=16384)
+    print(f"Provider: {args.provider} (max_tokens=16384)")
 
     skill_filter = (
         [s.strip() for s in args.skills.split(",") if s.strip()]

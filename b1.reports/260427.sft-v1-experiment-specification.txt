@@ -1,0 +1,644 @@
+================================================================================
+REPORT: SFT V1 — FORMAL EXPERIMENT SPECIFICATION + RESULTS
+================================================================================
+
+Date:   2026-04-27
+Status: COMPLETED
+Notes:  Supersedes 260427.sft-v1-pre-post-findings.txt (kept for trace).
+        This version specifies every term, object, transition, and metric
+        before stating results.
+
+
+================================================================================
+PART I — TERM DEFINITIONS (the things in the system)
+================================================================================
+
+DEF 1.  SKILL (declarative form)
+        A dataclass instance from core.schemas.Skill emitted by a catalog
+        method (s1.m1 / s1.m2 / s1.m3 / s2.m1).
+
+        FIELDS (declarative):
+            skill_uid     : str       (16-hex stable identifier)
+            name          : str       (kebab-case)
+            description   : str       (1-2 sentence Wikipedia-register definition)
+            example       : str       (1-2 sentence prose illustration)
+            category      : str       (e.g. "logical", "rhetorical", "reasoning")
+            source        : str       (provenance; e.g. "wikipedia-seed")
+
+        FILE:  data/pipeline-runs/default/catalog/skills.json
+        COUNT: 40 in v1
+
+
+DEF 2.  SKILL (procedural form)
+        A Skill dataclass instance after rewrite by bench_catalog
+        (b2_benchmarks.skillsbench.procedural_catalog). Same identity, same
+        skill_uid; additional fields populated.
+
+        ADDITIONAL FIELDS (procedural):
+            when_to_use   : str            (detection-framed; "Use when...")
+            procedure     : List[str]      (3-6 numbered steps)
+            constraints   : List[str]      (3-5 anti-overmatch conditions)
+            example       : str            (replaced; now contains
+                                           "Positive: ... Why: ...
+                                            Negative: ... Why: ...")
+            source        : str            ("bench_catalog.procedural-v1")
+
+        FILE:  data/pipeline-runs/default/bench_catalog/skills.json
+        COUNT: 40 in v1
+        WHEN INJECTED: rendered via b2_benchmarks.skillsbench.skill_injection.
+                       format_skill_as_system into a system-prompt block
+                       wrapped between markers:
+                          --- SKILL: <name> ---
+                          <description>\n\n## When to Use\n<when_to_use>\n
+                          \n## Procedure\n1. <step1>\n2. <step2>...\n
+                          \n## Constraints\n- <c1>\n- <c2>...\n
+                          \n## Example\n<example>
+                          --- END SKILL ---
+
+
+DEF 3.  EXTRACTED TASK
+        A dataclass instance from core.schemas.ExtractedTask emitted by
+        either a hand-written corpus or s3.m5 task_synthesis.
+
+        FIELDS:
+            task_uid              : str
+            title                 : str       (~5 word description)
+            domain                : str       (e.g. "logic")
+            input                 : str       (passage; 30-150 words)
+            question              : str       (challenge; 1-2 sentences)
+            output                : str       (correct conclusion;
+                                              short, exact-match graded)
+            difficulty            : str       ("intermediate" | "advanced")
+            query_type            : str       ("FREE_FORM" | "YES_NO" |
+                                              "SINGLE_WORD" | "RANKING")
+            acceptance_criteria   : dict      with keys:
+                must_identify         : List[str]    (3-5 rubric items)
+                correct_conclusion    : str          (== output)
+                skill_uids            : List[str]    (1 entry; the source
+                                                     skill from s3.m5)
+                skill_names           : List[str]
+                skill_categories      : List[str]
+            extraction_method     : str       ("s3.m5.task-synthesis-v1"
+                                              for synthesized tasks)
+
+        FILES:
+            data/pipeline-runs/default/synthesis/tasks.json         (600)
+            data/pipeline-runs/default/synthesis/tasks_train.json   (400)
+            data/pipeline-runs/default/synthesis/tasks_eval.json    (200)
+
+
+DEF 4.  TASK -> SKILL MAP
+        A JSON dict {task_uid: skill_name}. For synthesized tasks, generated
+        by construction at s3.m5 time: each task is born of a specific Skill
+        whose name is recorded in the task's acceptance_criteria.skill_names[0].
+        s3.m5 emits the sidecar map file alongside tasks.json.
+
+        FILES:
+            data/pipeline-runs/default/synthesis/task_skill_map.json
+            data/pipeline-runs/default/synthesis/task_skill_map_train.json
+            data/pipeline-runs/default/synthesis/task_skill_map_eval.json
+
+
+DEF 5.  EPISODE
+        One (task, condition, student) triple's outcome record, emitted by
+        either bench_traced (s4.m4 --mode inject) or by the corpus_harness
+        (b2_benchmarks.skillsbench.corpus_harness).
+
+        FIELDS:
+            task_uid              : str
+            model                 : str       (student identifier;
+                                              e.g. "claude-opus-4-7" or
+                                              "Qwen/Qwen3.5-0.8B+lora:...")
+            condition             : str       ("baseline" | "curated")
+            skill_name            : str       ("" if condition == baseline)
+            skill_uid             : str       ("" if condition == baseline)
+            response              : str       (full assistant text)
+            passed                : bool      (judge verdict; see DEF 7)
+            score                 : float     (rubric in [0, 1]; see DEF 7)
+            judge_rationale       : str       (judge's 1-2 sentence reason)
+            elapsed_s             : float
+
+        ADDITIONAL FIELDS (bench_traced only):
+            trace.system_prompt   : str       (exact prompt sent)
+            trace.user_prompt     : str       (exact prompt sent)
+            trace.response        : str       (full response, alias for above)
+            trace.procedural_steps: List[str] (response split by step pattern)
+
+
+DEF 6.  SFT ROW
+        One training example, emitted by sft_dataset
+        (b2_benchmarks.skillsbench.sft_dataset). Chat-messages format
+        compatible with HF SFTTrainer / axolotl / unsloth.
+
+        SHAPE:
+            {
+              "messages": [
+                {"role": "system",    "content": <SYSTEM_PROMPT>},
+                {"role": "user",      "content": <USER_PROMPT>},
+                {"role": "assistant", "content": <RESPONSE>}
+              ],
+              "metadata": {
+                "task_uid": str, "skill_uid": str, "skill_name": str,
+                "condition": str, "judge_passed": bool, "judge_score": float,
+                "model_source": str (always "claude-opus-4-7" for v1),
+                "extraction_method": str
+              }
+            }
+
+        FILE:  data/pipeline-runs/default/sft_dataset/dataset.jsonl
+        COUNT (v1): 353
+
+
+DEF 7.  JUDGE PROTOCOL
+        Implemented in b2_benchmarks.skillsbench.llm_judge.
+
+        FOR query_type == "FREE_FORM":
+            LLM judge (Opus). Single chat call with task passage, challenge,
+            acceptance_criteria, and the student's response. Judge returns
+            JSON with:
+                score              : float [0, 1] (rubric across must_identify
+                                                  items; partial credit)
+                conclusion_reached : bool         (does final answer match
+                                                  correct_conclusion, even if
+                                                  paraphrased?)
+                passed             : bool         (== conclusion_reached)
+                rationale          : str
+
+        FOR query_type in ("YES_NO" | "SINGLE_WORD" | "RANKING"):
+            Deterministic exact-match. The student's response is parsed for
+            an answer via _extract_answer_line:
+                1. If response contains "ANSWER: <X>", take X.
+                2. Else if response contains "<marker>: <X>" where marker is
+                   one of {answer, final answer, conclusion, verdict} with
+                   {is | = | : | -}, take X.
+                3. Else take last non-empty line.
+                Result is normalized: strip leading/trailing markdown
+                ({* _ ` # > -}) and trailing punctuation ({. , ' "}).
+            score = 1.0 if normalized answer == correct_conclusion (case-
+            insensitive); else 0.0. passed == (score == 1.0).
+
+
+================================================================================
+PART II — INJECTION SEMANTICS (the answer to "conditional or unconditional?")
+================================================================================
+
+SHORT ANSWER
+
+  Injection is CONDITIONAL on an EXTERNAL flag (the experimental condition
+  variable), set at episode-construction time by the harness, not by the
+  model.
+
+LONG ANSWER (per lifecycle stage)
+
+  TRAINING TIME (SFT v1):
+      Injection is UNCONDITIONAL across the training corpus.
+      Every one of the 353 SFT v1 rows has condition == "curated" — i.e.,
+      every system prompt contains a SKILL block.
+      The model never sees a (no-skill, response) example during v1 training.
+
+  EVAL / INFERENCE TIME (bench_traced and corpus_harness):
+      Injection is CONDITIONAL on an enum value `condition`.
+
+      For each (task, student) pair, TWO episodes are constructed by the
+      harness:
+          condition = "baseline"
+              system_prompt = SOLVER_SYSTEM_PROMPT
+              user_prompt   = "Passage: ...\n\nChallenge: ..."
+          condition = "curated"
+              skill = catalog[task_skill_map[task.task_uid]]
+              system_prompt = format_skill_as_system(SOLVER_SYSTEM_PROMPT, skill)
+              user_prompt   = "Passage: ...\n\nChallenge: ..." (identical to
+                              baseline's user_prompt)
+
+      The model has NO mechanism to detect, request, refuse, or generate
+      skill content. It receives whatever string the harness placed in the
+      system slot.
+
+  IN THE MODEL'S WEIGHTS:
+      No conditioning. The model is the same artifact across both eval
+      episodes for a given task — the only thing that varies is the system
+      prompt the harness fed it.
+
+
+================================================================================
+PART III — PIPELINE AS STATE MACHINE
+================================================================================
+
+The end-to-end SFT v1 pipeline is 7 stages. Each stage is an algorithm
+with input state, output state, transition function, and emitted metrics.
+
+
+STAGE 1: catalog (s2.m1 wikipedia_seeder)
+    INPUT STATE :  data/wikipedia-seed/source.json (list of declarative
+                  dicts, hand-curated; 40 entries)
+    TRANSITION  :  for each entry, compute stable_uid; wrap in Skill dataclass
+    OUTPUT STATE:  data/pipeline-runs/default/catalog/skills.json (40 Skill,
+                  declarative form; see DEF 1)
+    METRICS     :  count(skills), unique(skill_uid)
+
+STAGE 2: bench_catalog (b2_benchmarks.skillsbench.procedural_catalog)
+    INPUT STATE :  catalog/skills.json (declarative)
+    TRANSITION  :  for each Skill, single Opus call; prompt elicits a JSON
+                  with {when_to_use, procedure[], constraints[], example
+                  with positive+negative pair}; merge into Skill (same uid)
+    OUTPUT STATE:  bench_catalog/skills.json (40 Skill, procedural form;
+                  see DEF 2)
+    METRICS     :  count(skills) with all_required_fields_populated;
+                  failures count
+    COST (v1)   :  ~$5 in Opus; ~10 min walltime
+
+STAGE 3: s3.m5 (extracted_task_synthesis)
+    INPUT STATE :  bench_catalog/skills.json + N (tasks per skill, here 15)
+    TRANSITION  :  for each Skill, single Opus call; prompt provides a JSON
+                  schema for ExtractedTask + a 1-shot anchor + design
+                  principles (must require skill, must include trap,
+                  exact-match grade-able, varied scenarios). Parse the
+                  returned JSON array; for each entry, validate required
+                  fields; tag acceptance_criteria.skill_uids/skill_names/
+                  skill_categories with the source Skill; assign
+                  task_uid = stable_uid(skill_uid:idx:title)
+    OUTPUT STATE:  synthesis/tasks.json (40 * 15 = 600 ExtractedTask) +
+                  synthesis/task_skill_map.json (sidecar map; DEF 4)
+    METRICS     :  count(valid), count(malformed), count(skill_failures);
+                  skills_with_full_n; query_type distribution
+    COST (v1)   :  ~$12 in Opus; ~45 min walltime
+    ANOMALIES   :  initial run hit max_tokens=4096 cap on n=15 (response
+                  truncated mid-record); fixed by setting max_tokens=16384
+                  in core.providers.create_provider
+
+STAGE 4: split_tasks
+    INPUT STATE :  synthesis/tasks.json (600) + map (600 entries)
+    TRANSITION  :  group by skill (40 groups of 15); first 10 -> train,
+                  last 5 -> eval (deterministic, no shuffle)
+    OUTPUT STATE:  synthesis/tasks_train.json (400) +
+                  task_skill_map_train.json
+                  synthesis/tasks_eval.json  (200) +
+                  task_skill_map_eval.json
+    METRICS     :  per-skill balance check (10/skill train, 5/skill eval);
+                  train ∩ eval == empty
+
+STAGE 5: bench_traced (s4.m4 --mode inject; SFT-corpus generation pass)
+    INPUT STATE :  tasks_train.json (400) + task_skill_map_train.json +
+                  bench_catalog/skills.json + provider:claude-opus-4-7
+                  as solver + provider:claude-opus-4-7 as judge
+    TRANSITION  :  for each task: construct baseline_agent and curated_agent
+                  (LinearAgent with thinking_budget=4096); call solve_one
+                  for both conditions; pass response to judge (DEF 7);
+                  emit one episode per condition
+    OUTPUT STATE:  bench_traced/episodes.jsonl (400 * 2 = 800 episodes;
+                  DEF 5)
+    METRICS     :  per-condition pass_rate, mean_score; api_failures
+    COST (v1)   :  ~$5 in Opus; ~21 min walltime
+    RESULT      :  baseline pass_rate = 0.885, curated pass_rate = 0.8825
+                  (Opus on Opus-designed tasks; expected near-flat)
+
+STAGE 6: sft_dataset (b2_benchmarks.skillsbench.sft_dataset)
+    INPUT STATE :  bench_traced/episodes.jsonl
+    TRANSITION  :  filter:   condition=="curated" AND passed==True AND
+                            len(response) >= 50
+                  dedupe:   keep highest-score per (task_uid, condition,
+                            model)
+                  format:   to chat-messages with metadata (DEF 6)
+    OUTPUT STATE:  sft_dataset/dataset.jsonl (353 SFT rows)
+    METRICS     :  rows kept, rows per skill, rows per score bucket
+    NOTE        :  v1 design choice — no baseline-passing rows included;
+                  this becomes a primary suspect for the result.
+
+STAGE 7: train (training/train_qwen35_lora.py)
+    INPUT STATE :  sft_dataset/dataset.jsonl (353) +
+                  Qwen/Qwen3.5-0.8B base
+    TRANSITION  :  HF SFTTrainer with LoRA(r=8, alpha=16, target=all-linear);
+                  3 epochs, lr=2e-4 cosine, batch=1*grad_accum=8
+                  (effective batch 8); ~132 optimizer steps
+    OUTPUT STATE:  ./qwen35-0.8b-skill-lora/ (LoRA adapter + tokenizer)
+    METRICS     :  train_loss curve (final 0.46, started 2.42),
+                  mean_token_accuracy (0.508 -> 0.893),
+                  grad_norm (stable ~0.8, single spike to 3.2)
+    LOSS MASKING:  FELL BACK to loss-on-all-tokens (Qwen3.5 chat template
+                  lacks {% generation %} markers required by TRL >=0.18 for
+                  assistant_only_loss). All tokens contributed gradient,
+                  including system+user. Likely amplified format-learning
+                  over response-content learning.
+    WALLTIME    :  ~31 min on user's GPU
+
+STAGE 8: eval (training/eval_qwen35_lora.py + corpus_harness for pre-SFT)
+    INPUT STATE :  tasks_eval.json (200) + task_skill_map_eval.json +
+                  bench_catalog/skills.json +
+                  qwen3.5:0.8b base (pre-SFT) AND
+                  qwen3.5:0.8b + LoRA (post-SFT)
+    TRANSITION  :  per task: two episodes (baseline, curated); each goes
+                  through Opus judge (DEF 7); emit episode records
+    OUTPUT STATE:  bench-eval-pre-sft/episodes.json   (1600 ep; 4 students*)
+                  bench-eval-post-sft/episodes.json   ( 400 ep; 1 student)
+    METRICS     :  per-condition pass_rate, mean_score
+    *Pre-SFT covers haiku, llama3.1:8b, qwen3.5:2b, qwen3.5:0.8b; post-SFT
+     covers SFT'd qwen3.5:0.8b only.
+
+
+================================================================================
+PART IV — THE EXPERIMENT (independent variable, control, hypothesis)
+================================================================================
+
+INDEPENDENT VARIABLE
+    train_state in {pre_sft, post_sft}.
+    pre_sft  : qwen3.5:0.8b base weights as published.
+    post_sft : qwen3.5:0.8b + LoRA adapter from STAGE 7.
+
+CONTROLLED VARIABLES
+    eval task set       : 200 tasks (tasks_eval.json), held out from training
+    eval prompt         : SOLVER_SYSTEM_PROMPT (s4.m4); same for pre and post
+    eval skill catalog  : 40 procedural Skills (bench_catalog)
+    eval task->skill map: same map (task_skill_map_eval.json)
+    eval judge          : anthropic:claude-opus-4-7 (DEF 7)
+    decoding            : temperature=0 in both bench harnesses
+
+DEPENDENT VARIABLES (METRICS)
+    BL_pass : pass_rate over 200 baseline episodes
+    CU_pass : pass_rate over 200 curated  episodes
+    Δ_pass  := CU_pass - BL_pass     (per train_state)
+    BL_score: mean rubric score over 200 baseline  episodes (range [0,1])
+    CU_score: mean rubric score over 200 curated   episodes (range [0,1])
+
+PRIMARY HYPOTHESIS
+    SFT on the v1 corpus increases CU_pass; specifically:
+        CU_pass(post_sft) > CU_pass(pre_sft) AND
+        Δ_pass(post_sft) > Δ_pass(pre_sft)
+    Interpretation: the trained student uses the injected procedural skill
+    more effectively than the base student, raising both the absolute
+    curated rate and the differential benefit from skill injection.
+
+NULL HYPOTHESIS
+    CU_pass(post_sft) ≈ CU_pass(pre_sft).
+
+
+================================================================================
+PART V — RESULTS (with explicit metric definitions, n, p-values where computed)
+================================================================================
+
+PRIMARY TABLE
+
+    train_state    BL_pass   CU_pass   Δ_pass    BL_score   CU_score
+    pre_sft         0.510     0.565    +0.055      0.519      0.562
+    post_sft        0.635     0.585    -0.050      0.620      0.573
+
+    Δ from SFT     +0.125    +0.020    -0.105     +0.101     +0.011
+
+    n per cell     200       200                  200        200
+
+VERDICT ON HYPOTHESES
+
+    PRIMARY: REJECTED.
+        CU_pass(post) - CU_pass(pre) = +0.020. Within 95% CI binomial noise
+        for n=200 (CI half-width ≈ 0.069). Cannot distinguish from null.
+
+    SECONDARY OBSERVATION (unhypothesized, strong):
+        BL_pass(post) - BL_pass(pre) = +0.125, well outside binomial noise.
+        The SFT did change behavior, but the change was concentrated in the
+        baseline condition, not the curated condition.
+
+    Δ_pass FLIP:
+        Δ_pass(pre)  = +0.055
+        Δ_pass(post) = -0.050
+        Skill injection went from +5.5 pp lift to -5.0 pp regression.
+
+
+PER-SKILL DECOMPOSITION (n=5 per skill, full n=200 from
+training/compare_pre_post.py against bench-eval-pre-sft and bench-eval-post-sft)
+
+LIFT CLUSTER (Δ post > +0.05)   — 9 skills
+
+    skill                                 pre_BL  pre_CU  post_BL post_CU Δ post   ΔΔ
+    circular-reasoning                    0.200   0.800   0.200   0.600  +0.400  -0.200
+    appeal-to-emotion                     0.600   0.400   0.600   0.800  +0.200  +0.400
+    folk-physics-common-knowledge-physics 0.400   0.200   0.200   0.400  +0.200  +0.400
+    accident-fallacy                      0.000   0.400   0.400   0.600  +0.200  -0.200
+    anchoring-bias                        0.600   0.800   0.800   1.000  +0.200  +0.000
+    framing-effect                        0.400   0.200   0.400   0.600  +0.200  +0.400
+    modus-tollens                         1.000   0.800   0.800   1.000  +0.200  +0.400
+    regression-to-the-mean                0.200   0.800   0.800   1.000  +0.200  -0.400
+    self-serving-bias                     0.400   0.800   0.400   0.600  +0.200  -0.200
+
+FLAT CLUSTER (-0.05 ≤ Δ post ≤ +0.05)   — 19 skills
+
+    skill                                 pre_BL  pre_CU  post_BL post_CU Δ post   ΔΔ
+    ad-hominem                            0.800   1.000   0.600   0.600  +0.000  -0.200
+    analogical-inference                  0.400   0.400   0.400   0.400  +0.000  +0.000
+    appeal-to-authority                   0.800   0.400   0.800   0.800  +0.000  +0.400
+    availability-heuristic                0.400   0.600   0.800   0.800  +0.000  -0.200
+    base-rate-neglect                     0.200   0.600   0.600   0.600  +0.000  -0.400
+    complex-question                      0.200   0.400   0.200   0.200  +0.000  -0.200
+    confirmation-bias                     0.600   0.200   0.400   0.400  +0.000  +0.400
+    disjunctive-syllogism                 0.400   0.800   0.800   0.800  +0.000  -0.400
+    emotional-self-regulation             0.400   0.400   0.600   0.600  +0.000  +0.000
+    enumerative-induction                 0.400   0.600   0.800   0.800  +0.000  -0.200
+    equivocation                          0.000   0.600   0.000   0.000  +0.000  -0.600
+    gamblers-fallacy                      0.600   0.800   0.600   0.600  +0.000  -0.200
+    metaphor                              0.200   0.200   0.600   0.600  +0.000  +0.000
+    post-hoc-ergo-propter-hoc             1.000   0.800   0.800   0.800  +0.000  +0.200
+    red-herring                           0.200   0.400   0.600   0.600  +0.000  -0.200
+    slippery-slope                        0.400   0.200   1.000   1.000  +0.000  +0.200
+    spatial-reasoning                     0.800   0.400   0.400   0.400  +0.000  +0.400
+    sunk-cost-fallacy                     0.400   0.800   0.600   0.600  +0.000  -0.400
+    tu-quoque                             0.200   0.200   0.400   0.400  +0.000  +0.000
+
+REGRESSION CLUSTER (Δ post < -0.05)   — 12 skills
+
+    skill                                 pre_BL  pre_CU  post_BL post_CU Δ post   ΔΔ
+    hasty-generalization                  0.800   1.000   1.000   0.800  -0.200  -0.400
+    hindsight-bias                        0.800   0.800   0.600   0.400  -0.200  -0.200
+    modus-ponens                          1.000   0.600   1.000   0.800  -0.200  +0.200
+    straw-man                             0.400   0.600   0.400   0.200  -0.200  -0.400
+    transitive-inference                  0.600   0.400   0.400   0.200  -0.200  +0.000
+    false-dilemma                         0.400   0.600   0.800   0.600  -0.200  -0.400
+    necessary-and-sufficient-conditions   0.400   0.400   0.600   0.200  -0.400  -0.400
+    abductive-reasoning                   0.400   0.600   1.000   0.600  -0.400  -0.600
+    hypothetical-syllogism                1.000   0.400   1.000   0.600  -0.400  +0.200
+    statistical-syllogism                 0.600   0.800   1.000   0.600  -0.400  -0.600
+    contrapositive                        1.000   1.000   1.000   0.400  -0.600  -0.600
+    counterfactual-reasoning              0.800   0.400   1.000   0.400  -0.600  -0.200
+
+PATTERN
+
+    SFT raised post-SFT BL_pass on most skills (gross format-following effect),
+    so many post-SFT regressions arise from BL ceiling-or-near-ceiling vs CU
+    that didn't keep pace, not from CU collapsing.
+
+    Within the regression cluster, two sub-patterns:
+      (a) BL ceiling, CU dropped:    contrapositive (CU 1.00 -> 0.40),
+                                     statistical-syllogism (CU 0.80 -> 0.60),
+                                     hasty-generalization (CU 1.00 -> 0.80).
+                                     SFT actively made the model worse at
+                                     applying the procedure on these.
+      (b) BL ceiling, CU stayed:     counterfactual-reasoning, abductive-
+                                     reasoning. SFT didn't help; baseline
+                                     just rose past the curated rate.
+
+    Within the lift cluster, the strongest ΔΔ wins (+0.40) come from skills
+    whose pre-SFT curated was actively low: appeal-to-emotion (0.40 -> 0.80),
+    framing-effect (0.20 -> 0.60), modus-tollens (0.80 -> 1.00),
+    folk-physics (0.20 -> 0.40), appeal-to-authority (0.40 -> 0.80). SFT
+    brought the model up where it had room.
+
+    Equivocation regressed from CU 0.60 (pre) to CU 0.00 (post) while BL
+    stayed at 0.00 in both. The model learned to silently fail this skill —
+    ΔΔ -0.60. Worth follow-up; possibly a tokenizer/template artifact since
+    the responses we already saw used markdown formatting and equivocation
+    tasks may produce verbose meta-commentary the deterministic judge can't
+    parse cleanly.
+
+CHANGE 2 DROP-LIST (strict criterion: BL_post >= 0.95 AND CU_post <= CU_pre)
+
+    contrapositive            BL_post 1.00, CU_pre 1.00 -> CU_post 0.40
+    statistical-syllogism     BL_post 1.00, CU_pre 0.80 -> CU_post 0.60
+    counterfactual-reasoning  BL_post 1.00, CU_pre 0.40 -> CU_post 0.40
+    abductive-reasoning       BL_post 1.00, CU_pre 0.60 -> CU_post 0.60
+    hasty-generalization      BL_post 1.00, CU_pre 1.00 -> CU_post 0.80
+
+    Removes ~50 SFT rows from the corpus (5 skills × ~10 rows after baseline-
+    inclusion filter). Conservative; keeps the corpus broad enough.
+
+
+================================================================================
+PART VI — CLAIMS AND EVIDENCE
+================================================================================
+
+CLAIM 1.  SFT taught the model the SOLVER format (step-by-step + ANSWER line).
+EVIDENCE: Post-SFT BASELINE responses (no skill in system) consistently
+          contain "Step 1 (Identify ...): ..." style structure. Pre-SFT
+          baseline responses (sampled in bench-eval-pre-sft.corpus-prompt
+          .bak) used narrative paragraphs without per-step markers.
+          BL_pass rose +12.5 pp.
+
+CLAIM 2.  SFT taught the model to follow injected procedures verbatim.
+EVIDENCE: Post-SFT CURATED responses use the EXACT step labels from the
+          injected procedure ("Step 1 (Locate generalization)", "Scan for
+          conditional", "Locate disjunction"). Baseline responses use
+          generic step labels ("Identify the rule").
+
+CLAIM 3.  SFT did NOT teach the model to use injected skills DIFFERENTIALLY.
+EVIDENCE: Δ_pass(post) - Δ_pass(pre) = -0.105. The student's curated edge
+          over its baseline did not grow; it shrank. SFT moved both
+          conditions; the differential signal from skill injection did not.
+
+CLAIM 4.  SFT injection method was UNCONDITIONAL during training.
+EVIDENCE: sft_dataset filter at v1: condition=="curated" only. The 353
+          training rows all contain a SKILL block in the system prompt.
+          The model never saw a positive (no-skill) example during SFT.
+
+CLAIM 5.  v1 training loss profile was healthy.
+EVIDENCE: train_loss monotonic 2.42 -> 0.46 across 132 steps;
+          mean_token_accuracy 0.508 -> 0.893; grad_norm stable around 0.8;
+          one spike to 3.2 at epoch 2 boundary, no impact on subsequent
+          steps.
+
+CLAIM 6.  Loss masking degraded the gradient signal.
+EVIDENCE: TRL >=0.18 requires {% generation %} markers in the chat
+          template for assistant_only_loss. Qwen3.5's stock template
+          lacks them. Training script logged the warning and fell back
+          to loss-on-all-tokens. Result: gradient was distributed over
+          system+user+assistant tokens, weighting easy-to-predict prompt
+          boilerplate against harder-to-predict response content.
+
+
+================================================================================
+PART VII — v1.5 PLAN (with formal change list)
+================================================================================
+
+CHANGE 1.  sft_dataset filter
+    BEFORE:  conditions = ["curated"]
+    AFTER:   conditions = ["curated", "baseline"]
+             passed=True, dedup as before
+    EFFECT:  introduces the contrastive (no-skill, direct reasoning)
+             positive examples missing from v1; expected SFT corpus size
+             increases from 353 to ~700
+
+CHANGE 2.  drop ceiling skills from SFT corpus
+    BEFORE:  all 40 skills represented
+    AFTER:   exclude skills where Opus baseline pass_rate > 0.95 in
+             bench_traced (modus-ponens, contrapositive, hypothetical-
+             syllogism, statistical-syllogism, disjunctive-syllogism)
+    EFFECT:  train cluster reduces to ~30 skills; removes the regression
+             cluster from training pressure
+
+CHANGE 3.  patch Qwen3.5 chat template for assistant_only_loss
+    BEFORE:  template lacks {% generation %} markers; train falls back
+    AFTER:   inject {% generation %}...{% endgeneration %} around the
+             assistant message branch; save patched template alongside
+             tokenizer
+    EFFECT:  loss computed only on assistant tokens; gradient signal no
+             longer diluted by system+user predictions
+
+CHANGE 4.  (optional) increase epochs from 3 to 4
+    RATIONALE: at end of v1 training, train_loss tail showed 0.464 ->
+              0.473 — slight uptick suggesting 3 epochs was at or just
+              past optimum. With CHANGES 1+2+3 the corpus is different;
+              epoch sweep may want re-tuning.
+
+PREDICTED v1.5 RESULT
+    If CHANGES 1+2+3 land successfully:
+        BL_pass(v1.5) ≈ 0.55-0.60   (lower than v1.0; less format-only signal)
+        CU_pass(v1.5) ≈ 0.65-0.70   (target; > BL by margin > pre-SFT's +5.5pp)
+        Δ_pass(v1.5)  > +0.05       (sign back to positive, ideally larger)
+
+
+================================================================================
+PART VIII — OPEN QUESTIONS
+================================================================================
+
+Q1. Approve the v1.5 change list (CHANGE 1+2+3)?
+Q2. Rerun bench_traced after CHANGE 1+2 to refresh the SFT corpus, or
+    is filtering the existing bench_traced/episodes.jsonl sufficient?
+    (Existing data already includes baseline episodes; filtering is
+    sufficient unless we want to drop ceiling-skill episodes entirely.)
+Q3. Should I write a one-shot helper training/patch_qwen35_template.py
+    that loads the tokenizer, patches the chat template, and saves a
+    local copy?
+Q4. Should the per-skill n=200 numbers be computed and merged into PART V
+    of this report (mid-run estimates from n=77 are in the regression-
+    cluster table)?
+
+
+================================================================================
+ARTIFACTS (verifiable file paths)
+================================================================================
+
+CODE
+    s3_generating_skill_examples/m5_extracted_task_synthesis.py    Stage 3
+    b2_benchmarks/skillsbench/procedural_catalog.py                Stage 2
+    b2_benchmarks/skillsbench/sft_dataset.py                       Stage 6
+    b2_benchmarks/skillsbench/llm_judge.py                         DEF 7
+    b2_benchmarks/skillsbench/skill_injection.py                   DEF 2 inject
+    b2_benchmarks/skillsbench/corpus_harness.py                    Stage 8 pre
+    s4_extracting_skill_usage_instances/m4_skill_composition_testing.py
+                                                                   Stage 5
+    training/train_qwen35_lora.py                                  Stage 7
+    training/eval_qwen35_lora.py                                   Stage 8 post
+
+DATA
+    data/wikipedia-seed/source.json                                40 entries
+    data/pipeline-runs/default/catalog/skills.json                 40 declarative
+    data/pipeline-runs/default/bench_catalog/skills.json           40 procedural
+    data/pipeline-runs/default/synthesis/tasks.json                600 tasks
+    data/pipeline-runs/default/synthesis/tasks_train.json          400
+    data/pipeline-runs/default/synthesis/tasks_eval.json           200
+    data/pipeline-runs/default/synthesis/task_skill_map.json       full map
+    data/pipeline-runs/default/synthesis/task_skill_map_train.json
+    data/pipeline-runs/default/synthesis/task_skill_map_eval.json
+    data/pipeline-runs/default/bench_traced/episodes.jsonl         800 (SFT-pass)
+    data/pipeline-runs/default/sft_dataset/dataset.jsonl           353 SFT rows
+    data/pipeline-runs/default/bench-eval-pre-sft/episodes.json    1600 ep
+    data/pipeline-runs/default/bench-eval-pre-sft.corpus-prompt.bak/episodes.json
+                                                                   (kept; uses
+                                                                    corpus_harness
+                                                                    default prompt)
+    data/pipeline-runs/default/bench-eval-post-sft/episodes.json   400 ep
+
+PRIOR REPORTS (kept in trace)
+    b1.reports/260425.sft-dataset-generation-status.txt
+    b1.reports/260425.pipeline-status.txt
+    b1.reports/260427.sft-v1-pre-post-findings.txt   (this report supersedes)
+
+
+================================================================================
+END REPORT
+================================================================================

@@ -1,0 +1,14 @@
+{
+  "base_model": "Qwen/Qwen3.5-0.8B",
+  "data": "data/pipeline-runs/default/sft_dataset_v1_5/dataset.jsonl",
+  "epochs": 3,
+  "lr": 0.0002,
+  "lora": {
+    "r": 8,
+    "alpha": 16,
+    "dropout": 0.05,
+    "target_modules": "all-linear"
+  },
+  "effective_batch": 8,
+  "n_train_rows": 638
+}

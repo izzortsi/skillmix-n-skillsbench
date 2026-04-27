@@ -101,9 +101,16 @@ def run_singlecall_episode(
     model_name: str = "",
     skill: Optional[Skill] = None,
     verbose: bool = False,
+    base_system_prompt: Optional[str] = None,
 ) -> CorpusEpisode:
-    """One chat(): baseline if skill is None, else curated with the skill injected."""
-    base_system = get_default_system_prompt(task.domain)
+    """One chat(): baseline if skill is None, else curated with the skill injected.
+
+    `base_system_prompt`: when set, override the per-domain default prompt. Used
+    by --system-prompt solver to make pre/post-SFT comparisons fair (the SFT
+    corpus is generated under the s4.m4 SOLVER_SYSTEM_PROMPT, so eval should
+    match).
+    """
+    base_system = base_system_prompt if base_system_prompt is not None else get_default_system_prompt(task.domain)
     user_prompt = f"Passage: {task.passage}\n\nChallenge: {task.challenge}"
 
     if skill is not None:
@@ -341,15 +348,25 @@ def run_corpus_evaluation(
     cross_task: bool = False,
     task_skill_map: Optional[Dict[str, Skill]] = None,
     verbose: bool = False,
+    base_system_prompt: Optional[str] = None,
 ) -> List[CorpusEpisode]:
     """For each task: always run a baseline episode, then run zero or more curated episodes.
 
     cross_task=True       -> baseline + one episode per skill in `skills`.
     task_skill_map given  -> baseline + one episode with task_skill_map[task.task_uid] (if present).
     both None/false       -> baseline only for every task.
+
+    `base_system_prompt`: forwarded to singlecall episodes; lets callers
+    override the per-domain default (used by --system-prompt solver to make
+    pre/post-SFT eval comparable to the SFT corpus's prompt).
     """
     episode_fn = run_guided_episode if mode == "guided" else run_singlecall_episode
     episodes: List[CorpusEpisode] = []
+
+    # singlecall accepts base_system_prompt; guided does not (multi-turn protocol)
+    extra_kwargs = {}
+    if mode == "singlecall" and base_system_prompt is not None:
+        extra_kwargs["base_system_prompt"] = base_system_prompt
 
     total = len(tasks) * (1 + (len(skills) if cross_task else 1))
     count = 0
@@ -359,7 +376,8 @@ def run_corpus_evaluation(
         if verbose:
             print(f"[{count}/{total}] {task.task_uid} baseline")
         episodes.append(
-            episode_fn(task, provider, judge, model_name=model_name, verbose=verbose)
+            episode_fn(task, provider, judge, model_name=model_name, verbose=verbose,
+                       **extra_kwargs)
         )
 
         if cross_task:
@@ -369,7 +387,7 @@ def run_corpus_evaluation(
                     print(f"[{count}/{total}] {task.task_uid} + {skill.name}")
                 episodes.append(
                     episode_fn(task, provider, judge, model_name=model_name,
-                               skill=skill, verbose=verbose)
+                               skill=skill, verbose=verbose, **extra_kwargs)
                 )
         elif task_skill_map is not None:
             matching = task_skill_map.get(task.task_uid)
@@ -379,7 +397,7 @@ def run_corpus_evaluation(
                     print(f"[{count}/{total}] {task.task_uid} + {matching.name}")
                 episodes.append(
                     episode_fn(task, provider, judge, model_name=model_name,
-                               skill=matching, verbose=verbose)
+                               skill=matching, verbose=verbose, **extra_kwargs)
                 )
 
     return episodes
@@ -483,8 +501,24 @@ def main() -> None:
                         help="JSON {task_uid: skill_name} — each listed task gets a "
                              "baseline episode AND one curated episode with the mapped "
                              "skill injected. Ignored when --cross-task is set.")
+    parser.add_argument("--system-prompt", choices=["default", "solver"], default="default",
+                        help="'default' (per-domain reading-comprehension prompt — original "
+                             "behavior). 'solver' uses s4.m4's SOLVER_SYSTEM_PROMPT for both "
+                             "conditions, matching the SFT corpus's training distribution. "
+                             "Use 'solver' for pre/post-SFT comparisons to avoid prompt-shift "
+                             "confound.")
     parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args()
+
+    base_system_prompt: Optional[str] = None
+    if args.system_prompt == "solver":
+        # Late import — keep s4 dependency optional for users running corpus_harness
+        # standalone without the s4 package.
+        from s4_extracting_skill_usage_instances.m4_skill_composition_testing import (
+            SOLVER_SYSTEM_PROMPT,
+        )
+        base_system_prompt = SOLVER_SYSTEM_PROMPT
+        print(f"Using s4.m4 SOLVER_SYSTEM_PROMPT for base ({len(SOLVER_SYSTEM_PROMPT)} chars)")
 
     # Resolve the list of student specs. --models wins; --provider is a 1-element shortcut.
     if args.models.strip():
@@ -528,6 +562,7 @@ def main() -> None:
             model_name=p_model, mode=args.mode, cross_task=args.cross_task,
             task_skill_map=task_skill_map,
             verbose=args.verbose,
+            base_system_prompt=base_system_prompt,
         )
         all_episodes.extend(episodes)
 
