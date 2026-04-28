@@ -1,0 +1,30 @@
+# skillmix-n-skillsbench Python deps
+#
+# Versions are floors known to work with the v1.x training/eval scripts.
+# torch is intentionally NOT pinned here — the base image
+# (pytorch/pytorch:2.5.1-cuda12.1-cudnn9-devel) already provides a
+# CUDA-matched build. Adding it again would either be a no-op or trigger
+# a needless rebuild against a non-matching CUDA wheel.
+
+# --- core training stack ---
+transformers>=4.46.0
+trl>=0.18.0
+peft>=0.13.0
+accelerate>=0.34.0
+datasets>=3.0.0
+bitsandbytes>=0.44.0
+sentencepiece>=0.2.0
+safetensors>=0.4.5
+huggingface_hub>=0.25.0
+
+# --- evaluation / pipeline / judge ---
+anthropic>=0.94.0
+tiktoken>=0.7.0
+tenacity>=8.5.0
+pyyaml>=6.0.1
+tqdm>=4.66.0
+
+# --- quality-of-life ---
+ipython>=8.27.0
+jupyterlab>=4.2.5
+rich>=13.8.0

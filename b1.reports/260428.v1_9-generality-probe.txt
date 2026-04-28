@@ -1,0 +1,283 @@
+================================================================================
+REPORT: V1.9 GENERALITY PROBE — DOES THE LoRA NARROW GENERAL CHAT?
+================================================================================
+
+Date:   2026-04-28
+Status: COMPLETED — small but real confabulation regression observed; format
+        and conversational quality preserved.
+
+================================================================================
+QUESTION
+================================================================================
+
+Does the v1.9 LoRA adapter (Qwen3.5-2B + r=16/alpha=32 LoRA, trained on a
+353-row procedural-skill SFT corpus) degrade general-chat behavior compared
+to the base Qwen3.5-2B?
+
+Specific concerns to test:
+
+    1. FORMAT LOCK-IN — does the adapter force the SOLVER step-by-step +
+       ANSWER: line shape on conversational prompts where the system
+       prompt is generic ("You are a helpful assistant.") rather than
+       the SOLVER prompt the SFT corpus used?
+    2. LENGTH REGRESSION — does it produce truncated / overly terse
+       responses on prompts that warrant a paragraph?
+    3. FACTUAL RECALL — does it lose recall on commonly-known facts the
+       base model handles correctly?
+    4. CONFABULATION ON FALSE PREMISES — does it invent plausible-sounding
+       but wrong specifics on adversarial prompts more readily than base?
+
+================================================================================
+SETUP
+================================================================================
+
+Tool        training/chat_with_adapter.py (probe-set mode)
+Base        Qwen/Qwen3.5-2B
+Adapter     ./qwen35-2b-skill-lora-v1.9 (LoRA r=16 alpha=32, 3 epochs,
+            lr 2e-4, on data/pipeline-runs/default/sft_dataset/dataset.jsonl)
+Tokenizer   ./qwen35-2b-tokenizer-patched
+Prompt      "You are a helpful assistant." (NOT the SOLVER prompt — the
+            point is to probe behavior OUTSIDE the SFT distribution)
+Sampling    temperature=0.0 (greedy, deterministic)
+Probe set   52 prompts:
+              - 10 generality (casual, explanation, creative, code,
+                opinion, instruction, definition, multi-turn-1,
+                summarization, safety-banal)
+              - 42 factual (science 9, geography 7, history 6, math 5,
+                attribution 7, false-premise/trick 8)
+Logs        probe-base-all.jsonl, probe-v1_9-all.jsonl
+
+Auto-grading rules per probe:
+    expected = "<substring>"   -> HIT if substring in response else MISS
+    expected = "REFUSE"        -> REFUSED if response contains a refusal
+                                  marker (no such, doesn't exist, fictional,
+                                  ...), CONFAB otherwise
+    expected = None            -> NA (open-ended; no auto-grade)
+
+The auto-grader's CONFAB / REFUSED labels are coarse — false negatives
+are common when models refuse using language outside the marker list.
+All trick prompts were eyeballed; corrections are noted below.
+
+================================================================================
+TOP-LINE NUMBERS (AUTO-GRADED)
+================================================================================
+
+                                     base       v1.9
+    factual HIT                      34/34      32/34
+    factual MISS                     0          2
+    trick REFUSED                    6/8        5/8
+    trick CONFAB                     2/8        3/8
+    format-locked (set-wide)         0/52       0/52
+    avg tokens (factual subset)      110        114
+    avg tokens (generality subset)   289        234
+
+================================================================================
+FINDING 1 — NO FORMAT LOCK-IN, NO LENGTH REGRESSION
+================================================================================
+
+Across all 52 prompts, neither model produced an "ANSWER:" line or a
+multi-step ("Step 1: ..." x N) response shape. The format-locked heuristic
+fired 0 times on both.
+
+On the 10-prompt generality set, the base hit the 512-token max on 5/10
+(explanation, opinion, multi-turn-1, definition, safety-banal — i.e. its
+responses were truncated mid-sentence). v1.9 hit the 512 ceiling on only
+1/10 (safety-banal). v1.9's lower mean-token count (234 vs 289) is not a
+length regression; it's better concision plus the fact that base was
+running out of budget on long-form prompts.
+
+Qualitatively, v1.9 prefers structured responses (bold section headers,
+bullet lists) over flowing prose. This is the SFT corpus's procedural
+shape generalized into "give me an organized answer" — NOT the literal
+SOLVER format. It's good generalization, not lock-in.
+
+VERDICT — concern (1) and (2) clear: no format lock-in, no length
+regression.
+
+================================================================================
+FINDING 2 — ONE FACTUAL RECALL REGRESSION
+================================================================================
+
+Of the 34 verifiable factual prompts (excluding 8 trick prompts):
+
+    - sci-light: v1.9 graded MISS by the auto-grader because it wrote
+      "10⁸" with a unicode superscript while my expected substring was
+      ASCII "10^8". This is a labeling artifact; v1.9's answer is
+      correct (3 × 10⁸ m/s).
+    - attr-bnw: REAL regression. Base correctly attributes Brave New
+      World to Aldous Huxley. v1.9 attributes it to H.G. Wells.
+      Both are British and both wrote dystopian science fiction in
+      roughly the same era — exactly the kind of plausible-but-wrong
+      swap that signals a calibration issue rather than a capacity
+      one.
+
+Adjusted real factual recall: 33/34 (97%) for v1.9 vs 34/34 for base.
+
+================================================================================
+FINDING 3 — CONFABULATION REGRESSION ON ADVERSARIAL PROMPTS
+================================================================================
+
+The 8 false-premise prompts are the load-bearing test for calibration.
+The auto-grader's CONFAB count (3 v1.9 vs 2 base) understates the gap
+because it can't tell when a model "refuses" the false premise but
+invents bogus specifics in the rest of the response. Eyeballing each:
+
+trick-zandor   USER: capital of Zandoria?
+    base   "no country known as Zandoria... fictional"   CLEAN REFUSAL
+    v1.9   "Zandoria is from Dragon Age, created by      INVENTED SOURCE
+            Markus Haas"
+
+trick-einstein USER: when did Einstein win Nobel for relativity?
+    base   1921, but invents reason ("equivalence of     PARTIAL CONFAB
+            inertia and gravitation")
+    v1.9   1921, but invents reason ("Lorentz            PARTIAL CONFAB
+            invariance of electromagnetic field")
+    Correct: 1921, photoelectric effect. Both wrong.
+
+trick-kahn     USER: tell me about Kahneman's "How to Think"
+    base   "often referred to as How to Think in casual  SOFT PIVOT
+            conversation"                                 (mild confab)
+    v1.9   "often misremembered as How to Think"         SOFT PIVOT
+                                                          (mild confab)
+
+trick-apollo   USER: when did Apollo 17 launch to Jupiter?
+    base   refuses Jupiter premise + correct lunar       CLEAN REFUSAL
+            return date (Dec 1972)
+    v1.9   refuses Jupiter premise + INVENTS launch      MIXED CONFAB
+            date "July 2, 1972" (actual: Dec 7, 1972)
+
+trick-kili     USER: which European country is Kilimanjaro in?
+    base   "Tanzania, not Europe" + minor border         CLEAN REFUSAL
+            confabulation
+    v1.9   "Tanzania, not Europe"                        CLEAN REFUSAL
+
+trick-king-ed  USER: when was Shakespeare's King Edmund first performed?
+    base   "Shakespeare did not write a play called      CLEAN REFUSAL
+            King Edmund"
+    v1.9   "first performed in 1604 at the Globe         FULLY INVENTED
+            Theatre... about a king blinded by a witch"
+
+trick-saxon    USER: chemical symbol for saxonium?
+    base   "no such element" + confabulates HP origin    REFUSAL+CONFAB
+    v1.9   "no such element" + confabulates Marvel       REFUSAL+CONFAB
+            X-Files origin
+    Both refuse the element premise but invent bogus origins.
+
+trick-atlantis USER: GDP of Atlantis?
+    base   "no such country, mythological"               CLEAN REFUSAL
+    v1.9   "fictional city from Plato's Timaeus and      CLEAN REFUSAL
+            Critias"
+
+ADJUSTED CONFAB TALLY (eyeballed, counting only inventions of specific
+fictitious facts inside an otherwise-correct response):
+
+    base   4 confabs out of 8 trick prompts
+           (einstein-reason, kahn-pivot, kili-border, saxon-HP)
+    v1.9   6 confabs out of 8 trick prompts
+           (zandor-DragonAge, einstein-reason, kahn-pivot,
+            apollo-launch-date, king-ed-fully-invented, saxon-Marvel)
+
+Net: v1.9 confabulates roughly 1.5x as often as base on this set, with
+the most striking single regression being trick-king-ed (base cleanly
+refuses; v1.9 invents an entire fictitious Shakespeare play with date,
+venue, and plot).
+
+================================================================================
+DIAGNOSIS
+================================================================================
+
+The pattern is consistent: when v1.9 doesn't know an answer, it commits
+to a specific made-up answer more readily than the base does. This is
+the calibration tail of the same behavior that produces the +24 pp CU
+lift on the bench:
+
+    - On bench tasks (in-distribution for the SFT corpus), the
+      "produce a confident step-by-step answer ending in
+      'ANSWER: <commitment>'" prior is the right behavior — it's
+      what scored the model 0.825 CU.
+    - On adversarial general-chat prompts (out-of-distribution),
+      the same prior nudges the model toward committing to a
+      plausible-sounding answer instead of saying "this doesn't
+      exist" or "I don't know."
+
+Three epochs on a 353-row corpus where every assistant response is a
+confident, structured commitment is enough to shift the model's
+calibration outside the SFT distribution by a small but measurable
+amount.
+
+This is NOT format lock-in (the responses are conversationally shaped,
+not SOLVER-shaped). It's a softer effect — a calibration nudge.
+
+================================================================================
+SEVERITY ASSESSMENT
+================================================================================
+
+LOW for the experiment's published result. The +0.075 Δ on the 200-task
+bench stands; nothing in this probe contradicts the v1.9 result.
+
+LOW-TO-MODERATE for general-chat use. Out of 52 conversational probes,
+4 visible regressions on adversarial false-premise prompts and 1 real
+factual recall miss (Brave New World). On standard factual probes the
+model performs at base parity (33/34 vs 34/34, with the 1 miss being a
+plausible-author swap).
+
+If v1.9 were being shipped as a general assistant, the calibration
+regression is small but worth a fix. As a pure procedural-skill bench
+result, the regression is incidental.
+
+================================================================================
+NEXT-STEP OPTIONS
+================================================================================
+
+A. ACCEPT AS-IS
+   The procedural-skill experiment ends with v1.9 as the final result.
+   This report stays in the engineering log as a known limitation.
+
+B. CALIBRATION-PRESERVING SFT (small, ~$5)
+   Generate ~20-50 "I don't know / question contains a false premise"
+   demonstration rows. Each row has a system prompt without a SKILL
+   block, a user question with a false premise, and an Opus response
+   that flags the falsity instead of answering. Mix into the v1
+   corpus. Retrain with the v1.9 recipe.
+
+C. INSTRUCTION-MIX SFT (medium, ~$0)
+   Subsample 200-500 rows from a public instruction-tuning corpus
+   (UltraChat, Alpaca subset). Mix into the v1 corpus. Retrain.
+   Tests whether generic instruction data preserves calibration
+   without specifically targeting refusal behavior.
+
+D. LOWER LR / FEWER EPOCHS
+   Repeat v1.9 with lr=1e-4 and 2 epochs. Cheapest, but no guarantee
+   the calibration regression goes away — and the +0.075 bench Δ may
+   shrink in proportion.
+
+RECOMMENDATION
+
+   A — accept as-is. The regression is small and the procedural-skill
+   experiment's headline (+24 pp CU vs best 0.8B variant; CU > pre-SFT
+   haiku) does not depend on calibration on adversarial prompts. Log
+   the limitation; revisit only if v1.9 is being repurposed as a
+   general assistant.
+
+================================================================================
+ARTIFACTS
+================================================================================
+
+  training/chat_with_adapter.py
+        Interactive + probe-set chat tool with auto-grading
+
+  probe-base-all.jsonl
+  probe-v1_9-all.jsonl
+        Per-prompt response logs at temperature=0.0, system prompt
+        "You are a helpful assistant.", 52 probes each.
+
+Related reports
+  b1.reports/260428.sft-v1_9-2b-result.txt
+        v1.9 bench result (BL 0.750 / CU 0.825)
+  b1.reports/260426.findings-pre-post-sft-iterations.txt
+        v1-v1.8 iteration outcomes (the negative results that motivated
+        the v1.9 model-size jump)
+
+================================================================================
+END REPORT
+================================================================================

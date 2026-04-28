@@ -1,0 +1,47 @@
+# Keep the build context small and the image clean of stale artifacts.
+# Rules below are conservative: data/SFT corpus IS included (small, committed).
+# Trained weights, tokenizer dirs, probe logs, and caches are excluded —
+# these are large and machine-specific.
+
+# --- training artifacts (re-generated on the rented GPU) ---
+qwen35-*
+*.safetensors
+*.bin
+*.pt
+checkpoint-*
+**/checkpoint-*
+
+# --- patched tokenizer dirs (rebuilt with patch_qwen35_template.py) ---
+*-tokenizer-patched
+*-tokenizer-patched/
+
+# --- probe logs / scratch ---
+probe-*.jsonl
+*.bak
+*.tmp
+*.log
+
+# --- python / IDE ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+.env
+.envrc
+.vscode/
+.idea/
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+
+# --- git internals (we re-init or git clone fresh on the instance) ---
+.git/objects/pack/*.pack
+.git/lfs
+
+# --- huggingface caches if they leaked in ---
+.cache/
+hf_cache/

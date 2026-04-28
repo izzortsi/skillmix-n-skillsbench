@@ -1,0 +1,68 @@
+{
+  "n_total_episodes": 800,
+  "n_after_filter": 353,
+  "n_after_dedup": 353,
+  "n_rows": 353,
+  "filter_kept_pct": 44.1,
+  "filters_applied": {
+    "require_passed": true,
+    "conditions": [
+      "curated"
+    ],
+    "min_score": 0.0,
+    "min_response_chars": 50,
+    "dedup": true
+  },
+  "rows_per_skill": {
+    "self-serving-bias": 8,
+    "accident-fallacy": 9,
+    "complex-question-loaded-question-with-implicit-assumption": 10,
+    "red-herring": 10,
+    "metaphor": 9,
+    "spatial-reasoning": 9,
+    "modus-ponens": 9,
+    "statistical-syllogism": 9,
+    "emotional-self-regulation": 10,
+    "folk-physics-common-knowledge-physics": 8,
+    "modus-tollens": 9,
+    "hypothetical-syllogism": 6,
+    "disjunctive-syllogism": 9,
+    "contrapositive": 10,
+    "ad-hominem": 10,
+    "straw-man": 9,
+    "false-dilemma": 10,
+    "slippery-slope": 10,
+    "confirmation-bias": 10,
+    "anchoring-bias": 10,
+    "tu-quoque": 10,
+    "equivocation": 7,
+    "appeal-to-emotion": 9,
+    "post-hoc-ergo-propter-hoc": 10,
+    "circular-reasoning": 6,
+    "hasty-generalization": 9,
+    "base-rate-neglect": 8,
+    "availability-heuristic": 10,
+    "sunk-cost-fallacy": 9,
+    "abductive-reasoning": 8,
+    "transitive-inference": 5,
+    "necessary-and-sufficient-conditions": 10,
+    "enumerative-induction": 10,
+    "analogical-inference": 2,
+    "counterfactual-reasoning": 10,
+    "regression-to-the-mean": 10,
+    "gamblers-fallacy": 10,
+    "framing-effect": 7,
+    "hindsight-bias": 10,
+    "appeal-to-authority": 9
+  },
+  "rows_per_model": {
+    "claude-opus-4-7": 353
+  },
+  "rows_per_condition": {
+    "curated": 353
+  },
+  "rows_per_score_bucket": {
+    "[0.9, 1.0]": 352,
+    "[0.7, 0.9)": 1
+  }
+}

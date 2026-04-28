@@ -1,0 +1,108 @@
+TASK-01: Investigate gpt-oss "current task type" and "current skill" embedding layers
+
+Repository: skillmix-n-skillsbench(work-repo)
+Created: 2026-04-28
+Status: pending
+
+================================================================================
+OBJECTIVE
+================================================================================
+
+The user noted that gpt-oss has architectural layers / embeddings dedicated
+to "current task type" and "current skill" — i.e. skill conditioning is
+baked into the model as a learned embedding swapped at inference, rather
+than injected into the prompt context as text.
+
+This task is to (1) verify what gpt-oss actually does in this regard,
+(2) characterize the architectural pattern, and (3) sketch whether/how
+the same idea could be applied to the v1.9 setup (Qwen3.5-2B + LoRA on
+procedural-skill SFT corpus) as a v2.0-class experiment.
+
+If the architectural pattern checks out, the natural follow-up is a v2.0
+recipe where the skill is injected as a learned embedding (or a small
+prefix-tuned vector) rather than a text block in the system prompt.
+This would directly address the calibration regression seen in
+b1.reports/260428.v1_9-generality-probe.txt: the model can be conditioned
+on a skill without the chat template needing to carry the skill text,
+which removes the "always commit to a confident answer" prior that bled
+into general chat.
+
+================================================================================
+REQUIREMENTS
+================================================================================
+
+R1. Verify the gpt-oss claim. Read the gpt-oss release (model card,
+    architecture section, any blog post, paper if available) and
+    identify exactly what is meant by "layer for current task type"
+    and "layer for current skill". Possible interpretations to
+    distinguish:
+      a. A learned embedding lookup keyed by task-type / skill id,
+         injected as a special token at the input.
+      b. A prefix-tuning style vector concatenated to the residual
+         stream at one or more layers.
+      c. A separate adapter / LoRA selected at inference time per
+         task-type / skill.
+      d. A "system token" mechanism (similar to <|task|>...<|endtask|>
+         tags) where the embeddings of those tokens are learned during
+         training and serve as task-type carriers.
+      e. Something else / no such mechanism (i.e. confirm or refute).
+
+R2. Map the verified pattern onto the skillmix-n-skillsbench setup.
+    Specifically: if the pattern is (a)/(b)/(d), how would we adapt
+    Qwen3.5-2B + the existing 40-skill procedural catalog to use it?
+    Identify the smallest change (e.g. add 40 learned skill embeddings
+    + a single new token "<|skill|>" + train as v2.0; OR train 40
+    per-skill prefix vectors; OR train 40 per-skill micro-LoRAs).
+
+R3. Connect to the half-formed "inject / wipe / inject / wipe / goal
+    stack" sketch from the same conversation. The sketch was three-way
+    ambiguous (multi-turn training shape, inference-time skill switching,
+    or an agent-loop wrapper around the existing model). The user's
+    follow-up about gpt-oss embeddings suggests the natural reading
+    is closer to "skill conditioning is an architectural slot you
+    push/pop, not a context-window slot." Document this connection so
+    the v2.0 design captures the user's intent.
+
+R4. Output a short research note (~1-3 pages) in b1.reports/ summarizing
+    the findings and recommending whether to pursue v2.0 as a separate
+    experiment or treat it as out-of-scope for the current
+    skillmix-n-skillsbench results.
+
+================================================================================
+ACCEPTANCE CRITERIA
+================================================================================
+
+- [ ] gpt-oss's "task-type" / "skill" mechanism is identified concretely
+      (with a citation to model card / paper / source) — or refuted as
+      a misreading.
+- [ ] If the mechanism exists, the v2.0 adaptation sketch lists at least
+      two alternative shapes (e.g. learned skill tokens vs per-skill
+      prefix vectors) with cost/benefit notes.
+- [ ] A research-note report lands in
+      b1.reports/yymmdd.gpt-oss-skill-embeddings-investigation.txt
+      following the report skill's plain-text format rules.
+- [ ] The report ends with an explicit recommendation: PURSUE (v2.0
+      experiment), DEFER (interesting but not now), or DROP (mechanism
+      doesn't exist or doesn't apply).
+
+================================================================================
+RAW PROMPTS
+================================================================================
+
+[2026-04-28] gpt oss has layer
+for current task type
+and layer for current skill
+baked in as embeddings
+
+[2026-04-28 prior turn, context]
+"we should try
+
+inject skill
+
+then wipe
+
+inject
+
+then wipe
+
+goal stack..idk"

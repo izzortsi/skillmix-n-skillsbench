@@ -13,20 +13,48 @@ __pycache__/
 .venv/
 venv/
 env/
+.env
+.envrc
 
 # Editor
 .vscode/
 .idea/
 *.swp
+.ipynb_checkpoints/
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Pipeline run outputs (generated; can be recreated from the modules)
-# skillsuite/llm-skills.extraction-pipeline/data/pipeline-runs/
-# skillsuite/llm-skills.extraction-pipeline/pipeline-runs/
+# --- ML training artifacts (reproducible; do not commit) ---
+# Trained adapters / full-FT weights / checkpoints
+qwen35-*-skill-lora*/
+qwen35-*-skill-full/
+qwen35-*-skill-partial*/
+checkpoint-*/
+**/checkpoint-*/
+*.safetensors
+*.bin
+*.pt
 
-# Local credentials / tokens (never commit)
+# Patched tokenizer dirs (rebuilt with training/patch_qwen35_template.py)
+qwen35-*-tokenizer-patched/
+*-tokenizer-patched/
+
+# Probe / scratch logs
+probe-*.jsonl
+*.bak
+*.tmp
+*.log
+
+# HuggingFace caches (if they leak into the repo dir)
+.cache/
+hf_cache/
+.huggingface/
+
+# --- Credentials (NEVER commit) ---
 *.credentials.json
 tokens.json
+*.pem
+*.key
+secrets.*

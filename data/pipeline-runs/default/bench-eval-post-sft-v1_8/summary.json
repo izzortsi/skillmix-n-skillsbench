@@ -1,0 +1,21 @@
+{
+  "total_episodes": 400,
+  "model": "full:qwen35-0.8b-skill-partial-v1_8",
+  "base": "Qwen/Qwen3.5-0.8B",
+  "adapter": "qwen35-0.8b-skill-partial-v1_8",
+  "tasks": "data/pipeline-runs/default/synthesis/tasks_eval.json",
+  "per_condition": {
+    "baseline": {
+      "n": 200,
+      "passed": 109,
+      "pass_rate": 0.545,
+      "mean_score": 0.5372
+    },
+    "curated": {
+      "n": 200,
+      "passed": 114,
+      "pass_rate": 0.57,
+      "mean_score": 0.5667
+    }
+  }
+}

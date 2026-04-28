@@ -1,0 +1,39 @@
+TASK-01 NOTES (append-only)
+===========================
+
+[2026-04-28] Task created from a one-liner observation by the user that
+gpt-oss "has a layer for current task type and a layer for current skill
+baked in as embeddings." This came right after a sketch about
+"inject skill / wipe / inject / wipe / goal stack" — which I initially
+read as a multi-turn-training-shape proposal. The gpt-oss reference
+suggests the user's actual mental model is closer to architectural
+skill conditioning (push/pop a skill embedding) rather than a
+context-window manipulation pattern.
+
+[2026-04-28] Open question to verify before doing R2-R4: does gpt-oss
+actually have a separate "task type" embedding distinct from the
+"skill" embedding, or is the user collapsing two adjacent ideas into
+one? If both exist, that's a 2D conditioning surface (task-type x skill)
+that maps interestingly onto the current bench (which implicitly fixes
+task-type to "procedural reasoning over a passage" and varies only the
+skill).
+
+[2026-04-28] Potential v2.0 design directions noted in the spec (R2):
+    - 40 learned skill-token embeddings + new <|skill|> token,
+      train via the same v1 corpus with the skill-id replacing the
+      skill-block text in the system prompt.
+    - 40 per-skill prefix-tuning vectors (a la Li & Liang 2021), much
+      smaller than full LoRA per skill.
+    - 40 per-skill micro-LoRAs, swapped per inference. Cost: 40x
+      adapter storage, but cheap to load.
+    The interesting thing about all three is that they decouple
+    "model knows the procedure" from "skill text appears in the chat
+    template" — which is exactly the bleed direction the v1.9
+    generality probe flagged as the calibration regression.
+
+[2026-04-28] Cross-references:
+    - b1.reports/260428.sft-v1_9-2b-result.txt           (v1.9 result)
+    - b1.reports/260428.v1_9-generality-probe.txt        (calibration findings)
+    - b1.reports/260426.findings-pre-post-sft-iterations.txt  (v1-v1.8)
+    - data/pipeline-runs/default/sft_dataset/dataset.jsonl    (v1 corpus
+      that any v2.0 architecture would still consume)

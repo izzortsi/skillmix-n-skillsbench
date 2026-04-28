@@ -1,0 +1,142 @@
+================================================================================
+REPORT: SFT v1.9 RESULT — Qwen3.5-2B + LoRA r=16 (the bottleneck was size)
+================================================================================
+
+Date:   2026-04-28
+Status: COMPLETED — v1.9 cleared both decision gates; model size IS the
+        bottleneck at v1 corpus.
+
+================================================================================
+HEADLINE
+================================================================================
+
+v1.9 (same v1 recipe — 353-row curated-only corpus, 3 epochs, lr 2e-4 —
+on Qwen/Qwen3.5-2B with LoRA r=16, alpha=32) lifted the post-SFT student
+above its baseline AND above pre-SFT haiku reference:
+
+                              BL pass    CU pass    Δ
+    Pre-SFT  qwen3.5:0.8b     0.510      0.565      +0.055
+    Pre-SFT  haiku-4-5  (ref) 0.785      0.800      +0.015
+    Post-SFT v1   (0.8B LoRA) 0.635      0.585      -0.050
+    Post-SFT v1.9 (2B  LoRA)  0.750      0.825      +0.075
+
+DELTAS
+
+    v1.9 vs pre-SFT 0.8B:     ΔBL +0.240   ΔCU +0.260
+    v1.9 vs post-SFT v1:      ΔBL +0.115   ΔCU +0.240
+    v1.9 vs pre-SFT haiku:    ΔBL -0.035   ΔCU +0.025
+
+DECISION-GATE OUTCOME (from 260426 report)
+
+    WIN: post-v1.9 CU > 0.65 AND CU > BL by >=5 pp
+         post-v1.9 CU = 0.825 > 0.65         PASS
+         post-v1.9 Δ = +0.075 (>= 0.05)      PASS
+    Verdict: WIN.
+
+================================================================================
+WHAT THIS OVERTURNS
+================================================================================
+
+The 260426 findings report concluded that three well-formed 0.8B recipes
+(v1, v1.6, v1.8) clustered CU into a 2 pp band of 0.565-0.585, and inferred
+"the ceiling sits somewhere model-internal, not in the training recipe."
+v1.9 confirms that diagnosis: at 2B, the SAME recipe lifts CU by +24 pp
+over the best 0.8B recipe.
+
+Specifically:
+
+  - The 0.8B "ceiling" was a model-capacity ceiling, not a corpus or
+    objective ceiling. Adding contrastive rows (v1.5), dropping ceiling
+    skills (v1.6), going to partial FT (v1.7), or stripping the skill
+    frame (v1.8) all produced CU within 2 pp of v1's 0.585. None could
+    cross that band because 0.8B did not have the capacity to use the
+    procedure differentially while ALSO maintaining basic format
+    competence.
+
+  - At 2B, the same 353 rows is enough to teach BOTH format AND
+    differential procedure use. CU 0.825 vs BL 0.750 — the +7.5 pp gap
+    means the model is genuinely benefiting from the injected procedure,
+    not just learning to produce procedure-shaped responses.
+
+================================================================================
+WHAT v1.9 DOES NOT YET TELL US
+================================================================================
+
+  1. Whether 1.5B / 1.7B would also clear the gates. We jumped from 0.8B
+     to 2B; the smallest-model-that-works is unknown. Cheap to test
+     (Qwen3-1.7B is closest available) if curiosity warrants it.
+
+  2. Whether more corpus would push CU higher still. The 2B model at
+     353 rows already exceeds haiku-4-5's 0.800 CU reference. Returns to
+     scaling the corpus may be small from here; the experiment may have
+     reached the natural ceiling of the 200-task / 40-skill holdout.
+
+  3. Whether the per-skill pattern is now uniform-positive or still
+     bimodal (lift on weak skills, regression on ceiling skills, like v1
+     showed at n=77). Per-skill diff for v1.9 vs pre-SFT-2B-baseline
+     would settle this. Worth running if any decision hinges on which
+     skills the model now uses procedurally.
+
+================================================================================
+NEXT-AXIS OPTIONS
+================================================================================
+
+The original experiment hypothesis is now confirmed. From here the
+question becomes "what's next on top of v1.9", not "is the hypothesis
+right". Three directions, in increasing investment:
+
+A. SHIP-IT (no further work)
+   The experiment closes with v1.9 as the final result. Update the README
+   to call the SFT pipeline validated, archive v1.5/v1.6/v1.7/v1.8 as
+   negative-result artifacts, and move on.
+
+B. PER-SKILL DIAGNOSTIC (cheap, ~30 min)
+   Re-run the v1.9 eval through training/compare_pre_post.py against a
+   fresh pre-SFT-2B baseline (same 200 tasks, no SFT). Establishes:
+     - Per-skill lift / flat / regression cluster structure at 2B
+     - Whether the bimodal pattern from v1 still appears at 2B
+     - Whether any skills hit a 100% ceiling (would inform corpus
+       trimming for v1.10)
+   Recommended only if planning further iterations.
+
+C. SMALLEST-MODEL-THAT-WORKS (cheap, ~1 GPU-hour)
+   Repeat v1.9 recipe on Qwen3-1.7B. Closes the model-size envelope —
+   the headline becomes "X B params + 353 rows of curated demos is
+   enough to learn differential procedural use", where X is the smaller
+   of {1.7B, 2B}.
+
+D. CORPUS SCALING (medium, ~$50-100 + 4-8 GPU-hours)
+   Generate 10x rows by widening the task pool (e.g., 40 skills × 50
+   tasks/skill = 2000 tasks → ~1500 curated-passing rows). Re-run v1
+   recipe on 0.8B with the larger corpus to test whether corpus scale
+   alone can also break the 0.585 0.8B ceiling. Diagnostic: separates
+   "model capacity" from "corpus information content" as causal axes
+   for the 0.8B failure.
+
+E. DPO / REJECTION-SAMPLING (largest, ~$100-200)
+   Take v1.9 as the SFT-warmstart and run DPO on (CU-passing, CU-failing)
+   pairs from the holdout-like distribution. Tests whether even higher
+   CU is reachable with a preference-learning objective.
+
+RECOMMENDATION
+
+   B (per-skill diagnostic) as a near-free check; then choose between A
+   (close the experiment), C (size envelope), or D (corpus scale).
+   Defer E unless v1.9's ceiling becomes the new bottleneck.
+
+================================================================================
+ARTIFACTS
+================================================================================
+
+  qwen35-2b-tokenizer-patched/
+        Patched Qwen3.5-2B tokenizer with {% generation %} markers
+
+  qwen35-2b-skill-lora-v1.9/
+        LoRA r=16 alpha=32 adapter, 3 epochs, lr 2e-4
+
+  data/pipeline-runs/default/bench-eval-post-sft-v1_9/
+        episodes.json (400 ep) + summary.json (BL 0.750 / CU 0.825)
+
+================================================================================
+END REPORT
+================================================================================

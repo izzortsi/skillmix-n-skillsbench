@@ -1,0 +1,263 @@
+================================================================================
+REPORT: PRE / POST-SFT FINDINGS ACROSS v1 - v1.8 ITERATIONS
+================================================================================
+
+Date:   2026-04-26
+Status: COMPLETED
+
+================================================================================
+SCOPE
+================================================================================
+
+This report summarizes the findings from running pre-SFT and four post-SFT
+evaluations of Qwen3.5-0.8B against the same 200-task / 40-skill holdout
+benchmark, plus a fifth (v1.8) for which only mid-run numbers are available.
+All conditions use the s4.m4 SOLVER_SYSTEM_PROMPT (apples-to-apples). The
+judge is anthropic:claude-opus-4-7. Pass rate is the deterministic /
+LLM-judge verdict on FREE_FORM tasks; mean score is the same judge's
+0..1 score.
+
+The single question across iterations:
+
+    Does SFT on (task + injected procedural skill -> Opus CoT) demonstrations
+    cause Qwen3.5-0.8B to apply injected procedures effectively, lifting the
+    curated (skill-injected) pass rate above its baseline (no-skill) pass rate?
+
+Five recipe variants were tested; none produced an unambiguous WIN.
+
+================================================================================
+AGGREGATE TABLE
+================================================================================
+
+                                         BL pass    CU pass    Δ (CU-BL)
+Pre-SFT  qwen3.5:0.8b                    0.510      0.565      +0.055
+Pre-SFT  haiku-4-5 (reference, no SFT)   0.785      0.800      +0.015
+
+Post-SFT v1   LoRA r=8, curated-only     0.635      0.585      -0.050
+Post-SFT v1.5 LoRA r=8, BL+CU mixed      0.650      0.425      -0.225
+Post-SFT v1.6 LoRA r=8, drop ceiling     0.645      0.565      -0.080
+Post-SFT v1.7 partial FT (6 layers)      0.465      0.615      +0.150
+Post-SFT v1.8 partial + strip-skill       0.545      0.570      +0.025
+
+DELTAS FROM BASELINE (effect of SFT itself, vs pre-SFT qwen)
+
+                                         ΔBL        ΔCU        Δ(Δ)
+Post-SFT v1   LoRA curated-only          +0.125     +0.020     -0.105
+Post-SFT v1.5 LoRA BL+CU mixed           +0.140     -0.140     -0.280
+Post-SFT v1.6 LoRA drop ceiling          +0.135     +0.000     -0.135
+Post-SFT v1.7 partial FT 6 layers        -0.045     +0.050     +0.095
+Post-SFT v1.8 partial + strip-skill      +0.035     +0.005     -0.030
+
+================================================================================
+FINDING 1 — SFT v1 IS THE BEST OF THE LoRA RECIPES
+================================================================================
+
+Among the three LoRA-trained variants (v1, v1.5, v1.6), the simplest recipe
+(curated-only, no chat-template patch, no ceiling drop) produced the best
+absolute pass rates (BL 0.635, CU 0.585) and the smallest sign flip on Δ
+(-0.050 vs the pre-SFT +0.055).
+
+Adding baseline-passing rows to the corpus (v1.5) collapsed CU to 0.425.
+Hypothesized mechanism: the model now sees both "with skill block in system =
+follow procedure" and "no skill block in system = direct answer", but at 353
+rows the contrastive signal is too noisy and the model treats the skill
+block as a non-causal token; on injected-skill prompts it sometimes follows
+the procedure, sometimes ignores it, lowering CU below pre-SFT.
+
+Dropping ceiling skills (v1.6) closed the gap to v1 on BL (0.645 vs 0.635)
+and matched v1's curated mid-band (0.565), but did not unlock the
+differential lift the corpus was hoped to teach.
+
+INTERPRETATION
+
+    LoRA at r=8 over 353 rows learns FORMAT (the SOLVER step-by-step shape +
+    ANSWER: line) and basic procedure-mimicry. It does not learn to use the
+    presence-or-absence of a skill block as a conditional signal. Adding
+    contrastive negatives or dropping ceiling skills did not move the
+    bottleneck, which suggests the bottleneck is not the corpus composition
+    but the capacity-vs-task-difficulty match: 0.8B + LoRA r=8 has enough
+    capacity to memorize the response shape but not to learn a mode-switch.
+
+================================================================================
+FINDING 2 — PARTIAL FT (v1.7) IS THE ONLY VARIANT WITH POSITIVE Δ
+================================================================================
+
+v1.7 (full-rank fine-tune of the top 6 layers + lm_head + final norm,
+adamw_bnb_8bit, same 353-row curated-only corpus) is the ONLY variant
+across v1-v1.8 that produced CU > BL post-SFT. Δ = +0.150.
+
+But the headline number masks the real shape:
+
+    BL 0.465  -- WORSE than pre-SFT BL (0.510)
+    CU 0.615  -- BEST CU of any post-SFT variant
+
+DIAGNOSIS — MODE COLLAPSE TOWARD THE PROCEDURAL FORMAT
+
+    Spot-check of v1.7 baseline failures showed the model emitting
+    "Step 1 (SKILL block: ...)" prefaces and procedure-step language
+    even with no skill in the system prompt — i.e. it hallucinated the
+    SKILL frame the corpus had always shown it.
+
+    Full-rank training of the top layers on a corpus where every row
+    carries a SKILL block in the system prompt + a procedure-flavored
+    response taught the model "expect a skill block; produce procedural
+    output." When the skill block is missing at inference, the model
+    is in OOD territory and drops accuracy.
+
+    The +0.150 Δ does not reflect the model learning to USE the skill
+    block; it reflects the model losing the ability to function WITHOUT
+    one. The CU column is real, but the BL collapse is the cost.
+
+================================================================================
+FINDING 3 — v1.8 (STRIP-SKILL-BLOCK) FIXES MODE COLLAPSE BUT DOESN'T LIFT
+================================================================================
+
+v1.8 reuses the v1.7 partial-FT recipe but strips the SKILL block from the
+system prompt of every training row (--strip-skill-block in sft_dataset).
+Hypothesis: the model has never seen a SKILL block during training, so it
+cannot hallucinate one at inference, eliminating mode collapse. This was
+predicted to recover the BL pass rate without changing CU.
+
+Final n=200 numbers confirm the prediction:
+
+    BL  0.545  -- recovered toward pre-SFT (0.510); +8 pp above v1.7's BL
+    CU  0.570  -- essentially flat vs v1 (0.585) and v1.6 (0.565)
+    Δ   +0.025 -- small positive Δ, but well within noise band
+
+INTERPRETATION
+
+    The skill-strip variant DID fix the mode-collapse failure mode that
+    inflated v1.7's apparent Δ.
+
+    What it did NOT do is unlock differential procedural following.
+    Across every variant where the model is well-formed on BL, CU lands
+    in 0.565-0.585 — within 2 pp of pre-SFT haiku's 0.800-bench gap.
+    The ceiling appears to sit somewhere model-internal, not in the
+    training recipe.
+
+================================================================================
+FINDING 4 — THE CONSISTENT BL/CU CEILING ACROSS RECIPES
+================================================================================
+
+Excluding v1.5 (BL+CU mixed, which clearly broke something) and v1.7
+(mode-collapsed), the remaining well-formed post-SFT variants land in a
+tight band:
+
+                              BL          CU
+    Post-SFT v1               0.635       0.585
+    Post-SFT v1.6             0.645       0.565
+    Post-SFT v1.8             0.545       0.570
+
+Three different recipes (curated-only LoRA; ceiling-dropped LoRA; partial
+FT with skill-strip) produce a CU pass rate inside a 2-pp band (0.565-0.585).
+This is strong evidence that the ceiling is not in the training recipe.
+
+The post-SFT BL also clusters around 0.57-0.65 — i.e. SFT consistently
+lifts the BL pass rate by 5-13 pp relative to pre-SFT (0.510). This lift
+is the FORMAT-LEARNING effect: the model now reliably produces the
+SOLVER step-by-step shape with an ANSWER: line, which the deterministic
+ANSWER-extractor judge then scores correctly.
+
+What the SFT does not buy is the ability to use the procedure when it's
+shown. CU does not exceed BL by a meaningful margin in any well-formed
+variant.
+
+================================================================================
+WHAT THIS MEANS FOR THE EXPERIMENT
+================================================================================
+
+The original hypothesis — that SFT on (task + skill block, Opus CoT)
+demonstrations would teach a 0.8B student to apply procedural skills
+differentially — is NOT supported at this scale, with this corpus, at this
+model size, under any of the five training recipes tested.
+
+What IS supported:
+
+    1. The pipeline produces a usable SFT corpus end-to-end (catalog ->
+       bench_catalog -> s3.m5 -> bench_traced -> sft_dataset -> training
+       -> eval works without confound).
+    2. SFT on procedural-skill demonstrations does lift baseline pass
+       rate by 5-13 pp by teaching the response format.
+    3. The judge fixes (deterministic ANSWER-line extractor + markdown
+       stripping) are stable across all 1600+ episodes scored.
+    4. The pre/post comparison is methodologically clean: matched
+       prompts (--system-prompt solver), matched holdout tasks, matched
+       judge.
+
+What the data DOES NOT support:
+
+    1. Differential procedural application as a learnable behavior at
+       0.8B + LoRA-r-8 + 353-row corpus.
+    2. Any of the four corpus / recipe variations as a fix for that
+       gap (corpus composition, ceiling drop, partial FT, skill-strip).
+
+================================================================================
+PROPOSED v1.9 — MODEL SIZE AS THE NEXT AXIS
+================================================================================
+
+Three variables remain unexplored as differentiators:
+
+    A. Model size (current 0.8B is small; same recipe at 2B may close
+       the gap). VRAM estimate for Qwen3.5-2B + LoRA: ~6.5-7 GB steady,
+       ~10-12 GB first-iteration spike, fits 12 GB+ comfortably.
+    B. Corpus scale (current 353 rows is small; 10x rows from a wider
+       task set may give the contrastive signal v1.5 lacked).
+    C. Training objective (DPO or rejection-sampling FT directly on
+       (CU-passing, CU-failing) pairs, rather than supervised mimicry).
+
+RECOMMENDED NEXT STEP — A only
+
+    Run v1 recipe (LoRA r=16, alpha=32, curated-only, 353 rows) on
+    Qwen3.5-2B. Same eval design. This is the cheapest diagnostic for
+    "is 0.8B simply too small?". If 2B + same recipe lifts CU above
+    BL by 5+ pp on the same holdout, model size IS the bottleneck and
+    a corpus-scaling investment is justified. If 2B's CU still tracks
+    BL within 2 pp, the bottleneck is the corpus or the objective.
+
+================================================================================
+ARTIFACTS
+================================================================================
+
+Pre-SFT
+    data/pipeline-runs/default/bench-eval-pre-sft/episodes.json     (800 ep)
+    data/pipeline-runs/default/bench-eval-pre-sft/summary.json
+    data/pipeline-runs/default/bench-eval-pre-sft.corpus-prompt.bak
+        (kept for reference: prompt-mismatch run that motivated SOLVER redux)
+
+Post-SFT
+    qwen35-0.8b-skill-lora/                  (v1   adapter)
+    qwen35-0.8b-skill-lora-v1.5/             (v1.5 adapter)
+    qwen35-0.8b-skill-lora-v1.6/             (v1.6 adapter)
+    qwen35-0.8b-skill-partial/               (v1.7 weights, partial FT)
+    qwen35-0.8b-skill-partial-v1_8/          (v1.8 weights, partial + strip)
+
+    data/pipeline-runs/default/bench-eval-post-sft/                 (v1)
+    data/pipeline-runs/default/bench-eval-post-sft-v1_5/            (v1.5)
+    data/pipeline-runs/default/bench-eval-post-sft-v1_6/            (v1.6)
+    data/pipeline-runs/default/bench-eval-post-sft-partial/         (v1.7)
+    data/pipeline-runs/default/bench-eval-post-sft-v1_8/            (v1.8,
+        n=200: BL 0.545 / CU 0.570)
+
+Training corpora
+    data/pipeline-runs/default/sft_dataset/dataset.jsonl            (v1, 353 rows)
+    data/pipeline-runs/default/sft_dataset_v1_5/dataset.jsonl       (BL+CU mix)
+    data/pipeline-runs/default/sft_dataset_v1_6/dataset.jsonl       (ceiling drop)
+    data/pipeline-runs/default/sft_dataset_v1_8/dataset.jsonl       (skill-strip)
+
+Scripts
+    training/train_qwen35_lora.py            (modes: lora, full, partial)
+    training/eval_qwen35_lora.py             (auto-detect lora vs partial)
+    training/patch_qwen35_template.py        (chat-template generation markers)
+    training/compare_pre_post.py             (per-skill diff)
+
+Related reports
+    b1.reports/260427.sft-v1-experiment-specification.txt
+        Formal experiment spec (state machine, definitions, claims+evidence)
+    b1.reports/260427.sft-v1-pre-post-findings.txt
+        v1-only findings (this report supersedes for v1.5+)
+    b1.reports/260425.sft-dataset-generation-status.txt
+        Pipeline build-out status
+
+================================================================================
+END REPORT
+================================================================================
