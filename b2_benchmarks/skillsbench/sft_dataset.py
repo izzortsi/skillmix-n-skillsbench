@@ -38,9 +38,29 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from collections import Counter
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
+
+
+# Matches the SKILL block emitted by b2_benchmarks.skillsbench.skill_injection.
+# format_skill_as_system. The block is delimited by `--- SKILL: name ---`
+# and `--- END SKILL ---`. We strip the surrounding blank lines too, so the
+# resulting system prompt looks identical to a baseline-condition prompt.
+_SKILL_BLOCK_RE = re.compile(
+    r"\n*--- SKILL: .+?--- END SKILL ---\n*", re.DOTALL,
+)
+
+
+def _strip_skill_block(system_prompt: str) -> str:
+    """Remove `--- SKILL: ... --- END SKILL ---` from a system prompt.
+
+    Used by --strip-skill-block to make the SFT input distribution match
+    the baseline eval distribution. The model never sees a SKILL block at
+    training; the procedural shape of the assistant response stays.
+    """
+    return _SKILL_BLOCK_RE.sub("", system_prompt).rstrip()
 
 
 # ---------------------------------------------------------------------------
@@ -70,12 +90,21 @@ def _episode_metadata(ep: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def _episode_to_sft_row(ep: Dict[str, Any]) -> Dict[str, Any]:
+def _episode_to_sft_row(
+    ep: Dict[str, Any],
+    strip_skill_block: bool = False,
+) -> Dict[str, Any]:
     """Convert one bench_traced episode into one chat-format SFT row.
 
     Reuses `trace.system_prompt` and `trace.user_prompt` verbatim — these
     are the exact prompts the model saw during generation, so the SFT
     distribution matches the inference distribution.
+
+    `strip_skill_block`: if True, removes the `--- SKILL: ... --- END SKILL ---`
+    block from the system prompt. Used to teach the model the procedural
+    response shape WITHOUT exposing it to the SKILL block in training, so
+    that baseline-eval inputs (which have no SKILL block) are in-distribution.
+    The procedural shape of the assistant response is preserved.
     """
     trace = ep.get("trace", {}) or {}
     system_prompt = (trace.get("system_prompt", "") or "").strip()
@@ -83,6 +112,9 @@ def _episode_to_sft_row(ep: Dict[str, Any]) -> Dict[str, Any]:
     # Prefer the full response (CoT + ANSWER line) over the parsed `answer`
     # field — the CoT IS the SFT signal we want to teach.
     response_text = (trace.get("response", "") or ep.get("answer", "") or "").strip()
+
+    if strip_skill_block:
+        system_prompt = _strip_skill_block(system_prompt)
 
     return {
         "messages": [
@@ -173,6 +205,7 @@ def build_dataset(
     min_score: float = 0.0,
     min_response_chars: int = 50,
     skip_skills: Optional[List[str]] = None,
+    strip_skill_block: bool = False,
     dedup: bool = True,
     verbose: bool = False,
 ) -> Dict[str, Any]:
@@ -203,7 +236,7 @@ def build_dataset(
         filtered = dedupe_by_keys(filtered)
     n_after_dedup = len(filtered)
 
-    rows = [_episode_to_sft_row(ep) for ep in filtered]
+    rows = [_episode_to_sft_row(ep, strip_skill_block=strip_skill_block) for ep in filtered]
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with out_path.open("w", encoding="utf-8") as fh:
@@ -291,6 +324,14 @@ def main() -> None:
                              "(matched against episode.injected_skill_name). "
                              "Use to drop ceiling skills where the procedure is "
                              "overhead rather than scaffolding.")
+    parser.add_argument("--strip-skill-block", action="store_true",
+                        help="Remove the `--- SKILL: ... --- END SKILL ---` block "
+                             "from each row's system prompt before writing. The "
+                             "assistant response (procedural CoT) is unchanged. "
+                             "Use to teach the procedural shape WITHOUT exposing "
+                             "the model to a SKILL block in training — fixes the "
+                             "v1.7 mode-collapse failure where the SFT'd model "
+                             "expected a SKILL block at baseline eval.")
     parser.add_argument("--no-dedup", action="store_true",
                         help="Skip dedup by (task_uid, condition, model)")
     parser.add_argument("--verbose", "-v", action="store_true")
@@ -306,6 +347,7 @@ def main() -> None:
         min_score=args.min_score,
         min_response_chars=args.min_response_chars,
         skip_skills=skip_skills,
+        strip_skill_block=args.strip_skill_block,
         dedup=not args.no_dedup,
         verbose=args.verbose,
     )

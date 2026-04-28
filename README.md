@@ -298,10 +298,39 @@ directly (`s4.m4` is the only spec method that does).
   Findings in
   [`b1.reports/260427.sft-v1-experiment-specification.txt`](b1.reports/260427.sft-v1-experiment-specification.txt).
 - **SFT v1.5** (added baseline rows + dropped 5 ceiling skills + chat-template
-  patch): worse than v1. Contrastive-rows hypothesis falsified.
+  patch): worse than v1 (BL 0.650 / CU 0.425). Contrastive-rows hypothesis
+  falsified.
 - **SFT v1.6** (curated-only + drop ceiling + chat patch — isolates the patch
-  effect): in flight at last check-in.
+  effect): BL 0.645 / CU 0.565. Matches v1's CU; chat patch alone did not
+  unlock differential lift.
+- **SFT v1.7** (partial FT, top-6 layers + lm_head + final norm,
+  adamw_bnb_8bit): BL 0.465 / CU 0.615. The only +Δ run, but BL collapsed —
+  mode collapse: the model hallucinated "SKILL block" prefaces when none was
+  present at inference. Apparent Δ was a BL-collapse artifact.
+- **SFT v1.8** (partial FT + `--strip-skill-block` so the SKILL frame is
+  removed from training-row system prompts): BL 0.545 / CU 0.570. As
+  predicted, mode collapse fixed (BL recovered) but no new ceiling
+  unlocked (CU stayed in the 0.565-0.585 band shared by v1, v1.6, v1.8).
 
+After five recipe variants, three well-formed runs (v1, v1.6, v1.8) cluster
+CU within a 2 pp band — strong evidence the ceiling is **not** in the
+training recipe at this model size.
+
+- **SFT v1.9** (same v1 recipe — curated-only, 353 rows — on
+  **Qwen/Qwen3.5-2B** with LoRA r=16, alpha=32): **WIN.** BL 0.750 /
+  CU 0.825 / Δ +0.075. CU exceeds pre-SFT haiku-4-5's 0.800 reference.
+  Cleared both decision gates (CU > 0.65; Δ ≥ 5 pp). Confirms the 0.8B
+  ceiling was a model-capacity ceiling, not a corpus or objective
+  ceiling — the SAME recipe at 2B lifts CU by +24 pp over the best
+  0.8B recipe.
+
+The original SFT hypothesis (procedural-skill demonstrations teach a
+student to apply the procedure when shown) is supported at 2B + 353 rows.
+
+Findings across v1-v1.8 are consolidated in
+[`b1.reports/260426.findings-pre-post-sft-iterations.txt`](b1.reports/260426.findings-pre-post-sft-iterations.txt);
+the v1.9 result and next-axis options in
+[`b1.reports/260428.sft-v1_9-2b-result.txt`](b1.reports/260428.sft-v1_9-2b-result.txt).
 The
 [`b1.reports/`](b1.reports/) directory is the running engineering log; each
 report is a self-contained snapshot at the date in its filename

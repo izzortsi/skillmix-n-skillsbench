@@ -227,18 +227,34 @@ def main() -> None:
         tokenizer.pad_token = tokenizer.eos_token
 
     # ---- Model ----
-    print(f"Loading base model from: {args.base}")
-    base = AutoModelForCausalLM.from_pretrained(
-        args.base,
-        torch_dtype=torch.bfloat16,
-        device_map="auto",
-        trust_remote_code=True,
-    )
-    print(f"Applying LoRA adapter: {args.adapter}")
-    model = PeftModel.from_pretrained(base, str(args.adapter))
+    # Detect adapter type. PEFT adapters carry an adapter_config.json next to
+    # adapter_model.safetensors. Full fine-tuned models save model.safetensors
+    # (or pytorch_model.bin) and a config.json — i.e., the dir IS the model.
+    adapter_config = args.adapter / "adapter_config.json"
+    is_lora = adapter_config.exists()
+
+    if is_lora:
+        print(f"Loading base model from: {args.base}")
+        base = AutoModelForCausalLM.from_pretrained(
+            args.base,
+            torch_dtype=torch.bfloat16,
+            device_map="auto",
+            trust_remote_code=True,
+        )
+        print(f"Applying LoRA adapter: {args.adapter}")
+        model = PeftModel.from_pretrained(base, str(args.adapter))
+        model_label = f"{args.base}+lora:{args.adapter.name}"
+    else:
+        print(f"Loading full fine-tuned model from: {args.adapter}")
+        model = AutoModelForCausalLM.from_pretrained(
+            str(args.adapter),
+            torch_dtype=torch.bfloat16,
+            device_map="auto",
+            trust_remote_code=True,
+        )
+        model_label = f"full:{args.adapter.name}"
     model.eval()
 
-    model_label = f"{args.base}+lora:{args.adapter.name}"
     print(f"Model label for episodes: {model_label}")
 
     # ---- Tasks ----

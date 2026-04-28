@@ -69,6 +69,61 @@ from trl import SFTConfig, SFTTrainer
 # ---------------------------------------------------------------------------
 
 
+def freeze_for_partial_ft(
+    model,
+    n_trainable_layers: int,
+    train_embeddings: bool = False,
+) -> tuple[int, int]:
+    """Freeze base, keep top-N transformer layers + final norm + lm_head trainable.
+
+    Layer access path is the standard HF Llama/Qwen layout: model.model.layers
+    (a ModuleList of N transformer blocks), model.model.norm (final RMSNorm),
+    model.lm_head (output projection), model.model.embed_tokens (input).
+
+    Returns (n_trainable_params, n_total_params) for logging.
+    """
+    # 1. Freeze everything
+    for p in model.parameters():
+        p.requires_grad = False
+
+    # 2. Locate the layers list (Qwen3 / Llama-style)
+    if hasattr(model, "model") and hasattr(model.model, "layers"):
+        layers = model.model.layers
+    else:
+        raise RuntimeError(
+            f"Could not find model.model.layers on a {type(model).__name__}. "
+            f"This freeze helper assumes Qwen/Llama-style architecture; "
+            f"adjust for your model class."
+        )
+    n_total_layers = len(layers)
+    if n_trainable_layers > n_total_layers:
+        n_trainable_layers = n_total_layers
+
+    # 3. Unfreeze top N transformer layers
+    for layer in layers[n_total_layers - n_trainable_layers:]:
+        for p in layer.parameters():
+            p.requires_grad = True
+
+    # 4. Always train final norm (cheap, important for output distribution)
+    if hasattr(model.model, "norm"):
+        for p in model.model.norm.parameters():
+            p.requires_grad = True
+
+    # 5. Always train LM head (output projection)
+    if hasattr(model, "lm_head"):
+        for p in model.lm_head.parameters():
+            p.requires_grad = True
+
+    # 6. Optionally train input embeddings
+    if train_embeddings and hasattr(model.model, "embed_tokens"):
+        for p in model.model.embed_tokens.parameters():
+            p.requires_grad = True
+
+    n_trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    n_total = sum(p.numel() for p in model.parameters())
+    return n_trainable, n_total
+
+
 def load_sft_jsonl(path: Path) -> Dataset:
     """Load the bench_traced -> sft_dataset JSONL.
 
@@ -115,29 +170,58 @@ def main() -> None:
                              "have a chat-template-patched tokenizer dir "
                              "(weights + config still come from --model). "
                              "Default: same as --model.")
-    parser.add_argument("--output-dir", type=Path,
-                        default=Path("./qwen35-0.8b-skill-lora"))
+    parser.add_argument("--output-dir", type=Path, default=None,
+                        help="Default: './qwen35-0.8b-skill-{mode}' where {mode} is "
+                             "the --mode value.")
 
-    # Training hyperparameters
-    parser.add_argument("--epochs", type=int, default=3)
-    parser.add_argument("--lr", type=float, default=2e-4)
+    # Training mode — LoRA (parameter-efficient) vs full fine-tune vs partial
+    parser.add_argument("--mode", choices=["lora", "full", "partial"], default="lora",
+                        help="lora (default): LoRA r=8 on all-linear, ~6 GB VRAM, "
+                             "lr=2e-4, 3 epochs. full: full fine-tune, ~14-19 GB "
+                             "VRAM for 0.8B, lr=5e-6, 2 epochs. partial: layerwise — "
+                             "freeze base, train top N transformer layers + lm_head + "
+                             "final norm. Set N via --n-trainable-layers (default 6). "
+                             "Memory between LoRA and full; better behavioral capacity "
+                             "than LoRA, fits where full doesn't.")
+    parser.add_argument("--n-trainable-layers", type=int, default=6,
+                        help="[partial only] number of top transformer layers to keep "
+                             "trainable; lower base layers are frozen. Default 6.")
+    parser.add_argument("--train-embeddings", action="store_true",
+                        help="[partial only] also keep input embeddings trainable. "
+                             "Default frozen.")
+    parser.add_argument("--optim", default=None,
+                        help="HF TrainingArguments optim string. Default depends on "
+                             "mode. For tight VRAM, set 'adamw_bnb_8bit' (requires "
+                             "bitsandbytes; cuts optimizer memory ~4x).")
+
+    # Training hyperparameters — defaults differ by --mode; sentinel None
+    # means "use mode-appropriate default" (resolved after parse_args).
+    parser.add_argument("--epochs", type=int, default=None,
+                        help="default: lora=3, full=2")
+    parser.add_argument("--lr", type=float, default=None,
+                        help="default: lora=2e-4, full=5e-6")
+    parser.add_argument("--lr-scheduler", default=None,
+                        choices=["cosine", "linear", "constant", "constant_with_warmup"],
+                        help="default: lora=cosine, full=linear")
+    parser.add_argument("--warmup-ratio", type=float, default=None,
+                        help="default: lora=0.03, full=0.05")
+    parser.add_argument("--weight-decay", type=float, default=None,
+                        help="default: lora=0.0, full=0.01")
     parser.add_argument("--batch", type=int, default=1,
                         help="per-device batch size (default 1; combine with --grad-accum)")
     parser.add_argument("--grad-accum", type=int, default=8,
                         help="gradient accumulation steps (effective batch = batch * grad_accum)")
     parser.add_argument("--max-seq-length", type=int, default=4096,
                         help="curated system prompts run ~2k-3k chars; 4096 is comfortable")
-    parser.add_argument("--warmup-ratio", type=float, default=0.03)
-    parser.add_argument("--weight-decay", type=float, default=0.0)
 
-    # LoRA hyperparameters
-    parser.add_argument("--r", type=int, default=8, help="LoRA rank")
-    parser.add_argument("--alpha", type=int, default=16, help="LoRA alpha")
-    parser.add_argument("--dropout", type=float, default=0.05)
+    # LoRA hyperparameters (ignored when --mode full)
+    parser.add_argument("--r", type=int, default=8, help="[lora only] LoRA rank")
+    parser.add_argument("--alpha", type=int, default=16, help="[lora only] LoRA alpha")
+    parser.add_argument("--dropout", type=float, default=0.05, help="[lora only] LoRA dropout")
     parser.add_argument("--target-modules", default="all-linear",
-                        help='LoRA target modules. "all-linear" (default) is safest for '
-                             'a new architecture like qwen35; alternatively pass a comma '
-                             'list like "q_proj,k_proj,v_proj,o_proj"')
+                        help='[lora only] LoRA target modules. "all-linear" (default) '
+                             'is safest for a new architecture like qwen35; alternatively '
+                             'pass a comma list like "q_proj,k_proj,v_proj,o_proj"')
 
     # Logging / checkpointing
     parser.add_argument("--logging-steps", type=int, default=10)
@@ -151,6 +235,31 @@ def main() -> None:
                              "SFT behavior). Pass this flag to compute loss on every token.")
 
     args = parser.parse_args()
+
+    # Resolve mode-dependent defaults
+    _MODE_DEFAULTS = {
+        "lora":    {"epochs": 3, "lr": 2e-4, "lr_scheduler": "cosine",
+                    "warmup_ratio": 0.03, "weight_decay": 0.0},
+        "full":    {"epochs": 2, "lr": 5e-6, "lr_scheduler": "linear",
+                    "warmup_ratio": 0.05, "weight_decay": 0.01},
+        # partial: between lora and full. Higher lr than full because most
+        # layers are frozen; lower than lora because we still update full
+        # parameters in the unfrozen layers (no low-rank regularization).
+        "partial": {"epochs": 2, "lr": 2e-5, "lr_scheduler": "linear",
+                    "warmup_ratio": 0.05, "weight_decay": 0.01},
+    }
+    md = _MODE_DEFAULTS[args.mode]
+    if args.epochs is None:        args.epochs = md["epochs"]
+    if args.lr is None:            args.lr = md["lr"]
+    if args.lr_scheduler is None:  args.lr_scheduler = md["lr_scheduler"]
+    if args.warmup_ratio is None:  args.warmup_ratio = md["warmup_ratio"]
+    if args.weight_decay is None:  args.weight_decay = md["weight_decay"]
+    if args.output_dir is None:    args.output_dir = Path(f"./qwen35-0.8b-skill-{args.mode}")
+
+    print(f"Training mode: {args.mode}")
+    print(f"  epochs={args.epochs}  lr={args.lr}  lr_scheduler={args.lr_scheduler}")
+    print(f"  warmup_ratio={args.warmup_ratio}  weight_decay={args.weight_decay}")
+    print(f"  output_dir={args.output_dir}")
 
     # ---------- model + tokenizer ----------
     tokenizer_src = args.tokenizer_path or args.model
@@ -172,6 +281,18 @@ def main() -> None:
     model.gradient_checkpointing_enable()
     model.enable_input_require_grads()
 
+    # Apply layerwise freeze if --mode partial
+    if args.mode == "partial":
+        n_trainable, n_total = freeze_for_partial_ft(
+            model,
+            n_trainable_layers=args.n_trainable_layers,
+            train_embeddings=args.train_embeddings,
+        )
+        pct = 100.0 * n_trainable / n_total
+        print(f"Partial FT: top {args.n_trainable_layers} transformer layers + lm_head"
+              f"{' + embeddings' if args.train_embeddings else ''} trainable.")
+        print(f"  trainable: {n_trainable:,} / {n_total:,} params ({pct:.1f}%)")
+
     # ---------- data ----------
     print(f"Loading SFT data: {args.data}")
     dataset = load_sft_jsonl(args.data)
@@ -185,22 +306,26 @@ def main() -> None:
     )
     print(f"  sample row (first 200 chars after chat template):\n    {sample[:200]!r}...")
 
-    # ---------- LoRA config ----------
-    if args.target_modules == "all-linear":
-        target_modules = "all-linear"
-    else:
-        target_modules = [m.strip() for m in args.target_modules.split(",") if m.strip()]
-    print(f"LoRA: r={args.r} alpha={args.alpha} dropout={args.dropout} "
-          f"target_modules={target_modules}")
+    # ---------- LoRA config (only built when --mode lora) ----------
+    lora_config = None
+    if args.mode == "lora":
+        if args.target_modules == "all-linear":
+            target_modules = "all-linear"
+        else:
+            target_modules = [m.strip() for m in args.target_modules.split(",") if m.strip()]
+        print(f"LoRA: r={args.r} alpha={args.alpha} dropout={args.dropout} "
+              f"target_modules={target_modules}")
 
-    lora_config = LoraConfig(
-        r=args.r,
-        lora_alpha=args.alpha,
-        target_modules=target_modules,
-        lora_dropout=args.dropout,
-        bias="none",
-        task_type=TaskType.CAUSAL_LM,
-    )
+        lora_config = LoraConfig(
+            r=args.r,
+            lora_alpha=args.alpha,
+            target_modules=target_modules,
+            lora_dropout=args.dropout,
+            bias="none",
+            task_type=TaskType.CAUSAL_LM,
+        )
+    else:
+        print("Full fine-tune mode: all parameters trainable, no PEFT adapter.")
 
     # ---------- SFTConfig (kwargs vary across TRL versions; introspect) ----------
     import inspect
@@ -211,7 +336,7 @@ def main() -> None:
         per_device_train_batch_size=args.batch,
         gradient_accumulation_steps=args.grad_accum,
         learning_rate=args.lr,
-        lr_scheduler_type="cosine",
+        lr_scheduler_type=args.lr_scheduler,
         warmup_ratio=args.warmup_ratio,
         weight_decay=args.weight_decay,
         bf16=True,
@@ -223,6 +348,10 @@ def main() -> None:
         seed=args.seed,
         report_to="none",  # disable wandb/tensorboard by default
     )
+    # Optimizer override (e.g. adamw_bnb_8bit) — accepted by HF TrainingArguments
+    if args.optim:
+        sft_kwargs["optim"] = args.optim
+        print(f"Optimizer: {args.optim}")
     # Sequence-length kwarg renamed across TRL versions:
     #   <0.15: max_seq_length    >=0.15: max_length
     if "max_length" in sft_sig.parameters:
@@ -260,8 +389,11 @@ def main() -> None:
         model=model,
         args=sft_config,
         train_dataset=dataset,
-        peft_config=lora_config,
     )
+    # peft_config only when training a LoRA adapter; in full mode the trainer
+    # updates all model parameters directly.
+    if lora_config is not None:
+        trainer_kwargs["peft_config"] = lora_config
     if "processing_class" in trainer_sig.parameters:
         trainer_kwargs["processing_class"] = tokenizer
     else:
@@ -273,20 +405,34 @@ def main() -> None:
     trainer.train()
 
     # ---------- save ----------
-    print(f"\nSaving LoRA adapter + tokenizer to {args.output_dir}")
+    artifact_label = {
+        "lora":    "LoRA adapter",
+        "full":    "full fine-tuned model",
+        "partial": f"partial fine-tuned model (top {args.n_trainable_layers} layers)",
+    }[args.mode]
+    print(f"\nSaving {artifact_label} + tokenizer to {args.output_dir}")
     trainer.save_model(str(args.output_dir))
     tokenizer.save_pretrained(str(args.output_dir))
 
     # Persist a small manifest so we know what produced these weights
     manifest = {
+        "mode": args.mode,
         "base_model": args.model,
         "data": str(args.data),
         "epochs": args.epochs,
         "lr": args.lr,
-        "lora": {
+        "lr_scheduler": args.lr_scheduler,
+        "warmup_ratio": args.warmup_ratio,
+        "weight_decay": args.weight_decay,
+        "lora": ({
             "r": args.r, "alpha": args.alpha, "dropout": args.dropout,
             "target_modules": target_modules,
-        },
+        } if args.mode == "lora" else None),
+        "partial": ({
+            "n_trainable_layers": args.n_trainable_layers,
+            "train_embeddings": args.train_embeddings,
+        } if args.mode == "partial" else None),
+        "optim": args.optim,
         "effective_batch": args.batch * args.grad_accum,
         "n_train_rows": len(dataset),
     }
