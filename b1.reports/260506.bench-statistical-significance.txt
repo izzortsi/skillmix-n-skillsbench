@@ -1,0 +1,143 @@
+================================================================================
+REPORT: STATISTICAL SIGNIFICANCE OF v1.9 / v2.0 Δ ESTIMATES
+================================================================================
+
+Date:   2026-05-06
+Status: COMPLETED — supersedes the verbal "within noise" framing in
+        260428.sft-v2_0-4b-result.txt and the paper draft.
+
+================================================================================
+QUESTION
+================================================================================
+
+The v1.9 and v2.0 result reports state Δ = pass_rate(curated) -
+pass_rate(baseline) as +0.075 and +0.045 respectively, and characterize
+the v1.9 → v2.0 shrinkage as evidence of bench saturation. The paper
+draft hedges with "within one standard error of each other". This
+report runs the actual tests:
+
+    1. Per-model McNemar's test on the paired (BL, CU) verdicts —
+       is Δ significantly different from zero?
+    2. Per-model bootstrap 95% CI on Δ — point estimate + uncertainty.
+    3. Cross-model bootstrap test — is v1.9's Δ significantly larger
+       than v2.0's? (the bench-saturation claim)
+
+Implementation: training/significance_tests.py. McNemar uses continuity
+correction for n_discordant >= 25, exact binomial otherwise. Bootstrap
+uses 10,000 resamples of task_uids with replacement; cross-model test
+resamples each model independently (correct under the assumption that
+v1.9 and v2.0 are independent eval runs on the same task list).
+
+================================================================================
+RESULTS
+================================================================================
+
+v1.9 (Qwen3.5-2B + LoRA r=16)
+    contingency: a=140  b(BL only)=10  c(CU only)=25  d(both fail)=25
+    Δ = +0.0750
+    McNemar two-sided χ²=5.60, p=0.018          ← significant at α=0.05
+    bootstrap 95% CI on Δ: [+0.020, +0.130]
+    => v1.9's positive Δ is statistically real.
+
+v2.0 (Qwen3.5-4B + LoRA r=32)
+    contingency: a=163  b(BL only)=4  c(CU only)=13  d(both fail)=20
+    Δ = +0.0450
+    McNemar two-sided exact-binomial p=0.049    ← borderline at α=0.05
+    bootstrap 95% CI on Δ: [+0.005, +0.085]
+    => v2.0's positive Δ is barely distinguishable from zero;
+       under Bonferroni correction for 2 tests it would not survive.
+
+v1.9 vs v2.0 (the bench-saturation test)
+    Δ_v1.9 - Δ_v2.0 = +0.0300
+    bootstrap 95% CI on (Δ_v1.9 - Δ_v2.0): [-0.040, +0.100]
+    one-sided bootstrap p (H₀: Δ_v1.9 ≤ Δ_v2.0): p = 0.225
+    => Cannot reject the null. The v1.9 → v2.0 shrinkage of Δ
+       (+0.030 in absolute terms) is NOT statistically distinguishable
+       from sampling noise at n=200 per condition.
+
+================================================================================
+INTERPRETATION — WHAT WE CAN AND CANNOT CLAIM
+================================================================================
+
+CLAIMS THAT SURVIVE THE TEST:
+
+  1. SFT teaches differential procedural skill use at 2B.
+     v1.9's +0.075 Δ is statistically real (p=0.018, CI excludes 0).
+     This supports the original SFT hypothesis.
+
+  2. SFT contributes a small but real procedural lift at 4B.
+     v2.0's +0.045 Δ is borderline-significant on its own (p=0.049,
+     CI = [+0.005, +0.085]). The 4B model does benefit from skill
+     injection, just by a smaller absolute margin than the 2B model.
+
+  3. Curated and baseline pass rates separately are well-distinguished
+     in both v1.9 and v2.0. The absolute lifts (e.g. v2.0 BL 0.835 vs
+     v1.9 BL 0.750) easily clear binomial noise at n=200.
+
+CLAIMS THAT DO NOT SURVIVE THE TEST:
+
+  1. "v2.0's Δ is smaller than v1.9's, indicating bench saturation."
+     Directionally true (+0.030 absolute drop) but p=0.225, 95% CI
+     on the difference includes zero. At n=200 we cannot statistically
+     distinguish saturation from noise.
+
+  2. Any model-size-conditional comparison of Δ values that relies on
+     v1.9 vs v2.0 differences. The direction of the effect is
+     consistent with saturation, but the magnitude is within sampling
+     uncertainty.
+
+CONFIRMING SATURATION WOULD REQUIRE ONE OF:
+
+  A. Larger n. To detect a Δ difference of ~0.030 at α=0.05, power 0.80,
+     paired binary outcomes, we estimate n ≈ 800–1200 per condition.
+     Cost: ~$50–100 in additional eval and judge calls (4–6× current).
+
+  B. Harder bench. A compose-skill or adversarial bench where the
+     procedure provides 2-3× larger absolute lift would push v1.9's
+     Δ to a value far enough from v2.0's that n=200 is sufficient.
+     This is the option recommended in the v2.0 result report's
+     next-axis section.
+
+  C. Multi-seed eval. Run v2.0 inference at two or three seeds (with
+     temperature > 0) and aggregate. Reduces per-condition variance
+     without increasing task count. Cost: ~$5–10.
+
+================================================================================
+PAPER UPDATES REQUIRED
+================================================================================
+
+The paper draft (paper/skillmix-n-skillsbench.{md,tex}) currently states
+in Section 5.2 and the abstract that the v1.9 → v2.0 Δ shrinkage indicates
+"bench saturation". Updates:
+
+  1. Add a Statistical Tests section (probably between Results and
+     Discussion) reporting the per-model and cross-model test outcomes.
+
+  2. Soften the saturation claim from "indicates" to "is consistent with
+     but does not statistically support" or similar.
+
+  3. Update Limitations item 3 to cite the test result rather than the
+     verbal "within one standard error" framing.
+
+  4. Update the Conclusion to claim only what the tests support: SFT
+     teaches procedural use at 2B+; saturation is suggested by the
+     direction but not confirmed at n=200.
+
+================================================================================
+ARTIFACTS
+================================================================================
+
+  training/significance_tests.py
+      McNemar's test (paired binary verdict) + bootstrap CIs on Δ +
+      cross-model bootstrap test on Δ difference. Self-contained;
+      stdlib only.
+
+  data/pipeline-runs/default/bench-eval-post-sft-v1_9/episodes.json
+      400 paired episodes used for v1.9 tests.
+
+  data/pipeline-runs/default/bench-eval-post-sft-v2_0/episodes.json
+      400 paired episodes used for v2.0 tests.
+
+================================================================================
+END REPORT
+================================================================================

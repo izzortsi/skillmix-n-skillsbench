@@ -56,7 +56,7 @@
 \maketitle
 
 \begin{abstract}
-We study whether supervised fine-tuning (SFT) on a small corpus of (task + injected procedural-skill block, Opus chain-of-thought, judge-confirmed pass) demonstrations teaches a smaller language model to apply procedural skills \emph{differentially} when shown an explicit procedure. Across eight training-recipe variants and three model sizes (\Qweno, \Qwent, \Qwenf) on a 200-task / 40-skill holdout, we find: (i) at 0.8B the SFT signal is dominated by format learning and never produces a clean \CU-vs-\BL{} lift across five recipe iterations; (ii) at 2B, the same simplest recipe (LoRA $r{=}16$, 353 rows, three epochs) yields \CU{} pass-rate $0.825$ vs \BL{} $0.750$, and a controlled attribution split (pre-SFT 2B at $0.685/0.710$) isolates $+11.5$\,pp \CU{} lift to SFT contribution and $+14.5$\,pp to base-model scaling; (iii) at 4B, the same recipe lifts \CU{} to $0.880$ with $\Delta$ shrinking to $+0.045$, indicating bench saturation. We additionally find that the bench scoring is format-sensitive in a way that prevents direct measurement of pre-SFT 4B reasoning, that the v1.7 ``mode collapse'' failure mode is a 0.8B capacity-floor artifact rather than a structural property of the SFT shape, and that the calibration regression visible in 2B SFT generality probes is eliminated at 4B. We release pipeline, recipes, eval scripts, and full episode-level logs.
+We study whether supervised fine-tuning (SFT) on a small corpus of (task + injected procedural-skill block, Opus chain-of-thought, judge-confirmed pass) demonstrations teaches a smaller language model to apply procedural skills \emph{differentially} when shown an explicit procedure. Across eight training-recipe variants and three model sizes (\Qweno, \Qwent, \Qwenf) on a 200-task / 40-skill holdout, we find: (i) at 0.8B the SFT signal is dominated by format learning and never produces a clean \CU-vs-\BL{} lift across five recipe iterations; (ii) at 2B, the same simplest recipe (LoRA $r{=}16$, 353 rows, three epochs) yields \CU{} pass-rate $0.825$ vs \BL{} $0.750$, and a controlled attribution split (pre-SFT 2B at $0.685/0.710$) isolates $+11.5$\,pp \CU{} lift to SFT contribution and $+14.5$\,pp to base-model scaling; (iii) at 4B, the same recipe lifts \CU{} to $0.880$ with $\Delta$ shrinking to $+0.045$ (still individually significant, $p{=}0.049$), although the v1.9$\to$v2.0 $\Delta$-shrinkage is consistent with but not statistically supported as bench saturation at this sample size. We additionally find that the bench scoring is format-sensitive in a way that prevents direct measurement of pre-SFT 4B reasoning, that the v1.7 ``mode collapse'' failure mode is a 0.8B capacity-floor artifact rather than a structural property of the SFT shape, and that the calibration regression visible in 2B SFT generality probes is eliminated at 4B. We release pipeline, recipes, eval scripts, and full episode-level logs.
 \end{abstract}
 
 \section{Introduction}
@@ -69,7 +69,7 @@ The main empirical results are:
 \begin{enumerate}[leftmargin=*]
   \item \textbf{At 0.8B, SFT teaches format, not procedural-skill differentiation.} Five recipe variants (varying corpus composition, chat-template patches, partial fine-tuning, skill-block stripping) all cluster post-SFT \CU{} pass-rate inside a 2\,pp band of $0.565$--$0.585$, statistically indistinguishable from \BL.
   \item \textbf{At 2B, the simplest recipe works.} \CU{} pass-rate $0.825$ vs \BL{} $0.750$. With a pre-SFT 2B control ($0.685/0.710$), the \CU{} lift decomposes cleanly into $+14.5$\,pp from base-model scaling and $+11.5$\,pp from SFT contribution. The procedural-$\Delta$ ($\CU - \BL$) lifts from $+0.025$ (pre-SFT) to $+0.075$ (post-SFT).
-  \item \textbf{At 4B, the bench saturates.} Same recipe at \Qwenf{} yields \CU{} $0.880$, \BL{} $0.835$, $\Delta$ $+0.045$. The pre-SFT 4B control fails because the deterministic judge requires literal \texttt{ANSWER:} lines that the base model does not reliably emit, so the 4B SFT contribution is bounded but not directly measurable on this bench.
+  \item \textbf{At 4B, the same recipe yields a smaller but still significant $\Delta$.} \CU{} $0.880$, \BL{} $0.835$, $\Delta$ $+0.045$ (McNemar exact $p{=}0.049$). The shrinkage from v1.9's $+0.075$ is directionally consistent with bench saturation but not statistically distinguishable from noise at $n{=}200$ ($p{=}0.225$ one-sided bootstrap; § \ref{sec:stats}). The pre-SFT 4B attribution control fails because the deterministic judge requires literal \texttt{ANSWER:} lines that the base model does not reliably emit, so the 4B SFT contribution is bounded but not directly measurable on this bench.
   \item \textbf{Mode-collapse failure modes are capacity-floor artifacts.} A v1.7 partial-FT recipe at 0.8B produced an apparent $+0.150$ $\Delta$ but with collapsed \BL{} ($0.465$); the same SFT shape at 4B produces no analogous failure ($0/52$ phantom skill-block references in general chat).
   \item \textbf{Generality is preserved.} A 52-prompt OOD probe shows v2.0 (4B+LoRA) matches base 4B on factual recall ($34/34$ HIT), eliminates a calibration regression observed in v1.9 (2B+LoRA), and produces no format lock-in despite three epochs of training on a single response shape.
 \end{enumerate}
@@ -169,7 +169,35 @@ Same recipe at LoRA $r{=}32$/$\alpha{=}64$ on \Qwenf. Result: \BL{} $0.835$ / \C
 
 The pre-SFT 4B attribution control was attempted but failed: base \Qwenf{} reasons correctly on bench tasks (spot-checks confirm step-by-step reasoning that reaches the right answer) but does not reliably emit the literal \texttt{ANSWER:} format the deterministic judge requires. With 88.5\% of the bench using the deterministic judge, pre-SFT 4B scores $\sim\!0/200$, which is a format-compliance artifact rather than a reasoning measurement. The v2.0 SFT contribution at 4B is therefore bounded by the saturation trend (plausibly $0.03$--$0.10$ \CU) but not directly measured on this bench.
 
-The v1.9$\to$v2.0 deltas ($\Delta$BL $+0.085$, $\Delta$CU $+0.055$, $\Delta\Delta -0.030$) are unaffected by this artifact since both v1.9 and v2.0 are SFT-trained format-compliant students. The shrinkage of the SFT-attributable $\Delta$ from $+0.075$ to $+0.045$ (within noise) is the bench-saturation signal: as base-model capability grows, the procedure adds less to what the model can already do.
+The v1.9$\to$v2.0 deltas ($\Delta$BL $+0.085$, $\Delta$CU $+0.055$, $\Delta\Delta -0.030$) are unaffected by this artifact since both v1.9 and v2.0 are SFT-trained format-compliant students. The shrinkage of the SFT-attributable $\Delta$ from $+0.075$ to $+0.045$ is consistent with bench saturation; § \ref{sec:stats} shows it is not statistically distinguishable at $n{=}200$.
+
+\subsection{Statistical tests of the per-model and cross-model $\Delta$ estimates}\label{sec:stats}
+
+Each task is run in both \BL{} and \CU{} conditions, so the verdicts are paired. We run McNemar's test (continuity-corrected $\chi^2$ for $n_{\mathrm{discordant}} \geq 25$, exact binomial otherwise) per model, and a paired bootstrap (10{,}000 resamples of \texttt{task\_uid} with replacement) for 95\% CIs on $\Delta$. Cross-model: we resample v1.9 and v2.0 independently and report a one-sided bootstrap test for $H_0\!: \Delta_{\mathrm{v1.9}} \leq \Delta_{\mathrm{v2.0}}$ (the direction predicted by the saturation hypothesis).
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+& $\Delta$ & McNemar two-sided $p$ & bootstrap 95\% CI on $\Delta$ \\
+\midrule
+v1.9 & $+0.0750$ & $\chi^2{=}5.60,\ p{=}0.018^{*}$  & $[+0.020,\ +0.130]$ \\
+v2.0 & $+0.0450$ & exact, $p{=}0.049^{*}$            & $[+0.005,\ +0.085]$ \\
+\bottomrule
+\end{tabular}
+\caption{Per-model paired tests on the procedural-$\Delta$. Both models have a positive $\Delta$ that is individually distinguishable from zero at $\alpha{=}0.05$ ($^{*}$), although v2.0's $p{=}0.049$ would not survive Bonferroni correction across the two tests.}
+\label{tab:stats-per-model}
+\end{table}
+
+For the cross-model saturation test:
+\begin{itemize}[leftmargin=*,nosep]
+  \item $\Delta_{\mathrm{v1.9}} - \Delta_{\mathrm{v2.0}} = +0.030$
+  \item Paired-bootstrap 95\% CI on the difference: $[-0.040,\ +0.100]$
+  \item One-sided bootstrap $p$ for $H_0\!: \Delta_{\mathrm{v1.9}} \leq \Delta_{\mathrm{v2.0}}\!: p = 0.225$
+\end{itemize}
+
+The CI on the difference includes zero and the one-sided $p$ is $0.225$. The $\Delta$-shrinkage from v1.9 to v2.0 is consistent with bench saturation in direction but is \emph{not statistically distinguishable from sampling noise at the present sample size}. Confirming saturation would require either (a) larger $n$ ($\sim 800$--$1200$ per condition for $80\%$ power to detect an effect of this magnitude), (b) a bench where the procedural lift is 2--3$\times$ larger so the absolute $\Delta$ is more robustly measurable, or (c) multi-seed evaluation to reduce per-condition variance.
 
 \subsection{Generality probe: v2.0 preserves out-of-distribution behavior}
 We probe v1.9, v2.0, base 2B, and base 4B with a 52-prompt OOD battery (10 generality + 42 factual including 8 false-premise ``trick'' prompts) under a generic system prompt (not the \textsc{solver} prompt; Table~\ref{tab:generality}).
@@ -223,7 +251,7 @@ The five 0.8B variants are individually publishable as negative results --- corp
 \begin{enumerate}[leftmargin=*]
   \item \textbf{Pre-SFT 0.8B was run via Ollama}, not the same HuggingFace transformers path used for 2B/4B. Quantization and chat-template differences may inflate or deflate its baseline relative to a strictly-comparable HF run. We did not re-bench 0.8B under the same path.
   \item \textbf{Pre-SFT 4B is unmeasured on this bench.} The format-compliance artifact prevents direct attribution of v2.0's lift between base scaling and SFT contribution.
-  \item \textbf{$n{=}200$ per condition limits the resolution of the $\Delta$ statistic.} Per-condition binomial standard error is $\sim\!3$\,pp, so $\Delta$ uncertainty is $\sim\!5$\,pp. The v1.9 and v2.0 $\Delta$ values ($+0.075$ and $+0.045$) are within one standard error of each other; the bench-saturation claim is directional rather than statistically distinguishable at this sample size.
+  \item \textbf{$n{=}200$ per condition limits the resolution of the $\Delta$ statistic.} Per-condition binomial standard error is $\sim\!3$\,pp; per-model McNemar's tests confirm v1.9 ($p{=}0.018$) and v2.0 ($p{=}0.049$) each have a positive $\Delta$ distinguishable from zero, but the cross-model bootstrap test for the saturation hypothesis fails ($p{=}0.225$ one-sided, 95\% CI on $\Delta_{\mathrm{v1.9}} - \Delta_{\mathrm{v2.0}}$ is $[-0.040, +0.100]$). The $\Delta$ shrinkage is directional but not statistically supported at this $n$.
   \item \textbf{The bench tests single-skill-per-task application, not skill composition.} The original procedural-skills hypothesis posits compositional benefit (apply skill $A$ then skill $B$); the present bench cannot distinguish ``model uses procedure when shown'' from ``model would have applied roughly the right pattern anyway, because the task was synthesized to require exactly that skill.''
   \item \textbf{The SFT corpus is small (353 rows).} Whether scaling the corpus to $10\times$ would change the saturation curve at 4B is untested.
   \item \textbf{Attribution at 4B is bounded but not measured.} We rely on saturation-trend extrapolation for the 4B SFT contribution range ($0.03$--$0.10$ \CU).
@@ -232,7 +260,7 @@ The five 0.8B variants are individually publishable as negative results --- corp
 
 \section{Conclusion}
 
-Procedural-skill SFT works as a recipe for teaching a smaller language model to apply explicit procedures more effectively when shown --- but only at base sizes where the model already produces format-compliant reasoning. At 0.8B, five recipe variants establish that the SFT signal cannot exceed format-learning at this capacity. At 2B, the simplest recipe (LoRA $r{=}16$, 353 rows, 3 epochs) produces a measurable $+11.5$\,pp \CU{} lift attributable to SFT contribution and a $+5$\,pp differential procedural-$\Delta$ lift, with clean attribution from a pre-SFT 2B control. At 4B, the same recipe lifts to \CU{} $0.880$ with shrinking $\Delta$, indicating bench saturation and limiting further interpretation without harder benchmarks.
+Procedural-skill SFT works as a recipe for teaching a smaller language model to apply explicit procedures more effectively when shown --- but only at base sizes where the model already produces format-compliant reasoning. At 0.8B, five recipe variants establish that the SFT signal cannot exceed format-learning at this capacity. At 2B, the simplest recipe (LoRA $r{=}16$, 353 rows, 3 epochs) produces a measurable $+11.5$\,pp \CU{} lift attributable to SFT contribution and a $+5$\,pp differential procedural-$\Delta$ lift, with clean attribution from a pre-SFT 2B control. At 4B, the same recipe lifts to \CU{} $0.880$ with $\Delta$ at $+0.045$ (still individually distinguishable from zero, McNemar $p{=}0.049$); the directional shrinkage from v1.9's $+0.075$ is consistent with bench saturation but does not survive a paired-bootstrap test at $n{=}200$ ($p{=}0.225$ one-sided), so the saturation claim is suggestive rather than confirmed and motivates either larger-$n$ runs or harder benches for follow-up work.
 
 The negative-result iteration sequence and the bench format-sensitivity finding both constrain the interpretation of similar SFT-on-procedural-demonstrations claims. We argue future work in this area should (i) include a pre-SFT base-model control evaluated under format-tolerant scoring, (ii) measure compositional skill application rather than single-skill template-matching, and (iii) bound the SFT contribution within statistical noise at the chosen sample size before claiming model-size-conditional results.
 
