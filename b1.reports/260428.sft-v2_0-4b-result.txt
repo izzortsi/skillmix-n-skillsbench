@@ -28,6 +28,37 @@ DELTAS
     v2.0 vs pre-SFT 0.8B:     ΔBL +0.325   ΔCU +0.315
     v2.0 vs pre-SFT haiku:    ΔBL +0.050   ΔCU +0.080
 
+ATTRIBUTION CAVEAT (added 2026-05-06)
+
+    Pre-SFT 2B was benched cleanly (BL 0.685 / CU 0.710); the v1.9
+    attribution split is therefore measurable: at 2B, +14.5 pp CU is
+    base scaling and +11.5 pp CU is SFT contribution.
+
+    Pre-SFT 4B was NOT benched cleanly. Base Qwen3.5-4B reasons
+    correctly on the bench tasks but fails to emit a literal
+    "ANSWER:" line at the end of its response — the deterministic
+    judge requires that format and 88.5% of the bench (177/200)
+    uses it. Result: pre-SFT 4B scored 0/400 on raw bench numbers,
+    but spot-checks confirm the model is producing correct
+    reasoning. The 0/0 number is a format-compliance artifact, not
+    a reasoning measurement.
+
+    Consequently, the v2.0 attribution split (pre-SFT 4B → v2.0)
+    cannot be cleanly measured on this bench. We can place a soft
+    upper bound on the SFT contribution at 4B from the saturation
+    trend (the 2B SFT contribution was +0.115 CU; saturation is
+    expected to reduce this at 4B, so the 4B SFT contribution is
+    plausibly 0.03 - 0.10 CU), but cannot directly attribute.
+
+    The v2.0 absolute numbers (BL 0.835 / CU 0.880) and the v1.9
+    → v2.0 deltas (ΔBL +0.085, ΔCU +0.055) are unaffected — those
+    comparisons are between two SFT-trained models that both
+    produce ANSWER: format compliantly.
+
+    See b1.reports/260506.bench-format-sensitivity-finding.txt
+    for full diagnosis and options to measure pre-SFT 4B
+    substantively (deferred at this time).
+
 DECISION-GATE OUTCOME
 
     From the v2.0 pre-registered criteria

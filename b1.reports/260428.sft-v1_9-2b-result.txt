@@ -26,6 +26,37 @@ DELTAS
     v1.9 vs post-SFT v1:      ΔBL +0.115   ΔCU +0.240
     v1.9 vs pre-SFT haiku:    ΔBL -0.035   ΔCU +0.025
 
+ATTRIBUTION SPLIT (added 2026-05-06 with pre-SFT 2B control)
+
+    Pre-SFT 2B (Qwen3.5-2B base, no SFT, same SOLVER prompt) was
+    benched against the same 200-task holdout to attribute v1.9's
+    lift between base-model scaling and SFT contribution:
+
+                                BL pass    CU pass    Δ
+        Pre-SFT 0.8B            0.510      0.565      +0.055
+        Pre-SFT 2B   (NEW)      0.685      0.710      +0.025
+        v1.9 (2B+LoRA)          0.750      0.825      +0.075
+
+    Base scaling 0.8B → 2B:        ΔBL +0.175   ΔCU +0.145
+    SFT contribution at 2B:         ΔBL +0.065   ΔCU +0.115
+    SFT differential lift (Δ):      pre-SFT 2B Δ = +0.025
+                                    v1.9 Δ        = +0.075
+                                    SFT Δ-lift    = +0.050
+
+    The original v1.9 framing ("model size unlocks the ceiling")
+    overstated the SFT contribution by attributing the full v1.9 - v1
+    gap (+24 pp CU) to model size. With the proper pre-SFT 2B control,
+    the split is: +14.5 pp from base scaling alone, +11.5 pp from SFT
+    on top of base 2B. SFT does substantial work — it just looked like
+    base scaling because the comparison was against pre-SFT 0.8B.
+
+    Bench-eval-pre-sft-4b ran into a format-compliance artifact: base
+    Qwen3.5-4B reasons correctly but doesn't reliably emit literal
+    "ANSWER:" lines, so the deterministic judge scores it ~0/200. The
+    v2.0 attribution split is therefore bounded but not measurable on
+    this bench. See b1.reports/260506.bench-format-sensitivity-
+    finding.txt.
+
 DECISION-GATE OUTCOME (from 260426 report)
 
     WIN: post-v1.9 CU > 0.65 AND CU > BL by >=5 pp

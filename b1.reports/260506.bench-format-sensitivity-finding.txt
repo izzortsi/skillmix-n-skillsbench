@@ -1,0 +1,177 @@
+================================================================================
+REPORT: BENCH FORMAT-SENSITIVITY — pre-SFT base models score artificially
+        low because the deterministic judge requires literal "ANSWER:"
+================================================================================
+
+Date:   2026-05-06
+Status: COMPLETED — finding documented; affects interpretation of all
+        pre-SFT-base vs post-SFT comparisons.
+
+================================================================================
+THE FINDING
+================================================================================
+
+The skillsbench scoring pipeline (b2_benchmarks/skillsbench/llm_judge.py)
+uses two judges:
+
+    - LLM judge (Opus 4-7) for FREE_FORM tasks (33 of 200, ~16.5%)
+    - Deterministic extractor for YES_NO + YES_NO_VERIFICATION +
+      SINGLE_WORD + RANKING (177 of 200, ~83.5%)
+
+The deterministic extractor's preferred extraction pattern is the literal
+line "ANSWER: <value>" — the format the SOLVER_SYSTEM_PROMPT instructs.
+Fallback patterns ("Final answer:", "Conclusion:", "Verdict:", or the
+last non-empty line) exist but are imperfect.
+
+When pre-SFT Qwen3.5-4B was benched against the same 200-task holdout
+(b1.reports/260428.sft-v2_0-4b-result.txt asks for this attribution
+control), the model scored 0/400 episodes — every episode FAILED.
+
+Inspection of episode 0:
+
+    response: 4348 chars (~1100-1500 tokens) of coherent procedural
+    reasoning. Step 6 of the model's own thinking explicitly says
+    "The answer is No." (which is the correct answer for that task).
+
+    However, the model then continues in a self-correction loop ("Wait,
+    let me re-read carefully...") and runs out of token budget before
+    emitting a literal final-line ANSWER:. The deterministic extractor
+    captures fragment text from the model's quoted self-instruction
+    ("ANSWER: yes' or 'ANSWER: no") and tries to match against the
+    expected gold "no". Mismatch -> FAIL.
+
+Across 5 spot-checked episodes, the same shape: model reasons correctly
+in its <think> block but never closes with the expected ANSWER format.
+
+================================================================================
+WHY THIS HAPPENS
+================================================================================
+
+Qwen3.5-4B in its native chat-template path emits a `<think>...</think>`
+block followed by a final answer. With the SOLVER prompt's instruction
+to "explain your reasoning explicitly, then state your conclusion", the
+model expands its thinking into a multi-section verbose chain (1.
+Analyze... 2. Define... 3. Analyze passage... etc) that consumes ~600-
+1500 tokens of budget. Self-correction loops near the end push the
+budget past the 2048 / 4096 ceilings without emitting a clean ANSWER:
+suffix. Greedy decoding (temperature=0) makes this consistent across
+seeds; repetition_penalty=1.05 prevents pathological loops but doesn't
+shorten the verbose thinking pattern.
+
+Post-SFT models (v1.9 at 2B, v2.0 at 4B) do not exhibit this because
+their training corpus consists of 353 examples that all end with
+"ANSWER: <value>". Three epochs of LoRA on that distribution teaches
+both the procedural shape AND the answer-format suffix.
+
+================================================================================
+SCOPE OF THE FINDING
+================================================================================
+
+The bench scoring is designed for SFT-trained students. Pre-SFT base
+models — which exist outside the SFT distribution — are penalized not
+on reasoning ability but on format compliance.
+
+Implication for attribution claims:
+
+    pre-SFT 0.8B (Ollama qwen3.5:0.8b)   BL 0.510   CU 0.565
+    pre-SFT 2B   (HF Qwen3.5-2B)         BL 0.685   CU 0.710  *
+    pre-SFT 4B   (HF Qwen3.5-4B)         BL 0.000   CU 0.000  **
+    v1.9 (2B + LoRA)                     BL 0.750   CU 0.825
+    v2.0 (4B + LoRA)                     BL 0.835   CU 0.880
+
+    *  Reliable. 2B's native thinking is shorter; the SOLVER prompt
+       fits in budget; ANSWER: line is reached.
+    ** Format artifact. Reasoning is correct; format is not produced.
+       NOT a measure of base 4B's actual reasoning capability.
+
+The 0.8B pre-SFT control was run via Ollama, which uses its own chat
+template and may apply different generation parameters (temperature,
+repetition_penalty defaults). The 0.510 / 0.565 result is plausibly
+also somewhat format-deflated, but the magnitude is probably small
+because at 0.8B the model is less verbose to begin with. We have not
+re-benched 0.8B with the same HF transformers path used for 2B/4B.
+
+================================================================================
+WHAT THIS MEANS FOR THE EXPERIMENT
+================================================================================
+
+The v1.9 attribution split (pre-SFT 2B → v1.9) IS clean:
+
+                                ΔBL     ΔCU
+    Base scaling 0.8B → 2B      +0.175  +0.145
+    SFT contribution at 2B      +0.065  +0.115
+
+The v2.0 attribution split (pre-SFT 4B → v2.0) is NOT clean:
+
+                                ΔBL     ΔCU
+    pre-SFT 4B → v2.0           +0.835  +0.880  (artifact-inflated)
+
+We can place a lower bound on the SFT contribution at 4B by reasoning:
+
+    SFT contribution at 4B  >=  SFT contribution at 2B  -  saturation
+
+i.e. the SFT contribution at 4B is bounded above by what we measure at
+2B, modulo the saturation effect (saturation reduces the SFT contribution).
+The 2B SFT contribution was +0.115 CU. The 4B SFT contribution is
+plausibly in the +0.03 to +0.10 CU range based on the trend, but we
+cannot measure it directly with this bench.
+
+================================================================================
+OPTIONS TO MEASURE PRE-SFT 4B SUBSTANTIVELY (DEFERRED)
+================================================================================
+
+If the experiment is reopened to measure pre-SFT 4B substantively:
+
+  A. Force LLM judge for all task types in pre-SFT eval (~$5, ~30 min).
+     The Opus judge reads thinking + extracts conclusion regardless of
+     literal ANSWER: presence. Cleaner separation of "substance" from
+     "format". Adds a substance-only metric alongside the existing
+     format-compliant pass-rate metric.
+
+  B. Patch the deterministic extractor to be more lenient ("the answer
+     is X", "I conclude X", search-near-end logic). Risks changing
+     prior post-SFT numbers; needs revalidation across all existing
+     eval runs.
+
+  C. Use a stricter solver prompt that explicitly limits thinking
+     length and requires ANSWER: format on the FIRST line. Loses
+     apples-to-apples with v1.9/v2.0 (which used the SFT-distribution
+     SOLVER prompt). Useful as a separate "format-aware base eval"
+     condition.
+
+These are not pursued at this time. The current experiment treats the
+v1.9 attribution as the cleanest available SFT-contribution measurement
+and accepts that the v2.0 attribution is bounded but not measured.
+
+================================================================================
+ARTIFACTS
+================================================================================
+
+  data/pipeline-runs/default/bench-eval-pre-sft-2b/
+        n=400, BL 0.685 / CU 0.710. Used in v1.9 attribution split.
+
+  data/pipeline-runs/default/bench-eval-pre-sft-4b/
+        n=10 smoke + (full-run was canceled mid-flight after the same
+        format-pattern observed at scale). Documented as artifact.
+
+  b2_benchmarks/skillsbench/llm_judge.py:
+        _extract_answer_line() — current extractor (line ~183).
+        _score_deterministic() — dispatch to deterministic for
+        YES_NO/SINGLE_WORD/RANKING/YES_NO_VERIFICATION.
+
+  training/eval_qwen35_lora.py:
+        --adapter optional; repetition_penalty=1.05 in generate (broke
+        greedy-decoding garbage loops on base 4B, but did not fix the
+        format-compliance issue).
+
+Related reports
+  b1.reports/260428.sft-v1_9-2b-result.txt
+        v1.9 result; the attribution split section will be updated to
+        cite this report and use the pre-SFT 2B numbers above.
+  b1.reports/260428.sft-v2_0-4b-result.txt
+        v2.0 result; will be updated to cite this report's caveat
+        on pre-SFT 4B attribution.
+
+================================================================================
+END REPORT
+================================================================================

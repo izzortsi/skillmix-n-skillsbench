@@ -340,6 +340,16 @@ bench saturates at 4B+; further model scaling will lift absolutes
 but Δ will keep compressing. The next bottleneck is the bench, not
 the model.
 
+**Attribution split (added 2026-05-06):** pre-SFT 2B controls (BL 0.685
+/ CU 0.710) revealed that v1.9's lift over pre-SFT 0.8B is +14.5 pp
+CU base-scaling + 11.5 pp CU SFT contribution — both substantial. Pre-SFT
+4B could not be benched cleanly: the deterministic judge requires literal
+"ANSWER:" lines that base 4B doesn't emit reliably (it reasons correctly
+but runs out of token budget mid-thinking-out-loud). v2.0's attribution
+split is therefore bounded but not measured on this bench; the bench
+itself is format-sensitive in a way that penalizes pre-SFT base models.
+See [`b1.reports/260506.bench-format-sensitivity-finding.txt`](b1.reports/260506.bench-format-sensitivity-finding.txt).
+
 Findings across v1-v1.8 are consolidated in
 [`b1.reports/260426.findings-pre-post-sft-iterations.txt`](b1.reports/260426.findings-pre-post-sft-iterations.txt);
 v1.9 result and v1.9 generality probe in
