@@ -62,50 +62,50 @@
   {
     "category": "logical",
     "name": "modus tollens",
-    "definition": "A valid argument form: from a conditional P→Q and the negation of Q, infer the negation of P. The contrapositive of modus ponens.",
+    "definition": "A valid argument form: from a conditional P\u2192Q and the negation of Q, infer the negation of P. The contrapositive of modus ponens.",
     "example": "A botanist states: 'If a sample is from genus Quercus, it has lobed leaves.' A new sample lacks any lobed leaves. By modus tollens, the sample is not from Quercus."
   },
   {
     "category": "logical",
     "name": "hypothetical syllogism",
-    "definition": "A valid argument form: from P→Q and Q→R, infer P→R. Chains conditional statements transitively to license a longer-range inference.",
+    "definition": "A valid argument form: from P\u2192Q and Q\u2192R, infer P\u2192R. Chains conditional statements transitively to license a longer-range inference.",
     "example": "If a tree is a Quercus alba, then it has lobed leaves; if it has lobed leaves, then it sheds in autumn. By hypothetical syllogism, if a tree is a Quercus alba, then it sheds in autumn."
   },
   {
     "category": "logical",
     "name": "disjunctive syllogism",
-    "definition": "A valid argument form: from a disjunction P∨Q and the negation of one disjunct ~P, infer the remaining disjunct Q. Requires the disjunction to be exhaustive.",
+    "definition": "A valid argument form: from a disjunction P\u2228Q and the negation of one disjunct ~P, infer the remaining disjunct Q. Requires the disjunction to be exhaustive.",
     "example": "A clinician reasons: the patient's pneumonia is either bacterial or viral. The blood culture and procalcitonin rule out bacterial. By disjunctive syllogism, the pneumonia is viral."
   },
   {
     "category": "logical",
     "name": "contrapositive",
-    "definition": "The transformation of a conditional P→Q into its logically equivalent form ~Q→~P. A statement and its contrapositive have identical truth conditions and license the same inferences.",
+    "definition": "The transformation of a conditional P\u2192Q into its logically equivalent form ~Q\u2192~P. A statement and its contrapositive have identical truth conditions and license the same inferences.",
     "example": "The rule 'if a permit is approved, the applicant has paid the fee' has contrapositive 'if the applicant has not paid the fee, the permit is not approved.' Either form supports denying a permit when the fee is unpaid."
   },
   {
     "category": "rhetorical",
     "name": "ad hominem",
     "definition": "An informal fallacy in which an argument is rebutted by attacking the character, motive, or attribute of the arguer rather than the substance of the argument itself.",
-    "example": "A senator counters a colleague's deficit analysis by saying 'of course you'd say that — your district benefits from defense contracts.' The substantive numerical claims are not engaged with at all."
+    "example": "A senator counters a colleague's deficit analysis by saying 'of course you'd say that \u2014 your district benefits from defense contracts.' The substantive numerical claims are not engaged with at all."
   },
   {
     "category": "rhetorical",
     "name": "straw man",
     "definition": "An informal fallacy in which an opponent's position is misrepresented in a weaker, easier-to-refute form, and the weakened version is then attacked as if it were the original.",
-    "example": "A scientist argues that a specific pesticide regulation is overly broad. A critic responds: 'so you want to let companies poison the water supply?' — substituting an extreme position for the actual nuanced one."
+    "example": "A scientist argues that a specific pesticide regulation is overly broad. A critic responds: 'so you want to let companies poison the water supply?' \u2014 substituting an extreme position for the actual nuanced one."
   },
   {
     "category": "rhetorical",
     "name": "false dilemma",
     "definition": "An informal fallacy in which only two options are presented as if they exhaust the alternatives, when in fact additional or intermediate options exist; also called a false dichotomy.",
-    "example": "A speaker insists 'either we ban gas-powered cars by 2030 or we accept catastrophic warming' — ignoring intermediate paths like phased transitions, hybrid adoption, or sectoral reductions."
+    "example": "A speaker insists 'either we ban gas-powered cars by 2030 or we accept catastrophic warming' \u2014 ignoring intermediate paths like phased transitions, hybrid adoption, or sectoral reductions."
   },
   {
     "category": "rhetorical",
     "name": "slippery slope",
     "definition": "An informal fallacy in which a chain of escalating consequences is asserted to follow from an initial action without adequate evidence that each step in the chain would actually occur.",
-    "example": "A debater claims that allowing same-day voter registration 'will lead to non-citizen voting, then to large-scale election fraud, then to the collapse of representative government' — without evidence linking each transition."
+    "example": "A debater claims that allowing same-day voter registration 'will lead to non-citizen voting, then to large-scale election fraud, then to the collapse of representative government' \u2014 without evidence linking each transition."
   },
   {
     "category": "reasoning",
@@ -117,7 +117,7 @@
     "category": "reasoning",
     "name": "anchoring bias",
     "definition": "A cognitive bias in which an initial reference value disproportionately influences subsequent numerical judgments, even when the anchor is arbitrary or irrelevant to the quantity being judged.",
-    "example": "A negotiator opens with $100,000. The counterparty's eventual offer of $80,000 feels like a major concession, even though the fair market value is closer to $50,000 — the opening anchor pulled the final number upward."
+    "example": "A negotiator opens with $100,000. The counterparty's eventual offer of $80,000 feels like a major concession, even though the fair market value is closer to $50,000 \u2014 the opening anchor pulled the final number upward."
   },
   {
     "category": "rhetorical",
@@ -165,7 +165,7 @@
     "category": "reasoning",
     "name": "base rate neglect",
     "definition": "A cognitive bias in which prior probability information (the base rate of an event in the population) is ignored or underweighted in favor of specific case information, producing systematically wrong probability judgments.",
-    "example": "A screening test for a rare disease is 99% accurate. A patient tests positive. Without considering that the disease only affects 1 in 10,000 people, an analyst concludes the patient likely has it — ignoring that most positives in this low-prevalence setting are false positives."
+    "example": "A screening test for a rare disease is 99% accurate. A patient tests positive. Without considering that the disease only affects 1 in 10,000 people, an analyst concludes the patient likely has it \u2014 ignoring that most positives in this low-prevalence setting are false positives."
   },
   {
     "category": "reasoning",
@@ -194,7 +194,7 @@
   {
     "category": "logical",
     "name": "necessary and sufficient conditions",
-    "definition": "A distinction in conditional logic. A necessary condition for X is something without which X cannot occur; a sufficient condition is something that, if present, guarantees X. The two are independent — a condition can be necessary without being sufficient, sufficient without being necessary, both, or neither.",
+    "definition": "A distinction in conditional logic. A necessary condition for X is something without which X cannot occur; a sufficient condition is something that, if present, guarantees X. The two are independent \u2014 a condition can be necessary without being sufficient, sufficient without being necessary, both, or neither.",
     "example": "In a graduate program, attending all lectures may be necessary to pass (you cannot pass without it) but not sufficient (you must also pass the exam). Identifying which kind of condition a rule states determines what counter-example refutes it."
   },
   {
@@ -219,12 +219,12 @@
     "category": "reasoning",
     "name": "regression to the mean",
     "definition": "A statistical phenomenon in which extreme observations tend to be followed by less extreme ones, because the original measurement included a temporary unusual component. Misattributing this rebound to an intervention is a common error.",
-    "example": "A school identifies the lowest-scoring 10% of students and gives them tutoring. On the next test, those students score higher on average. Some improvement may be from tutoring, but much would have occurred anyway — extreme low scores tend to drift upward toward the mean."
+    "example": "A school identifies the lowest-scoring 10% of students and gives them tutoring. On the next test, those students score higher on average. Some improvement may be from tutoring, but much would have occurred anyway \u2014 extreme low scores tend to drift upward toward the mean."
   },
   {
     "category": "reasoning",
     "name": "gambler's fallacy",
-    "definition": "A cognitive bias in which past outcomes of an independent random process are believed to influence future outcomes — for example, believing that a streak of one outcome makes the opposite outcome more likely on the next trial, when the trials are in fact independent.",
+    "definition": "A cognitive bias in which past outcomes of an independent random process are believed to influence future outcomes \u2014 for example, believing that a streak of one outcome makes the opposite outcome more likely on the next trial, when the trials are in fact independent.",
     "example": "A roulette table has shown red on the last seven spins. A bettor reasons that black is 'due' and bets heavily on it. The wheel has no memory; each spin remains 18/38 for either color regardless of history."
   },
   {
@@ -237,6 +237,126 @@
     "category": "reasoning",
     "name": "hindsight bias",
     "definition": "A cognitive bias in which, after an outcome becomes known, people overestimate how predictable that outcome was beforehand. Often expressed as 'I knew it all along.'",
-    "example": "After a startup fails, commentators describe the warning signs as obvious — crowded niche, inexperienced founder, short runway. Before the failure, those same signs were equally consistent with eventual success and were not flagged by the same commentators."
+    "example": "After a startup fails, commentators describe the warning signs as obvious \u2014 crowded niche, inexperienced founder, short runway. Before the failure, those same signs were equally consistent with eventual success and were not flagged by the same commentators."
+  },
+  {
+    "category": "arithmetic",
+    "name": "multi step word problem",
+    "definition": "A numerical reasoning task that requires identifying multiple intermediate quantities, deciding which arithmetic operations connect them, and combining them into a final answer.",
+    "example": "A bus has 24 seats. 14 passengers board at stop 1, 7 leave and 9 board at stop 2, and at stop 3 half of those onboard exit. How many remain? Answer: (14 - 7 + 9) / 2 = 8."
+  },
+  {
+    "category": "arithmetic",
+    "name": "fraction percentage conversion",
+    "definition": "Converting between fractions, decimals, and percentages, and applying the conversion to compute a quantity.",
+    "example": "If a price drops from $80 to $60, the discount is 20/80 = 1/4 = 0.25 = 25%."
+  },
+  {
+    "category": "arithmetic",
+    "name": "unit conversion",
+    "definition": "Translating a measurement from one unit system to another by applying conversion factors, including chained conversions.",
+    "example": "A car traveling 90 km/h covers 90,000 m in 3,600 s, i.e. 25 m/s."
+  },
+  {
+    "category": "lexical",
+    "name": "synonym selection in context",
+    "definition": "Choosing among candidate synonyms the one that best matches a target word's meaning given its surrounding sentence, accounting for register and connotation.",
+    "example": "In 'her terse reply ended the meeting', the best synonym for 'terse' is 'curt', not 'silent' or 'rude'."
+  },
+  {
+    "category": "lexical",
+    "name": "word meaning from context",
+    "definition": "Inferring the meaning of an unfamiliar or polysemous word from the surrounding sentence and broader passage cues, without external lookup.",
+    "example": "'The lawyer's peroration moved several jurors to tears' \u2014 peroration here means the closing emotional summation of a speech, inferred from 'lawyer' and 'moved jurors to tears'."
+  },
+  {
+    "category": "grammatical",
+    "name": "subject verb agreement",
+    "definition": "Identifying when a verb's number does not match its grammatical subject, particularly across intervening phrases that obscure the subject.",
+    "example": "'The list of items, including several rare books, are on the desk' \u2014 error: 'list' is singular, so the verb should be 'is'."
+  },
+  {
+    "category": "grammatical",
+    "name": "dangling modifier",
+    "definition": "Identifying when a participial or descriptive phrase at the start of a sentence has no logical subject in the main clause, producing an absurd reading.",
+    "example": "'Walking through the park, the cherry blossoms were stunning' \u2014 dangling: the cherry blossoms aren't walking; rewrite as 'Walking through the park, I found the cherry blossoms stunning.'"
+  },
+  {
+    "category": "discourse",
+    "name": "key point extraction",
+    "definition": "Identifying the main claim or argument of a passage and distinguishing it from supporting evidence, qualifications, or peripheral remarks.",
+    "example": "Passage about a study showing exercise reduces anxiety, with caveats on sample size and confounders. Key point: 'Exercise was associated with reduced anxiety in this sample, though the authors caution that the small N and lack of randomization limit causal claims.'"
+  },
+  {
+    "category": "semantic role",
+    "name": "agent identification",
+    "definition": "Determining the entity that performs the action expressed by a verb in a sentence, distinguishing it from patients, instruments, and beneficiaries \u2014 including in passive constructions.",
+    "example": "'The trophy was awarded to Maria by the committee' \u2014 agent: 'the committee'; patient: 'the trophy'; beneficiary: 'Maria'."
+  },
+  {
+    "category": "semantic role",
+    "name": "verb tense identification",
+    "definition": "Naming the tense, aspect, and voice of a finite verb form in a sentence, including compound forms like past perfect progressive or future passive.",
+    "example": "'The contract had been being negotiated for months' \u2014 past perfect progressive passive."
+  },
+  {
+    "category": "arithmetic",
+    "name": "proportional reasoning",
+    "definition": "Setting up and solving a proportion to compute an unknown quantity from a given ratio, including rate problems, scaling, and density-style mappings.",
+    "example": "If 3 machines produce 240 widgets in 8 hours, then 5 machines (same rate) produce 240 / (3 \u00d7 8) \u00d7 5 \u00d7 8 = 400 widgets in 8 hours."
+  },
+  {
+    "category": "lexical",
+    "name": "antonym recognition",
+    "definition": "Selecting the word that most directly opposes the meaning of a target word in a given context, distinguishing true antonyms from related-but-not-opposite terms.",
+    "example": "In 'his prodigal spending alarmed the family', the antonym of 'prodigal' is 'frugal' (not 'generous' or 'careful')."
+  },
+  {
+    "category": "lexical",
+    "name": "polysemy disambiguation",
+    "definition": "Determining which of a word's multiple established senses is intended in a particular sentence, using surrounding lexical and semantic context.",
+    "example": "'The bank approved the loan after reviewing the statements' \u2014 'bank' here is the financial institution sense, not the riverbank sense, signaled by 'approved', 'loan', 'statements'."
+  },
+  {
+    "category": "grammatical",
+    "name": "parallelism violation",
+    "definition": "Identifying items in a list or series that do not share the same grammatical form (mixing nouns with gerunds, infinitives with finite verbs, etc.) and proposing a parallel revision.",
+    "example": "'She likes hiking, to swim, and biked on weekends' \u2014 violates parallelism; corrected: 'She likes hiking, swimming, and biking.'"
+  },
+  {
+    "category": "grammatical",
+    "name": "tense consistency",
+    "definition": "Detecting unjustified tense shifts across clauses or sentences within a passage, distinguishing them from intentional shifts that reflect a temporal change.",
+    "example": "'The detective entered the room and notices a faint smell of bleach' \u2014 unjustified shift from past to present; corrected: '...entered... and noticed...'."
+  },
+  {
+    "category": "discourse",
+    "name": "one sentence summary",
+    "definition": "Producing a single sentence that captures the central claim or main event of a passage, constrained to omit supporting detail and qualifications while remaining accurate.",
+    "example": "Passage: a 600-word account of how a city introduced congestion pricing, including history, opposition, and revenue figures. Summary: 'The city implemented congestion pricing in 2024, generating $480M in its first year while drawing organized opposition from outer-borough commuters.'"
+  },
+  {
+    "category": "discourse",
+    "name": "topic sentence identification",
+    "definition": "Locating the sentence within a paragraph that states the paragraph's main idea, distinguishing it from supporting evidence, transitions, and asides.",
+    "example": "In a paragraph that opens with 'Ocean acidification poses an existential threat to coral reefs.' followed by four sentences of pH data and reef-decline figures, the first sentence is the topic sentence."
+  },
+  {
+    "category": "discourse",
+    "name": "argument structure mapping",
+    "definition": "Identifying the premises, intermediate conclusions, and final conclusion of an argument in a passage, distinguishing claims from rhetorical framing.",
+    "example": "'Since vaccinated employees rarely require hospitalization (premise 1), and the office insurer charges 30% more for unvaccinated staff (premise 2), our HR policy should require proof of vaccination (conclusion).'"
+  },
+  {
+    "category": "semantic role",
+    "name": "patient identification",
+    "definition": "Identifying the entity that undergoes or is affected by the action expressed by a verb, distinguishing it from agents, instruments, and beneficiaries \u2014 particularly across passive and dative constructions.",
+    "example": "'The contract was signed by the partners with a fountain pen' \u2014 patient: 'the contract'; agent: 'the partners'; instrument: 'a fountain pen'."
+  },
+  {
+    "category": "semantic role",
+    "name": "voice classification",
+    "definition": "Classifying a clause as active, passive, or middle voice based on the syntactic relationship between subject and verb, including identifying agent demotion in passives and reflexive constructions.",
+    "example": "'The package was delivered yesterday' \u2014 passive (subject is patient; agent is omitted/optional). 'The window broke during the storm' \u2014 middle (no overt agent; verb is intransitive use of a transitive root)."
   }
 ]

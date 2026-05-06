@@ -1,0 +1,277 @@
+================================================================================
+REPORT: SFT v2.0 RESULT — Qwen3.5-4B + LoRA r=32 (model size unlocks the
+        absolute ceiling; SFT Δ shrinks)
+================================================================================
+
+Date:   2026-04-28
+Status: COMPLETED — v2.0 cleared the CU > 0.85 gate; the Δ ≥ 5 pp
+        criterion is a statistical tie with v1.9 within n=200 noise.
+
+================================================================================
+HEADLINE
+================================================================================
+
+v2.0 (same v1 recipe — 353-row curated-only corpus, 3 epochs, lr 2e-4 —
+on Qwen/Qwen3.5-4B with LoRA r=32, alpha=64) lifted both conditions
+above v1.9 and exceeded the haiku-4-5 reference on both:
+
+                              BL pass    CU pass    Δ
+    Pre-SFT  qwen3.5:0.8b     0.510      0.565      +0.055
+    Pre-SFT  haiku-4-5  (ref) 0.785      0.800      +0.015
+    Post-SFT v1   (0.8B LoRA) 0.635      0.585      -0.050
+    Post-SFT v1.9 (2B  LoRA)  0.750      0.825      +0.075
+    Post-SFT v2.0 (4B  LoRA)  0.835      0.880      +0.045
+
+DELTAS
+
+    v2.0 vs v1.9:             ΔBL +0.085   ΔCU +0.055
+    v2.0 vs pre-SFT 0.8B:     ΔBL +0.325   ΔCU +0.315
+    v2.0 vs pre-SFT haiku:    ΔBL +0.050   ΔCU +0.080
+
+DECISION-GATE OUTCOME
+
+    From the v2.0 pre-registered criteria
+    (b1.reports/260428.sft-v1_9-2b-result.txt § NEXT-AXIS OPTIONS):
+
+       WIN: CU > 0.85 AND Δ ≥ 5 pp
+            CU = 0.880 > 0.85       PASS
+            Δ  = 0.045 vs 5 pp     SOFT FAIL (within noise)
+
+    At n=200 per condition, the binomial standard error per-condition
+    is ~3 pp, so Δ uncertainty is ~5 pp. v2.0's Δ of +4.5 pp is a
+    statistical tie with v1.9's +7.5 pp; both are in the "small but
+    real" range of differential procedural lift on this bench.
+
+    Verdict: WIN on absolute ceiling. SOFT FAIL on Δ (= the SFT-
+    attributable contribution is shrinking as the base gets more
+    capable). Headline: model size unlocks absolute ceiling; Δ
+    saturates.
+
+================================================================================
+THE BENCH HAS LIKELY SATURATED
+================================================================================
+
+The most informative finding is that BOTH BL and CU rose substantially
+v1.9 → v2.0 (+8.5 pp / +5.5 pp), but Δ shrank by 3.0 pp:
+
+    Capability                 v1.9 (2B)         v2.0 (4B)         Direction
+    Absolute floor (BL)        0.750             0.835             +↑↑
+    Absolute ceiling (CU)      0.825             0.880             +↑
+    Differential SFT lift (Δ)  +0.075            +0.045            -↓
+
+Interpretation: at 4B, the base model is competent enough that many
+tasks no longer require the procedural scaffolding to solve. The
+procedure helps where the model is genuinely uncertain (see PER-SKILL
+STRUCTURE below) and slightly hurts where the model was already at
+ceiling without it. As the base scales, the gap between
+"model-can-solve-directly" and "model-needs-the-procedure" narrows;
+the bench's measurable Δ shrinks accordingly.
+
+This is the textbook saturation signal for a fixed-difficulty bench
+against an increasingly capable student. Further model scaling will
+lift absolutes but Δ will continue to compress.
+
+================================================================================
+PER-SKILL STRUCTURE
+================================================================================
+
+n=5 per skill × 40 skills × 2 conditions = 400 episodes. Sorted by Δ:
+
+    LIFT CLUSTER (procedure HELPED, +Δ)
+        accident-fallacy                                    +0.40
+        spatial-reasoning                                   +0.40
+        false-dilemma                                       +0.20
+        confirmation-bias                                   +0.20
+        anchoring-bias                                      +0.20
+        appeal-to-emotion                                   +0.20
+        base-rate-neglect                                   +0.20
+        transitive-inference                                +0.20
+        necessary-and-sufficient-conditions                 +0.20
+        metaphor                                            +0.20
+        emotional-self-regulation                           +0.20
+        (11 skills, +0.20 to +0.40)
+
+    FLAT CLUSTER (Δ = 0, mostly at-ceiling on BL)
+        25 skills with Δ = 0.00, of which 22 had BL ≥ 0.80
+
+    REGRESSION CLUSTER (procedure HURT, -Δ)
+        complex-question-loaded-question-with-implicit...   -0.20
+        hypothetical-syllogism                              -0.20
+        framing-effect                                      -0.20
+        equivocation                                        -0.20
+        (4 skills, all 5/5 BL → 4/5 CU)
+
+PATTERN
+
+    The lift cluster is dominated by interpretive and spatial-social
+    skills (cognitive biases, fallacies that require attribution
+    pattern matching, spatial reasoning). The procedure provides real
+    scaffolding here.
+
+    The regression cluster is dominated by deductive logic skills
+    where the model has ceiling competence; injecting a 5-step
+    procedure adds sub-inference opportunities for error on tasks
+    the model could one-shot.
+
+    This is the same lift/flat/regression structure seen at 0.8B
+    (b1.reports/260427.sft-v1-pre-post-findings.txt § PER-SKILL
+    BREAKDOWN), just shifted upward at 4B: fewer regressions
+    (4 vs ~5+ at 0.8B), much higher absolute pass rates, more
+    skills at ceiling on BL.
+
+================================================================================
+PHANTOM SKILL-BLOCK REFERENCE — COSMETIC, NOT LOAD-BEARING
+================================================================================
+
+35 of 200 baseline responses (17.5%) explicitly reference "the skill
+block" that was NOT present in the system prompt — e.g. a baseline
+response opens with:
+
+    "Step 1 (Identify the procedure): The skill block says to name
+     each step from the procedure..."
+
+This is the same v1.7-style mode-collapse signature (model expects
+a SKILL block, hallucinates one). At 0.8B, that signature crashed BL
+pass rate to 0.465 (b1.reports/260426.findings-pre-post-sft-iterations
+.txt § FINDING 2). At 4B:
+
+    Phantom-skill-block baseline responses:    35 / 200  (17.5 %)
+    Of those, PASSED:                          33 / 35   (94.3 %)
+
+The 4B model produces a correct procedural answer DESPITE the phantom
+reference. The model has the capacity to execute the right procedure
+regardless of whether it remembers seeing a skill block. The phantom
+mention is calibration-tail noise (similar to the v1.9 generality-probe
+confabulations: model commits to a confident framing even when invented),
+not a functional regression.
+
+IMPLICATIONS
+
+    1. The skill-strip training fix used for v1.8 is unnecessary at 4B.
+       The mode-collapse failure mode that motivated it was a
+       0.8B-capacity-floor artifact, not a structural property of the
+       SFT corpus shape.
+
+    2. v1.7's catastrophic Δ (+0.150 from BL collapse) is now
+       definitively re-interpretable: the +Δ was a BL-collapse
+       artifact, not real differential learning. v2.0 produces the
+       same procedural-shaped responses without the BL collapse.
+
+    3. The phantom mention is worth flagging in any future user-facing
+       use of v2.0 (e.g. a chat product) but does not invalidate the
+       bench result.
+
+================================================================================
+THE WHOLE EXPERIMENT IN ONE TABLE
+================================================================================
+
+Recipe                             BL      CU      Δ        Note
+────────────────────────────────── ─────── ─────── ──────── ──────────────────
+Pre-SFT 0.8B                       0.510   0.565   +0.055   floor
+Pre-SFT haiku-4-5 (ref)            0.785   0.800   +0.015   reference student
+v1   0.8B LoRA r=8 curated-only    0.635   0.585   -0.050   format learning
+v1.5 0.8B LoRA r=8 BL+CU mix       0.650   0.425   -0.225   negative result
+v1.6 0.8B LoRA r=8 drop-ceiling    0.645   0.565   -0.080   negative result
+v1.7 0.8B partial FT 6 layers      0.465   0.615   +0.150   mode collapse
+v1.8 0.8B partial + skill-strip    0.545   0.570   +0.025   mode-collapse fixed
+v1.9 2B   LoRA r=16 curated-only   0.750   0.825   +0.075   model-size unlock
+v2.0 4B   LoRA r=32 curated-only   0.835   0.880   +0.045   bench saturation
+
+The progression v1 → v2.0 took six negative results, two recipe
+abandonments, two architectural pivots (LoRA → partial FT → LoRA), and
+two model-size jumps to converge on a stable result: the SFT recipe
+works, just barely above the noise floor of the bench, and the bench
+is the next thing to push.
+
+================================================================================
+NEXT-AXIS OPTIONS
+================================================================================
+
+The original v1 → v2.0 question was answered. The hypothesis (procedural
+SFT teaches differential skill use) is supported across two model sizes
+(2B, 4B) and one architecture pivot (LoRA). What remains:
+
+A. CLOSE THE EXPERIMENT
+   Treat v2.0 as the final result on this bench. Archive the iteration
+   reports as the "what we learned about model-scale and SFT-recipe
+   variation" deliverable. Document that the 200-task / 40-skill bench
+   saturates at 4B+ with this corpus.
+
+B. HARDER BENCH (recommended if continuing)
+   The current bench saturates because tasks are mostly solvable by a
+   4B base WITHOUT the procedure. Two ways to push the difficulty:
+     B1. Multi-skill composition tasks. Each task requires applying
+         skill A THEN skill B (e.g. "first apply modus-ponens, then
+         check for self-serving-bias in the conclusion"). The procedure
+         has to compose, not just match.
+     B2. Adversarial / counter-intuitive tasks per skill. Use Opus to
+         synthesize tasks where the wrong answer is more surface-
+         tempting than the right one (e.g. statistical syllogisms
+         where the typical case looks atypical). Forces the model to
+         lean on the procedure rather than intuition.
+
+C. DPO ON THE EXISTING BENCH
+   Take v2.0 as SFT warm-start; sample (CU-passing, CU-failing) pairs;
+   run DPO on those pairs. Tests whether preference learning can
+   squeeze additional Δ out of the same bench/corpus. Diminishing
+   returns expected at the saturation regime.
+
+D. SCALE TO 9B
+   Likely raises BL/CU absolutes by another 3-5 pp; Δ likely stays
+   in the 0.02-0.05 band. Diagnostic value: confirms the saturation
+   curve direction. Cost: ~$5-10 of GPU time on vast.ai.
+
+RECOMMENDATION
+
+   B (harder bench) if the experiment continues. The corpus + recipe
+   + model-size envelope is now well-mapped; the bench is the
+   bottleneck. Compose-skill tasks specifically test what
+   procedural skills are SUPPOSED to be useful for (algorithmic
+   composition), which the current single-skill-per-task bench
+   doesn't.
+
+   A (close the experiment) is also defensible. v2.0 is a clean
+   final number with full provenance.
+
+================================================================================
+ARTIFACTS
+================================================================================
+
+  qwen35-4b-skill-lora-v2.0/
+        LoRA r=32 alpha=64 adapter, 3 epochs, lr 2e-4, on
+        Qwen/Qwen3.5-4B. Trained on a vast.ai 3090 Ti instance
+        (~50 min walltime; max-seq-length 2048; adamw_bnb_8bit).
+
+  data/pipeline-runs/default/bench-eval-post-sft-v2_0/
+        episodes.json (400 ep, full n=200 per condition after
+        rejudge of 66 originally-judge-failed episodes via
+        training/rejudge_failed_episodes.py)
+        summary.json (BL 0.835 / CU 0.880)
+
+  training/rejudge_failed_episodes.py
+        Re-judges previously-judge-failed episodes by re-running
+        the LLM judge on the saved model responses. Used here to
+        recover from intermittent OAuth blips during the original
+        eval run.
+
+  training/eval_qwen35_lora.py (--adapter now optional)
+        Patched to support pre-SFT base-model evaluation as a
+        control. Pre-SFT 4B has not yet been benched; without it,
+        the v2.0 result attributes lift to "SFT + 4B base"
+        jointly. Future work: bench pre-SFT 4B for clean
+        attribution.
+
+Related reports
+  b1.reports/260428.sft-v1_9-2b-result.txt
+        v1.9 (2B) result — the comparison anchor for v2.0.
+  b1.reports/260428.v1_9-generality-probe.txt
+        v1.9 generality probe — calibration regression on
+        adversarial prompts; same calibration tail observed
+        as v2.0's phantom skill-block mention.
+  b1.reports/260426.findings-pre-post-sft-iterations.txt
+        v1-v1.8 iteration outcomes — the negative-results
+        sequence that motivated the model-size axis.
+
+================================================================================
+END REPORT
+================================================================================

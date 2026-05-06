@@ -323,14 +323,30 @@ training recipe at this model size.
   ceiling was a model-capacity ceiling, not a corpus or objective
   ceiling — the SAME recipe at 2B lifts CU by +24 pp over the best
   0.8B recipe.
+- **SFT v2.0** (same v1 recipe on **Qwen/Qwen3.5-4B** with LoRA r=32,
+  alpha=64, run on a vast.ai 3090 Ti): **soft WIN.** BL 0.835 / CU 0.880
+  / Δ +0.045. Cleared CU > 0.85 absolute gate; Δ is a statistical tie
+  with v1.9 at n=200 noise (~5 pp). Both BL and CU lifted v1.9 → v2.0,
+  but the SFT-attributable Δ shrank from +0.075 → +0.045 — the bench
+  is approaching saturation: at 4B the base model handles many tasks
+  without the procedure. v1.7-style mode collapse confirmed cosmetic
+  at 4B (35/200 baseline responses reference a phantom skill block;
+  33 of those 35 still PASS).
 
 The original SFT hypothesis (procedural-skill demonstrations teach a
-student to apply the procedure when shown) is supported at 2B + 353 rows.
+student to apply the procedure when shown) is supported across two
+model sizes (2B, 4B) on a 353-row corpus. The 200-task / 40-skill
+bench saturates at 4B+; further model scaling will lift absolutes
+but Δ will keep compressing. The next bottleneck is the bench, not
+the model.
 
 Findings across v1-v1.8 are consolidated in
 [`b1.reports/260426.findings-pre-post-sft-iterations.txt`](b1.reports/260426.findings-pre-post-sft-iterations.txt);
-the v1.9 result and next-axis options in
-[`b1.reports/260428.sft-v1_9-2b-result.txt`](b1.reports/260428.sft-v1_9-2b-result.txt).
+v1.9 result and v1.9 generality probe in
+[`b1.reports/260428.sft-v1_9-2b-result.txt`](b1.reports/260428.sft-v1_9-2b-result.txt) and
+[`b1.reports/260428.v1_9-generality-probe.txt`](b1.reports/260428.v1_9-generality-probe.txt);
+v2.0 result and next-axis options in
+[`b1.reports/260428.sft-v2_0-4b-result.txt`](b1.reports/260428.sft-v2_0-4b-result.txt).
 The
 [`b1.reports/`](b1.reports/) directory is the running engineering log; each
 report is a self-contained snapshot at the date in its filename

@@ -103,12 +103,17 @@ def generate_response(
     inputs = tokenizer(text, return_tensors="pt", truncation=True, max_length=8192)
     inputs = {k: v.to(model.device) for k, v in inputs.items()}
 
+    # repetition_penalty=1.05 prevents greedy-decoding token loops that the
+    # raw base model is prone to on OOD-feeling prompts (e.g. SOLVER prompt
+    # against pre-SFT base, where the model is not in its instruction-tuned
+    # distribution). 1.05 is mild enough not to distort SFT'd-model output.
     with torch.inference_mode():
         out = model.generate(
             **inputs,
             max_new_tokens=max_new_tokens,
             do_sample=temperature > 0,
             temperature=temperature if temperature > 0 else None,
+            repetition_penalty=1.05,
             pad_token_id=tokenizer.pad_token_id or tokenizer.eos_token_id,
         )
     # Slice off the prompt
@@ -194,8 +199,10 @@ def main() -> None:
                              "patched tokenizer dir does not contain model "
                              "weights. Default: tries the LoRA adapter dir, "
                              "then falls back to --base.")
-    parser.add_argument("--adapter", type=Path, required=True,
-                        help="Path to LoRA adapter directory")
+    parser.add_argument("--adapter", type=Path, default=None,
+                        help="Path to LoRA adapter directory (or full-FT "
+                             "model directory). Omit to evaluate the BASE "
+                             "model directly — useful for pre-SFT controls.")
     parser.add_argument("--tasks", type=Path, required=True,
                         help="Path to tasks_eval.json")
     parser.add_argument("--catalog", type=Path, required=True,
@@ -211,13 +218,13 @@ def main() -> None:
     args = parser.parse_args()
 
     # ---- Tokenizer ----
-    # Preference order: explicit --tokenizer-path > the adapter dir (if it
-    # contains tokenizer files saved by train_qwen35_lora.py) > the base.
-    # This lets the user point at a chat-template-patched tokenizer dir
-    # while keeping --base pointed at the weights source.
+    # Preference order: explicit --tokenizer-path > the adapter dir (if
+    # provided and contains tokenizer files saved by train_qwen35_lora.py)
+    # > the base. Lets the user point at a chat-template-patched tokenizer
+    # dir while keeping --base pointed at the weights source.
     if args.tokenizer_path:
         tokenizer_src = args.tokenizer_path
-    elif (args.adapter / "tokenizer_config.json").exists():
+    elif args.adapter and (args.adapter / "tokenizer_config.json").exists():
         tokenizer_src = str(args.adapter)
     else:
         tokenizer_src = args.base
@@ -227,32 +234,42 @@ def main() -> None:
         tokenizer.pad_token = tokenizer.eos_token
 
     # ---- Model ----
-    # Detect adapter type. PEFT adapters carry an adapter_config.json next to
-    # adapter_model.safetensors. Full fine-tuned models save model.safetensors
-    # (or pytorch_model.bin) and a config.json — i.e., the dir IS the model.
-    adapter_config = args.adapter / "adapter_config.json"
-    is_lora = adapter_config.exists()
-
-    if is_lora:
-        print(f"Loading base model from: {args.base}")
-        base = AutoModelForCausalLM.from_pretrained(
+    # Three modes:
+    #   adapter omitted  -> evaluate the base model directly (pre-SFT control)
+    #   adapter is LoRA  -> base + PeftModel adapter
+    #   adapter is full  -> dir IS the model (full / partial fine-tune output)
+    if args.adapter is None:
+        print(f"Loading base model (no adapter) from: {args.base}")
+        model = AutoModelForCausalLM.from_pretrained(
             args.base,
             torch_dtype=torch.bfloat16,
             device_map="auto",
             trust_remote_code=True,
         )
-        print(f"Applying LoRA adapter: {args.adapter}")
-        model = PeftModel.from_pretrained(base, str(args.adapter))
-        model_label = f"{args.base}+lora:{args.adapter.name}"
+        model_label = f"base:{args.base}"
     else:
-        print(f"Loading full fine-tuned model from: {args.adapter}")
-        model = AutoModelForCausalLM.from_pretrained(
-            str(args.adapter),
-            torch_dtype=torch.bfloat16,
-            device_map="auto",
-            trust_remote_code=True,
-        )
-        model_label = f"full:{args.adapter.name}"
+        adapter_config = args.adapter / "adapter_config.json"
+        is_lora = adapter_config.exists()
+        if is_lora:
+            print(f"Loading base model from: {args.base}")
+            base = AutoModelForCausalLM.from_pretrained(
+                args.base,
+                torch_dtype=torch.bfloat16,
+                device_map="auto",
+                trust_remote_code=True,
+            )
+            print(f"Applying LoRA adapter: {args.adapter}")
+            model = PeftModel.from_pretrained(base, str(args.adapter))
+            model_label = f"{args.base}+lora:{args.adapter.name}"
+        else:
+            print(f"Loading full fine-tuned model from: {args.adapter}")
+            model = AutoModelForCausalLM.from_pretrained(
+                str(args.adapter),
+                torch_dtype=torch.bfloat16,
+                device_map="auto",
+                trust_remote_code=True,
+            )
+            model_label = f"full:{args.adapter.name}"
     model.eval()
 
     print(f"Model label for episodes: {model_label}")

@@ -7,15 +7,15 @@
   "per_condition": {
     "baseline": {
       "n": 200,
-      "passed": 137,
-      "pass_rate": 0.685,
-      "mean_score": 0.685
+      "passed": 167,
+      "pass_rate": 0.835,
+      "mean_score": 0.8295
     },
     "curated": {
       "n": 200,
-      "passed": 144,
-      "pass_rate": 0.72,
-      "mean_score": 0.72
+      "passed": 176,
+      "pass_rate": 0.88,
+      "mean_score": 0.8785
     }
   }
 }
