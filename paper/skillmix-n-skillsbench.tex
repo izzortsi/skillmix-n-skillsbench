@@ -96,6 +96,13 @@ LoRA via TRL\,$\geq$\,0.18 \citep{trl} and PEFT\,$\geq$\,0.13. Adapters target a
 \section{Recipe Iterations}
 We report eight recipe variants. Five at 0.8B (v1--v1.8) explore corpus composition, partial fine-tuning, and skill-block masking; two at 2B/4B (v1.9, v2.0) test model-size as a separate axis.
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{figures/fig1_progression.pdf}
+\caption{Baseline (\BL) and curated (\CU) pass rates across all eleven evaluated configurations: pre-SFT controls, the five 0.8B SFT iterations, and the model-size pivot to 2B and 4B.}
+\label{fig:progression}
+\end{figure}
+
 \begin{table}[h]
 \centering
 \small
@@ -146,6 +153,13 @@ Same recipe shape as v1 (LoRA, curated-only, 353 rows, 3 epochs), bumped to $r{=
 A pre-SFT 2B control ($0.685/0.710$) cleanly attributes the lift over pre-SFT 0.8B (Table~\ref{tab:attribution}). The procedural-$\Delta$ lifts from $+0.025$ (pre-SFT) to $+0.075$ (post-SFT), a $+5$\,pp differential procedural-application lift attributable to SFT.
 
 This is the cleanest available measurement of the original SFT hypothesis. SFT does teach differential procedural use; the 0.8B failures were base-capacity-bound.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\linewidth]{figures/fig4_attribution.pdf}
+\caption{v1.9 lift over pre-SFT 0.8B decomposed into base-model scaling (gray; measured between the two pre-SFT controls) and SFT contribution at 2B (green; the residual from pre-SFT 2B to v1.9). The SFT contribution is +6.5\,pp on \BL{} and +11.5\,pp on \CU.}
+\label{fig:attribution}
+\end{figure}
 
 \begin{table}[h]
 \centering
@@ -198,6 +212,13 @@ For the cross-model saturation test:
 \end{itemize}
 
 The CI on the difference includes zero and the one-sided $p$ is $0.225$. The $\Delta$-shrinkage from v1.9 to v2.0 is consistent with bench saturation in direction but is \emph{not statistically distinguishable from sampling noise at the present sample size}. Confirming saturation would require either (a) larger $n$ ($\sim 800$--$1200$ per condition for $80\%$ power to detect an effect of this magnitude), (b) a bench where the procedural lift is 2--3$\times$ larger so the absolute $\Delta$ is more robustly measurable, or (c) multi-seed evaluation to reduce per-condition variance.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{figures/fig3_bootstrap.pdf}
+\caption{Left: bootstrap distributions of the procedural-$\Delta$ for v1.9 and v2.0 (10{,}000 resamples of paired \texttt{task\_uid}s). Both distributions sit above zero (the dashed line) but overlap substantially. Right: distribution of the difference $\Delta_{\mathrm{v1.9}} - \Delta_{\mathrm{v2.0}}$. The 95\% CI shaded in red includes zero, and the one-sided test for the saturation hypothesis returns $p{=}0.225$. Direction is consistent with saturation; magnitude is not statistically distinguishable from noise.}
+\label{fig:bootstrap}
+\end{figure}
 
 \subsection{Generality probe: v2.0 preserves out-of-distribution behavior}
 We probe v1.9, v2.0, base 2B, and base 4B with a 52-prompt OOD battery (10 generality + 42 factual including 8 false-premise ``trick'' prompts) under a generic system prompt (not the \textsc{solver} prompt; Table~\ref{tab:generality}).
@@ -339,6 +360,13 @@ Flat cluster ($\Delta = 0$): 25 skills, of which 22 are at \BL{} $\geq 0.80$ (ce
 Regression cluster (procedure hurt; all $5/5$ \BL{} $\to 4/5$ \CU): complex-question, hypothetical-syllogism, framing-effect, equivocation.
 
 The regression cluster overlaps with deductive-logic skills where the base 4B has ceiling competence and the 5-step procedure introduces sub-inference error opportunities --- the same lift/flat/regression pattern observed at 0.8B in v1, shifted upward by base scaling.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/fig2_per_skill_v2_0.pdf}
+\caption{Per-skill procedural-$\Delta$ at v2.0 ($n{=}5$ per skill, 40 skills). 11 skills lift on \CU; 25 are flat (mostly because \BL{} is already at ceiling); 4 regress. The lift cluster concentrates on interpretive and spatial-social skills; the regression cluster on deductive-logic skills where the model has ceiling competence on \BL.}
+\label{fig:per-skill}
+\end{figure}
 
 \section{Engineering reports cited}\label{app:reports}
 Full text of these reports is in the repository's \texttt{b1.reports/} directory:
