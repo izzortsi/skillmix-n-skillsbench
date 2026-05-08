@@ -1,0 +1,260 @@
+================================================================================
+REPORT: LLM-ONLY RE-JUDGE OF v1.9 AND v2.0 — SCORES SHIFT UPWARD,
+        Δ INCREASES, BENCH SATURATION STILL DIRECTIONAL
+================================================================================
+
+Date:   2026-05-06
+Status: PARTIAL — v1.9 and v2.0 re-judged under LLM-only path; pre-SFT 4B
+        and haiku reference re-judges pending.
+
+================================================================================
+QUESTION
+================================================================================
+
+The 260506 format-sensitivity finding (b1.reports/260506.bench-format-
+sensitivity-finding.txt) showed that the deterministic judge (used for
+88.5% of holdout tasks) requires literal "ANSWER:" lines, which pre-SFT
+base models do not reliably emit. To enable apples-to-apples
+attribution comparison between pre-SFT base models (which need LLM
+judge to be measured fairly) and post-SFT students, we ran a full
+LLM-only re-judge of v1.9 and v2.0 episodes — using the existing
+model responses, just routing them all through the LLM judge
+regardless of original query_type.
+
+This report documents the resulting score shifts and what they imply
+for the experiment's headline claims.
+
+================================================================================
+SETUP
+================================================================================
+
+Method     training/rejudge_failed_episodes.py with new flags:
+             --all                   target all 400 episodes per run
+             --force-llm-judge       override query_type to FREE_FORM
+             --out-dir <new>         preserve the originals
+
+Judge      anthropic:claude-opus-4-7 (same as original eval)
+Inputs     existing episodes.json files from
+             bench-eval-post-sft-v1_9/episodes.json
+             bench-eval-post-sft-v2_0/episodes.json
+Output     bench-eval-post-sft-v1_9-llm-only/
+           bench-eval-post-sft-v2_0-llm-only/
+
+Cost       ~$5 each, ~$10 total. Runs in ~10 min each (no model
+           generation; pure judge calls). All 400 episodes per run
+           successfully re-judged; zero remaining judge errors.
+
+================================================================================
+HEADLINE NUMBERS
+================================================================================
+
+                        BL pass    CU pass     Δ        scoring path
+v1.9 (2B+LoRA r=16)
+  original              0.750      0.825      +0.075    mixed (det+LLM)
+  LLM-only re-judge     0.815      0.915      +0.100    LLM-only
+
+v2.0 (4B+LoRA r=32)
+  original              0.835      0.880      +0.045    mixed (det+LLM)
+  LLM-only re-judge     0.920      0.985      +0.065    LLM-only
+
+DELTAS FROM RE-JUDGE (LLM-only minus original)
+
+  v1.9        ΔBL +0.065   ΔCU +0.090   ΔΔ +0.025
+  v2.0        ΔBL +0.085   ΔCU +0.105   ΔΔ +0.020
+
+THREE OBSERVATIONS
+
+  1. BOTH conditions lift under LLM-only judging at BOTH model sizes.
+     The deterministic judge was under-counting passes — even SFT'd
+     models that were trained to produce ANSWER: format sometimes
+     produce conclusions in alternative phrasings ("Final Answer: X",
+     "I conclude X", or just stating the answer in prose) that the
+     deterministic extractor missed but the LLM judge correctly
+     scores.
+
+  2. Curated lifts MORE than baseline under re-judge (ΔCU > ΔBL by
+     +2.5 pp at v1.9 and +2.0 pp at v2.0). This means curated-
+     condition responses were slightly more likely to be format-
+     noncompliant than baseline-condition responses — interpretable
+     as: when the procedure block is present, the model occasionally
+     embeds its conclusion inside procedural narration rather than
+     ending with a literal ANSWER: line. The deterministic judge
+     systematically under-counted curated wins.
+
+  3. v2.0 curated is now 0.985 — 197 of 200 tasks passed. The bench
+     is essentially solved at 4B + LoRA r=32 + LLM-only scoring.
+     v2.0 baseline at 0.920 is also near-ceiling. Whatever residual
+     SFT contribution exists at 4B, it is operating in the top
+     ~5 pp of headroom on this bench.
+
+================================================================================
+SIGNIFICANCE TESTS UNDER LLM-ONLY JUDGE
+================================================================================
+
+Per-model McNemar (paired BL vs CU) and bootstrap 95% CI on Δ
+(10,000 resamples, paired by task_uid):
+
+                     contingency                  Δ        McNemar       95% CI
+v1.9 LLM-only        a=153 b=10 c=30 d=7         +0.100   χ²=9.03,      [+0.040, +0.160]
+                                                          p=0.0027
+v2.0 LLM-only        a=183 b=1  c=14 d=2         +0.065   exact,        [+0.030, +0.105]
+                                                          p=0.00098
+
+Both Δs are now strongly distinguishable from zero:
+  - v1.9: p=0.0027 (was p=0.018 under mixed-judge)
+  - v2.0: p=0.00098 (was p=0.049 under mixed-judge)
+
+v2.0's Δ now survives Bonferroni correction across the two tests
+comfortably (p_adj ≈ 0.002 < 0.025). The earlier worry that v2.0's
+Δ was "barely significant" was an artifact of the deterministic
+judge under-counting curated wins.
+
+Cross-model bootstrap (paired bootstrap saturating-direction test):
+  Δ_v1.9 - Δ_v2.0 = +0.035
+  bootstrap 95% CI on the difference: [-0.040, +0.105]
+  one-sided p (H₀: Δ_v1.9 ≤ Δ_v2.0): p = 0.191
+
+Saturation result is essentially unchanged from the deterministic-
+judge path:
+  - mixed-judge:    Δ_v1.9 - Δ_v2.0 = +0.030, p = 0.225
+  - LLM-only:       Δ_v1.9 - Δ_v2.0 = +0.035, p = 0.191
+
+The shrinkage of Δ from 2B to 4B is robust to the scoring method —
+both judging paths agree on the magnitude (~+0.030 to +0.035) and
+on the conclusion that the shrinkage is directional but not
+statistically distinguishable at n=200.
+
+================================================================================
+WHAT THIS MEANS FOR THE PAPER
+================================================================================
+
+POSITIVE RESULTS THAT STRENGTHEN
+
+  1. The SFT effect at 2B is more robustly significant than the
+     paper currently states. Update v1.9 reporting: Δ +0.100, p=0.003.
+
+  2. The SFT effect at 4B is also robustly significant (no longer
+     borderline, no longer Bonferroni-fragile). Update v2.0
+     reporting: Δ +0.065, p<0.001.
+
+  3. v2.0 CU 0.985 means the bench is genuinely solved at 4B
+     under fair scoring. This is a stronger statement than the
+     paper currently makes; the saturation diagnosis is now
+     supported by the absolute pass-rate ceiling rather than just
+     the Δ shrinkage trend.
+
+CLAIMS THAT ARE UNCHANGED
+
+  4. Bench-saturation comparison still fails the cross-model test
+     (p=0.191 one-sided, CI includes 0). Same conclusion as the
+     mixed-judge path: directionally consistent with saturation,
+     not statistically distinguishable at n=200.
+
+  5. The headline result that v2.0 exceeds the haiku-4-5 reference
+     ALSO needs re-checking — haiku's 0.785/0.800 was scored under
+     the same deterministic-mixed path and is plausibly under-
+     counted by ~5-10 pp. Pending: haiku LLM-only re-judge.
+
+NEW WRINKLE TO ADDRESS
+
+  6. The fact that ΔCU > ΔBL by ~2 pp under re-judge means the
+     deterministic judge was systematically biased AGAINST the
+     curated condition. This is interpretable: procedure-following
+     responses bury their conclusions in narration more often than
+     direct-thinking responses do. The bench scoring originally
+     under-stated SFT's true contribution.
+
+================================================================================
+WHAT'S STILL MISSING
+================================================================================
+
+To complete the apples-to-apples attribution table:
+
+  A. Pre-SFT 4B with --force-llm-judge (eval_qwen35_lora.py).
+     Cost: ~$5, ~40 min. Highest leverage — closes the v2.0
+     attribution gap. The original deterministic-judge run scored
+     0/0 (format artifact). The LLM-judge run will give the
+     measured base-4B reasoning capability and let us cleanly
+     attribute v2.0's lift between base and SFT.
+
+  B. Haiku reference under LLM-only re-judge.
+     Cost: ~$5, ~10 min. Filter the original bench-eval-pre-sft
+     episodes to haiku-only, run rejudge_failed_episodes.py with
+     --all --force-llm-judge. Required for the reference
+     comparison in the paper to be honest.
+
+  C. Pre-SFT 0.8B under LLM-only re-judge (low priority).
+     The 0.8B baseline came from Ollama via corpus_harness, not
+     the same HF transformers path. Minor inconsistency; can
+     remain a footnote rather than a re-run.
+
+================================================================================
+PROVISIONAL UPDATED ATTRIBUTION (PENDING PRE-SFT 4B)
+================================================================================
+
+Once pre-SFT 4B LLM-only lands, the attribution table fills in as:
+
+                                        BL     CU     Δ
+  Pre-SFT 0.8B (Ollama, det)            0.510  0.565  +0.055
+  Pre-SFT 2B   (HF, det)                0.685  0.710  +0.025
+  Pre-SFT 4B   (HF, LLM-only)           ?      ?      ?      ← pending
+  Pre-SFT haiku (LLM-only)              ?      ?      ?      ← pending
+  v1.9 (LLM-only)                       0.815  0.915  +0.100
+  v2.0 (LLM-only)                       0.920  0.985  +0.065
+
+Predictions for pre-SFT 4B LLM-only (eyeball, no quantitative basis):
+  BL ~ 0.75-0.85   (base 4B reasons well, just doesn't hit ANSWER:
+                    format; LLM judge will count those passes)
+  CU ~ 0.80-0.90   (procedure injection should help base 4B too;
+                    less than v2.0 because base hasn't been SFT'd
+                    on procedural responses)
+  Δ ~ +0.05-0.10   (similar magnitude to v2.0's +0.065)
+
+If pre-SFT 4B CU lands at ~0.85, then v2.0's measured SFT contribution
+at 4B is ~0.10-0.15 CU — substantially larger than the soft upper
+bound (0.03-0.10) we placed in 260506.bench-format-sensitivity-finding
+.txt under the saturation extrapolation. This would mean SFT is doing
+real work at 4B, just not enough to change the bench's near-ceiling
+absolute pass rate.
+
+================================================================================
+ARTIFACTS
+================================================================================
+
+  data/pipeline-runs/default/bench-eval-post-sft-v1_9-llm-only/
+        400 episodes, summary.json: BL 0.815 / CU 0.915
+
+  data/pipeline-runs/default/bench-eval-post-sft-v2_0-llm-only/
+        400 episodes, summary.json: BL 0.920 / CU 0.985
+
+  training/rejudge_failed_episodes.py
+        Now supports --all (target all episodes), --force-llm-judge
+        (override query_type to FREE_FORM), --out-dir (preserve
+        originals). Used for both re-judge runs above.
+
+  training/eval_qwen35_lora.py
+        Now supports --force-llm-judge for use in fresh evals (will
+        be used for pre-SFT 4B run).
+
+  training/significance_tests.py
+        Bootstrap + McNemar; ran against the LLM-only data to produce
+        the new significance numbers in this report.
+
+Related reports
+  b1.reports/260506.bench-format-sensitivity-finding.txt
+        The motivation for this re-judge: deterministic judge
+        requires literal ANSWER: format that base models lack.
+  b1.reports/260506.bench-statistical-significance.txt
+        Original significance tests under deterministic-mixed
+        judging. This report's results supersede those for the
+        per-model claims; the saturation conclusion is unchanged.
+  b1.reports/260428.sft-v1_9-2b-result.txt
+        v1.9 result; needs an addendum for the LLM-only re-judge
+        numbers.
+  b1.reports/260428.sft-v2_0-4b-result.txt
+        v2.0 result; needs an addendum for the LLM-only re-judge
+        numbers AND a revision once pre-SFT 4B LLM-only lands.
+
+================================================================================
+END REPORT
+================================================================================

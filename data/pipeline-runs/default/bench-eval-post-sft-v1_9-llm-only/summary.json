@@ -1,0 +1,21 @@
+{
+  "total_episodes": 400,
+  "model": "Qwen/Qwen3.5-2B+lora:qwen35-2b-skill-lora-v1.9",
+  "base": "Qwen/Qwen3.5-2B",
+  "adapter": "qwen35-2b-skill-lora-v1.9",
+  "tasks": "data/pipeline-runs/default/synthesis/tasks_eval.json",
+  "per_condition": {
+    "baseline": {
+      "n": 200,
+      "passed": 163,
+      "pass_rate": 0.815,
+      "mean_score": 0.7558
+    },
+    "curated": {
+      "n": 200,
+      "passed": 183,
+      "pass_rate": 0.915,
+      "mean_score": 0.8982
+    }
+  }
+}
