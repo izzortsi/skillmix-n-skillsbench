@@ -1,0 +1,6 @@
+{
+  "model": "claude-haiku-4-5-20251001",
+  "base": "claude-haiku-4-5-20251001",
+  "adapter": null,
+  "tasks": "data/pipeline-runs/default/synthesis/tasks_eval.json"
+}
