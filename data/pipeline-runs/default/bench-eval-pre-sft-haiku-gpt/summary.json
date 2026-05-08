@@ -1,0 +1,21 @@
+{
+  "model": "claude-haiku-4-5-20251001",
+  "base": "claude-haiku-4-5-20251001",
+  "adapter": null,
+  "tasks": "data/pipeline-runs/default/synthesis/tasks_eval.json",
+  "total_episodes": 400,
+  "per_condition": {
+    "baseline": {
+      "n": 200,
+      "passed": 191,
+      "pass_rate": 0.955,
+      "mean_score": 0.9634
+    },
+    "curated": {
+      "n": 200,
+      "passed": 195,
+      "pass_rate": 0.975,
+      "mean_score": 0.9772
+    }
+  }
+}

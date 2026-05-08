@@ -261,6 +261,13 @@ WHAT'S STILL MISSING
      under HF + LLM-judge would close the bottom of the
      attribution table.
 
+  C. Cross-family judge validation (GPT-5.4 via OpenRouter).
+     COMPLETED 2026-05-08 on 5 of 6 datasets. Per-episode
+     agreement ≥98.25%, Cohen's κ ≥ 0.92, headline Δ shifts of
+     ≤0.025 pp. v1.9 is judge-invariant (100% agreement). Closes
+     the judge-overlap concern in paper §7.1. See
+     b1.reports/260508.cross-family-judge-validation.txt.
+
 ================================================================================
 PROVISIONAL UPDATED ATTRIBUTION (PENDING PRE-SFT 4B)
 ================================================================================

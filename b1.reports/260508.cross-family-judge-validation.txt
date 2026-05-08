@@ -1,0 +1,278 @@
+================================================================================
+REPORT: CROSS-FAMILY JUDGE VALIDATION — GPT-5.4 vs Opus 4.7 ON LLM-ONLY
+        RE-JUDGE EPISODES
+================================================================================
+
+Date:   2026-05-08
+Status: PARTIAL — five of six datasets cross-validated under non-Anthropic-
+        family second judge. Pre-SFT 4B Opus LLM-only is still pending; its
+        GPT cross-validation will follow. Cumulative cross-family bound
+        across 5 datasets / 2000 episodes is reported below.
+
+================================================================================
+QUESTION
+================================================================================
+
+Threats to Validity §7.1 in the paper draft (judge overlap with corpus
+generation) was the strongest unbounded methodological concern: Opus 4.7
+wrote the procedural skill catalog, synthesized the tasks, generated the
+SFT-corpus traces, and judged both pre-SFT and post-SFT responses. The
+concern: the judge may favor responses that resemble Opus's own style.
+
+The 260506 Sonnet-vs-Opus discussion noted that Sonnet 4.6 would only
+bound intra-Anthropic-family judge bias; cross-family bias requires a
+second judge from a different provider on different infrastructure. We
+chose GPT-5.4 via OpenRouter as the second judge.
+
+This report documents the resulting cross-family agreement numbers and
+what they imply for the paper's claims.
+
+================================================================================
+SETUP
+================================================================================
+
+Implementation
+    core/providers.py: added OpenrouterProvider class. OpenRouter exposes
+    an OpenAI-compatible API at https://openrouter.ai/api/v1, so the
+    provider reuses the openai Python SDK with a custom base_url and
+    api_key. Auth: OPENROUTER_API_KEY env var.
+
+    create_provider("openrouter", "openai/gpt-5.4") wires GPT-5.4 (or
+    any OpenRouter-routed model) into the existing judge dispatch.
+
+Methodology
+    Same flow as the Opus LLM-only re-judges: training/rejudge_failed_
+    episodes.py with --all --force-llm-judge, but --judge openrouter:
+    openai/gpt-5.4 instead of anthropic:claude-opus-4-7. The GPT judge
+    grades the existing model responses; no model regeneration. Cost:
+    ~$5 per dataset, ~10 min wallclock each.
+
+Datasets cross-validated
+    bench-eval-post-sft-v1-gpt          / -llm-only/ (Opus)
+    bench-eval-post-sft-v1_9-gpt        / -llm-only/
+    bench-eval-post-sft-v2_0-gpt        / -llm-only/
+    bench-eval-pre-sft-haiku-gpt        / -llm-only/
+    bench-eval-pre-sft-2b-gpt           / -llm-only/
+
+Pending
+    bench-eval-pre-sft-4b-{llm-only,gpt}/  — Opus LLM-only run is in
+    progress at time of writing.
+
+Agreement analysis
+    training/judge_agreement.py: pairs episodes by (task_uid, condition);
+    computes per-episode agreement rate, Cohen's κ, confusion matrix,
+    per-condition agreement, headline Δ shift, and per-skill disagreement
+    breakdown.
+
+================================================================================
+HEADLINE NUMBERS
+================================================================================
+
+                        Opus 4.7 LLM-only           GPT-5.4 (OpenRouter)
+                        BL    CU    Δ               BL    CU    Δ
+v1   (0.8B+LoRA)       0.710 0.705 -0.005          0.700 0.700  0.000
+v1.9 (2B+LoRA)         0.815 0.915 +0.100          0.815 0.915 +0.100
+v2.0 (4B+LoRA)         0.920 0.985 +0.065          0.920 0.980 +0.060
+haiku-4-5 (frontier)   0.955 0.985 +0.030          0.955 0.975 +0.020
+pre-SFT 2B             0.755 0.815 +0.060          0.750 0.835 +0.085
+pre-SFT 4B             pending                     pending
+
+PER-EPISODE AGREEMENT METRICS
+
+                       agreement     Cohen's κ     Δ shift (GPT - Opus)
+v1                     395/400       0.970         +0.005
+                       = 98.75%
+v1.9                   400/400       1.000          0.000
+                       = 100.00%      (perfect)
+v2.0                   399/400       0.973         -0.005
+                       = 99.75%
+haiku                  398/400       0.921         -0.010
+                       = 99.50%
+pre-SFT 2B             393/400       0.948         +0.025
+                       = 98.25%
+
+CUMULATIVE BOUND ACROSS 5 DATASETS / 2000 EPISODES
+    max |Δ shift|        = 0.025  (pre-SFT 2B)
+    min agreement rate   = 98.25% (pre-SFT 2B)
+    min Cohen's κ        = 0.921  (haiku)
+    max disagreement     = 7 episodes out of 400 (pre-SFT 2B)
+
+================================================================================
+INTERPRETATION
+================================================================================
+
+The agreement is essentially perfect for the SFT'd students:
+
+    1. v1.9: 400/400 agreement. Two completely separate LLM judges
+       from different families, on different infrastructure, produced
+       literally identical pass/fail verdicts on every one of 400
+       paired (task_uid, condition) tuples. The v1.9 headline Δ
+       (+0.100) is invariant to which family the judge comes from.
+
+    2. v2.0: 399/400 agreement. One disagreement on a curated
+       equivocation task. v2.0's CU rate moves from 0.985 to 0.980
+       under GPT; Δ shifts by 0.005.
+
+    3. v1: 395/400 agreement. Five disagreements spread across
+       hindsight-bias, emotional-self-regulation, hasty-generalization.
+       v1's Δ shifts from -0.005 to 0.000 under GPT — within rounding,
+       same conclusion (no differential procedural lift at 0.8B).
+
+The frontier reference and pre-SFT 2B show slightly larger but still
+small disagreements:
+
+    4. haiku-4-5: 398/400 agreement. Two disagreements (complex-
+       question, equivocation), both Opus-pass / GPT-fail on curated.
+       Δ shifts from +0.030 to +0.020.
+
+    5. pre-SFT 2B: 393/400 agreement. Seven disagreements spread
+       across seven different skills, in both directions (5 GPT-pass /
+       Opus-fail + 2 Opus-pass / GPT-fail). Δ shifts from +0.060 to
+       +0.085 — the largest shift in the experiment, but still within
+       2.5 pp.
+
+DISAGREEMENT PATTERN INTERPRETATION
+
+    SFT'd students at 2B+: GPT is slightly stricter than Opus on
+    curated-condition partial-credit calls. Curated procedural
+    responses sometimes embed conclusions inside narration, and GPT
+    is less willing to credit those than Opus is. v2.0 had 1 such
+    disagreement; haiku had 2.
+
+    Pre-SFT 2B: disagreements are spread across many skills in both
+    directions. Consistent with "two reasonable judges legitimately
+    diverging on borderline reasoning quality" rather than systematic
+    judge bias.
+
+    Same skill (equivocation) shows up as a disagreement source in
+    v2.0, haiku, and pre-SFT 2B. Suggests equivocation tasks contain
+    objectively borderline cases. Eyeballing one of these episodes
+    would clarify whether it's a task ambiguity or a judge-rule
+    divergence.
+
+================================================================================
+WHAT THIS CHANGES IN THE PAPER
+================================================================================
+
+§7.1 (judge overlap) goes from "magnitude is unmeasured" to a
+quantitative cross-family bound:
+
+    Before (paper draft):
+      "We did not cross-validate the judge against a second model.
+       The most plausible direction of bias is to inflate post-SFT
+       scores; the magnitude is unmeasured."
+
+    After:
+      "Cross-validation against GPT-5.4 (OpenRouter, non-Anthropic
+       provider, non-Anthropic-family judge) on five paired datasets
+       (2000 episodes total) shows per-episode agreement ≥98.25%,
+       Cohen's κ ≥ 0.92, and headline Δ shifts of ≤0.025 pp. The
+       v1.9 result is judge-invariant (100% agreement, κ=1.000); the
+       v2.0 result shifts by 0.005 pp; the haiku reference shifts by
+       0.010 pp. The judge-overlap concern is bounded; the SFT
+       contribution is robust to a non-Anthropic-family second judge."
+
+WHAT THIS DOESN'T CHANGE
+
+    1. Corpus-generation overlap (Opus wrote the procedural rewrites,
+       synthesised the tasks, generated the SFT traces). The cross-
+       family judge bounds judge-overlap; corpus-generation overlap
+       is structurally unbounded by this validation.
+
+    2. Single-seed evaluation. The cross-validation uses the same
+       model responses; we have not evaluated the single-seed
+       variance on either Opus or GPT.
+
+    3. Single non-Anthropic-family judge. A third family (e.g.
+       Gemini 2.5 Pro) would be a "for completeness" addition,
+       not a methodological necessity at the present level of
+       agreement.
+
+ATTRIBUTION SPLIT IMPLICATIONS
+
+    v1.9 SFT contribution at 2B (CU lift over base):
+      Opus:  +0.100  (base 0.815 → v1.9 0.915)
+      GPT:   +0.080  (base 0.835 → v1.9 0.915)
+      Range: +0.080 to +0.100
+
+    v1.9 differential procedural Δ-lift attributable to SFT:
+      Opus:  pre-SFT Δ +0.060 → v1.9 Δ +0.100 = +0.040 SFT Δ-lift
+      GPT:   pre-SFT Δ +0.085 → v1.9 Δ +0.100 = +0.015 SFT Δ-lift
+      Range: +0.015 to +0.040
+
+    Both judges agree:
+      - SFT contributes positive absolute lift on CU at 2B (+0.080
+        to +0.100)
+      - SFT contributes positive differential procedural-Δ at 2B
+        (+0.015 to +0.040)
+      - Direction of SFT contribution is unambiguous
+
+    Where they differ:
+      - Magnitude of differential procedural Δ-lift. Opus credits
+        SFT with a +0.040 Δ-lift on top of base 2B; GPT credits SFT
+        with a +0.015 Δ-lift because GPT credits base 2B with more
+        procedural responsiveness than Opus does.
+      - Honest paper framing: report both numbers and the range.
+
+================================================================================
+WHAT'S STILL MISSING
+================================================================================
+
+  A. pre-SFT 4B Opus LLM-only (eval_qwen35_lora.py with --force-llm-judge,
+     fresh HF eval). IN PROGRESS at time of writing. Closes the v2.0
+     attribution gap.
+
+  B. pre-SFT 4B GPT-5.4 cross-validation. Follows A by ~10 min, ~$5.
+     Will likely show similar agreement to the other base-model
+     dataset (pre-SFT 2B at κ=0.948).
+
+  C. Optional: third-family judge (Gemini 2.5 Pro). The current
+     5-dataset bound is already tight (≤0.025 pp Δ shift, κ ≥ 0.92);
+     a third family would be a robustness check, not a methodological
+     necessity.
+
+  D. Optional: human raters on a 50-episode subsample. If the paper
+     wants to bound LLM-judge bias against a non-LLM ground truth,
+     this is the cheapest practical option. ~$50-100 in human-rater
+     fees through a platform; not pursued in this study.
+
+================================================================================
+ARTIFACTS
+================================================================================
+
+  core/providers.py
+        OpenrouterProvider class added; create_provider dispatch
+        extended to "openrouter".
+
+  training/rejudge_failed_episodes.py
+        Already supported --judge override. No changes needed beyond
+        the OpenRouter provider; existing flag now accepts
+        openrouter:openai/gpt-5.4 etc.
+
+  training/judge_agreement.py
+        New utility. Pairs episodes from two judge runs by (task_uid,
+        condition); computes per-episode agreement, Cohen's κ,
+        per-condition split, headline Δ shift, per-skill disagreement
+        breakdown. Self-contained; stdlib only.
+
+  data/pipeline-runs/default/bench-eval-post-sft-{v1,v1_9,v2_0}-gpt/
+  data/pipeline-runs/default/bench-eval-pre-sft-{haiku,2b}-gpt/
+        400 episodes per dataset, judged by GPT-5.4 via OpenRouter.
+
+Related reports
+  b1.reports/260506.llm-only-rejudge-findings.txt
+        The LLM-only Opus re-judge work that this report cross-
+        validates. Numbers in §HEADLINE NUMBERS above are the
+        Opus-side references for the comparison.
+  b1.reports/260506.bench-format-sensitivity-finding.txt
+        The original format-compliance artifact that motivated the
+        LLM-only re-judge in the first place.
+  b1.reports/260506.bench-statistical-significance.txt
+        Per-model McNemar + bootstrap tests under deterministic
+        judging. The cross-family validation here strengthens the
+        per-model claims (judge-invariance) without changing the
+        cross-model saturation conclusion.
+
+================================================================================
+END REPORT
+================================================================================

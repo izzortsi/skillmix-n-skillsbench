@@ -8,6 +8,10 @@ Supported providers:
   - "anthropic"    Anthropic API. OAuth via ~/.claude/.credentials.json when
                    present (same code path as harness/agent.py), falls back
                    to ANTHROPIC_API_KEY.
+  - "ollama"       Local Ollama instance.
+  - "openrouter"   OpenRouter (OpenAI-compatible API at openrouter.ai). Used
+                   for non-Anthropic-family judges, e.g. openai/gpt-5.4,
+                   google/gemini-2.5-pro. Auth: OPENROUTER_API_KEY.
   - "mock"         Deterministic echo for tests.
 
 Usage:
@@ -375,6 +379,106 @@ class OllamaProvider:
 # ---------------------------------------------------------------------------
 
 
+# ---------------------------------------------------------------------------
+# OpenrouterProvider — non-Anthropic judge for cross-family validation
+# ---------------------------------------------------------------------------
+
+
+class OpenrouterProvider:
+    """OpenRouter chat provider via the OpenAI Python SDK.
+
+    OpenRouter's API is OpenAI-compatible at base_url=https://openrouter.ai/api/v1,
+    so we can reuse the openai SDK with a custom base_url + api_key.
+    Useful as a non-Anthropic-family second judge (e.g. openai/gpt-5.4,
+    google/gemini-2.5-pro) to bound cross-family judge bias.
+
+    Model spec: pass the openrouter slug as `model` (e.g. "openai/gpt-5.4").
+    The "openrouter:" prefix is stripped if present.
+
+    Auth: OPENROUTER_API_KEY env var.
+    """
+
+    def __init__(self, model: str = "openai/gpt-5.4", max_tokens: int = 4096):
+        try:
+            from openai import OpenAI
+        except ImportError as e:
+            raise ImportError(
+                "openai package required for OpenRouter: pip install openai"
+            ) from e
+
+        api_key = os.environ.get("OPENROUTER_API_KEY")
+        if not api_key:
+            raise ValueError(
+                "OPENROUTER_API_KEY not set. Get a key at https://openrouter.ai/keys"
+            )
+
+        # strip "openrouter:" prefix if accidentally included
+        if model.startswith("openrouter:"):
+            model = model[len("openrouter:"):]
+
+        self.model = model
+        self.max_tokens = max_tokens
+        self._client = OpenAI(
+            base_url="https://openrouter.ai/api/v1",
+            api_key=api_key,
+        )
+
+    @property
+    def model_name(self) -> str:
+        return self.model
+
+    def chat(
+        self,
+        messages: List[Dict[str, Any]],
+        temperature: float = 1.0,
+        system: Optional[str] = None,
+    ) -> ChatResult:
+        """Call OpenRouter via OpenAI-compatible chat-completions API.
+
+        Accepts either:
+          - messages with the system prompt as a {"role": "system"} entry, or
+          - a plain user/assistant messages list with `system=...` kwarg
+            (matching AnthropicProvider's calling convention).
+
+        Translates Anthropic-style content-blocks into plain string content
+        if the input has them (defensive; the LLM judge passes plain strings).
+        """
+        # Normalise: if `system` kwarg is passed, prepend; otherwise messages
+        # already include the system role.
+        msgs: List[Dict[str, Any]] = []
+        if system:
+            msgs.append({"role": "system", "content": system})
+        for m in messages:
+            content = m["content"]
+            # Defensive: flatten if someone passes Anthropic-style block list
+            if isinstance(content, list):
+                content = "".join(
+                    block.get("text", "") if isinstance(block, dict) else str(block)
+                    for block in content
+                )
+            msgs.append({"role": m["role"], "content": content})
+
+        resp = self._client.chat.completions.create(
+            model=self.model,
+            messages=msgs,
+            max_tokens=self.max_tokens,
+            temperature=temperature,
+        )
+
+        text = resp.choices[0].message.content or ""
+        usage = {
+            "prompt_tokens": getattr(resp.usage, "prompt_tokens", 0) if resp.usage else 0,
+            "completion_tokens": getattr(resp.usage, "completion_tokens", 0) if resp.usage else 0,
+            "total_tokens": getattr(resp.usage, "total_tokens", 0) if resp.usage else 0,
+        }
+        return ChatResult(text=text, usage=usage, raw=resp)
+
+
+# ---------------------------------------------------------------------------
+# MockProvider
+# ---------------------------------------------------------------------------
+
+
 class MockProvider:
     """Returns a canned response keyed on the last user message (for tests)."""
 
@@ -420,6 +524,14 @@ def create_provider(name: str = "anthropic", model: str = "", **kwargs) -> Any:
         if max_tokens is not None:
             return OllamaProvider(model=resolved, host=kwargs.get("host"), max_tokens=max_tokens)
         return OllamaProvider(model=resolved, host=kwargs.get("host"))
+    if name == "openrouter":
+        # Strip an optional "openrouter:" prefix in case the spec was stored with it.
+        resolved = model[len("openrouter:"):] if model.startswith("openrouter:") else model
+        if max_tokens is not None:
+            return OpenrouterProvider(model=resolved, max_tokens=max_tokens)
+        return OpenrouterProvider(model=resolved)
     if name == "mock":
         return MockProvider(model=model or "mock")
-    raise ValueError(f"Unknown provider: {name!r}. Supported: anthropic, ollama, mock.")
+    raise ValueError(
+        f"Unknown provider: {name!r}. Supported: anthropic, openrouter, ollama, mock."
+    )

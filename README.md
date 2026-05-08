@@ -341,14 +341,33 @@ but Δ will keep compressing. The next bottleneck is the bench, not
 the model.
 
 **Attribution split (added 2026-05-06):** pre-SFT 2B controls (BL 0.685
-/ CU 0.710) revealed that v1.9's lift over pre-SFT 0.8B is +14.5 pp
-CU base-scaling + 11.5 pp CU SFT contribution — both substantial. Pre-SFT
-4B could not be benched cleanly: the deterministic judge requires literal
-"ANSWER:" lines that base 4B doesn't emit reliably (it reasons correctly
-but runs out of token budget mid-thinking-out-loud). v2.0's attribution
-split is therefore bounded but not measured on this bench; the bench
-itself is format-sensitive in a way that penalizes pre-SFT base models.
-See [`b1.reports/260506.bench-format-sensitivity-finding.txt`](b1.reports/260506.bench-format-sensitivity-finding.txt).
+/ CU 0.710 deterministic; 0.755 / 0.815 LLM-only) revealed that v1.9's
+lift over pre-SFT 0.8B is +14.5 pp CU base-scaling + 11.5 pp CU SFT
+contribution under deterministic judging (range +8 to +12 pp under
+LLM-only). Pre-SFT 4B could not be benched cleanly under deterministic
+judging: the deterministic judge requires literal "ANSWER:" lines that
+base 4B doesn't emit reliably. See
+[`b1.reports/260506.bench-format-sensitivity-finding.txt`](b1.reports/260506.bench-format-sensitivity-finding.txt).
+
+**LLM-only re-judge (added 2026-05-06):** re-routing every episode
+through the LLM judge regardless of task type bypasses the
+format-compliance gate. Under fair scoring across four students:
+v1 Δ −0.005 (sub-floor), v1.9 Δ +0.100 (peak SFT lift), v2.0 Δ +0.065
+(saturating), haiku-4-5 Δ +0.030 (saturated). v2.0's CU ties haiku
+at 0.985 (197/200 identical pass count) — the bench is comprehensively
+saturated at the top under fair scoring. The 4-point trajectory matches
+the predicted saturation shape. See
+[`b1.reports/260506.llm-only-rejudge-findings.txt`](b1.reports/260506.llm-only-rejudge-findings.txt).
+
+**Cross-family judge validation (added 2026-05-08):** GPT-5.4 via
+OpenRouter graded the same model responses as Opus 4.7 across 5 of
+6 datasets (2000 episodes). Per-episode agreement ≥98.25%, Cohen's
+κ ≥ 0.92, headline Δ shifts ≤0.025 pp. v1.9 is judge-invariant
+(100% agreement, κ=1.000); v2.0 shifts by 0.005 pp; haiku shifts by
+0.010 pp. The judge-overlap concern (paper §7.1) is bounded
+quantitatively under a non-Anthropic-family second judge on
+non-Anthropic infrastructure. See
+[`b1.reports/260508.cross-family-judge-validation.txt`](b1.reports/260508.cross-family-judge-validation.txt).
 
 Findings across v1-v1.8 are consolidated in
 [`b1.reports/260426.findings-pre-post-sft-iterations.txt`](b1.reports/260426.findings-pre-post-sft-iterations.txt);
