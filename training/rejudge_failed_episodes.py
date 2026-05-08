@@ -1,27 +1,42 @@
 """
-rejudge_failed_episodes.py — Re-run the LLM judge on episodes whose
-original judge call failed (e.g. OAuth/auth/network errors mid-eval).
+rejudge_failed_episodes.py — Re-run the judge over an existing
+episodes.json. Two modes:
 
-WHY
-    eval_qwen35_lora.py catches judge exceptions and returns a fallback
-    JudgeResult(passed=False, score=0.0, rationale="judge evaluation
-    failed: {e}"). On a long eval, an intermittent auth/network blip
-    can corrupt 10-30% of episodes. The model responses are saved
-    correctly; only the judge verdicts are wrong. This script reruns
-    the judge on those episodes and updates episodes.json + summary.json
-    in place — no need to regenerate model responses.
+  (1) DEFAULT: target only episodes whose original judge call errored
+      (rationale starts with "judge evaluation failed:"). Recovers from
+      transient auth/network blips during the original eval.
+
+  (2) --all: target every episode in the file. Combined with
+      --force-llm-judge, this enables apples-to-apples re-scoring of
+      a full run via the LLM judge — useful when comparing against a
+      pre-SFT base eval that itself was forced through the LLM judge
+      (because the deterministic judge requires literal ANSWER: lines
+      that base models don't reliably emit).
+
+  --force-llm-judge routes every targeted episode through the LLM
+      judge by overriding query_type to FREE_FORM, regardless of the
+      task's original query_type. Use this when the model under test
+      doesn't follow the deterministic-judge format reliably.
+
+  --out-dir writes the rejudged episodes/summary to a NEW directory
+      instead of overwriting the source. Recommended whenever you're
+      re-judging ALL episodes, so the original headline numbers stay
+      in place for reference.
 
 USAGE
-    # 1. Fix the auth issue (export ANTHROPIC_API_KEY=... or refresh OAuth)
-    # 2. Sanity-check the judge:
-    python -c "from core.providers import create_provider; p = create_provider('anthropic:claude-opus-4-7'); print(p.chat([{'role':'user','content':'say ok'}]).text)"
-    # 3. Run this:
+    # mode (1): recover transient judge failures in-place (default)
+    python training/rejudge_failed_episodes.py \\
+        --episodes data/pipeline-runs/default/bench-eval-post-sft-v2_0/episodes.json \\
+        --tasks data/pipeline-runs/default/synthesis/tasks_eval.json
+
+    # mode (2): full LLM-judge re-score of v2.0 for apples-to-apples
+    # comparison with pre-SFT 4B (which was forced through LLM judge).
+    # Writes to a parallel output dir.
     python training/rejudge_failed_episodes.py \\
         --episodes data/pipeline-runs/default/bench-eval-post-sft-v2_0/episodes.json \\
         --tasks data/pipeline-runs/default/synthesis/tasks_eval.json \\
-        --judge anthropic:claude-opus-4-7
-
-    # 4. summary.json is recomputed; re-read pass rates
+        --all --force-llm-judge \\
+        --out-dir data/pipeline-runs/default/bench-eval-post-sft-v2_0-llm-only
 """
 
 from __future__ import annotations
@@ -93,10 +108,30 @@ def main() -> None:
                              "passage / challenge / acceptance_criteria)")
     parser.add_argument("--judge", default="anthropic:claude-opus-4-7",
                         help="Judge provider:model id (default: opus-4-7)")
+    parser.add_argument("--all", action="store_true", dest="rejudge_all",
+                        help="Re-judge ALL episodes, not just the ones whose "
+                             "original judge call errored. Combined with "
+                             "--force-llm-judge this gives a full LLM-judge "
+                             "re-score. Recommended with --out-dir so the "
+                             "original numbers are preserved.")
+    parser.add_argument("--force-llm-judge", action="store_true",
+                        help="Override every targeted episode's query_type "
+                             "to FREE_FORM, routing it through the LLM "
+                             "judge regardless of original task type. "
+                             "Apples-to-apples comparison with pre-SFT "
+                             "evals that ran with --force-llm-judge in "
+                             "eval_qwen35_lora.py.")
+    parser.add_argument("--out-dir", type=Path, default=None,
+                        help="Write rejudged episodes.json + summary.json "
+                             "to this directory instead of overwriting the "
+                             "source. Strongly recommended with --all so "
+                             "the original eval is preserved.")
     parser.add_argument("--dry-run", action="store_true",
-                        help="Show counts of failed episodes; do not re-judge.")
+                        help="Show counts of episodes that would be re-judged; "
+                             "do not actually re-judge.")
     parser.add_argument("--limit", type=int, default=0,
-                        help="Re-judge only the first N failed episodes (0 = all)")
+                        help="Re-judge only the first N targeted episodes "
+                             "(0 = all). Useful for smoke-testing.")
     args = parser.parse_args()
 
     # ---- Load episodes ----
@@ -104,16 +139,29 @@ def main() -> None:
     failed_idx = [i for i, ep in enumerate(episodes) if _is_failed(ep)]
     print(f"Total episodes: {len(episodes)}")
     print(f"Failed (judge errored): {len(failed_idx)}")
-    if not failed_idx:
+
+    # Decide what to re-judge
+    if args.rejudge_all:
+        target_idx = list(range(len(episodes)))
+        print(f"Mode: --all  (target all {len(target_idx)} episodes)")
+    else:
+        target_idx = failed_idx
+        print(f"Mode: failed-only  (target {len(target_idx)} episodes)")
+
+    if not target_idx:
         print("Nothing to do.")
         return
 
+    if args.force_llm_judge:
+        print("Force LLM judge: ON  (every episode routed through LLM judge)")
+
     if args.dry_run:
-        # Sample the first few failure rationales to confirm the pattern
-        for i in failed_idx[:5]:
+        for i in target_idx[:5]:
             ep = episodes[i]
             print(f"  [{i}] task={ep['task_uid']} cond={ep['condition']} "
-                  f"rationale={ep['judge_rationale'][:120]!r}")
+                  f"qtype={getattr(ep, 'query_type', 'n/a')}  "
+                  f"current passed={ep.get('passed')}  "
+                  f"rationale={(ep.get('judge_rationale') or '')[:80]!r}")
         return
 
     # ---- Load tasks for context lookup ----
@@ -132,7 +180,7 @@ def main() -> None:
     judge = LLMJudgeEvaluator(provider)
 
     # ---- Re-judge ----
-    todo = failed_idx if not args.limit else failed_idx[:args.limit]
+    todo = target_idx if not args.limit else target_idx[:args.limit]
     n_recovered = 0
     n_still_failed = 0
     for k, idx in enumerate(todo, 1):
@@ -142,6 +190,13 @@ def main() -> None:
             print(f"  [{k}/{len(todo)}] task {ep['task_uid']} not found in tasks file; skipping")
             continue
 
+        # If --force-llm-judge, override query_type to FREE_FORM so the
+        # judge skips its deterministic-extractor short-circuit.
+        if args.force_llm_judge:
+            effective_qt = "FREE_FORM"
+        else:
+            effective_qt = getattr(task, "query_type", "FREE_FORM")
+
         t0 = time.time()
         try:
             verdict = judge.evaluate(
@@ -149,7 +204,7 @@ def main() -> None:
                 passage=task.passage,
                 challenge=task.challenge,
                 acceptance_criteria=task.acceptance_criteria,
-                query_type=getattr(task, "query_type", "FREE_FORM"),
+                query_type=effective_qt,
             )
         except Exception as e:
             print(f"  [{k}/{len(todo)}] re-judge raised: {e}; leaving as-is")
@@ -173,13 +228,34 @@ def main() -> None:
               f"({elapsed:.1f}s)  {ep['task_uid']} / {ep['condition']}")
 
     # ---- Persist ----
-    args.episodes.write_text(json.dumps(episodes, indent=2))
-    print(f"\nWrote {len(episodes)} episodes -> {args.episodes}")
+    if args.out_dir:
+        args.out_dir.mkdir(parents=True, exist_ok=True)
+        episodes_out = args.out_dir / "episodes.json"
+        summary_out = args.out_dir / "summary.json"
+        # Preserve any pre-existing summary metadata if user pre-populated
+        # the out-dir; otherwise we'll seed from scratch.
+    else:
+        episodes_out = args.episodes
+        summary_out = args.episodes.parent / "summary.json"
 
-    summary_path = args.episodes.parent / "summary.json"
-    summary = _recompute_summary(episodes, summary_path)
-    summary_path.write_text(json.dumps(summary, indent=2))
-    print(f"Wrote summary -> {summary_path}")
+    episodes_out.write_text(json.dumps(episodes, indent=2))
+    print(f"\nWrote {len(episodes)} episodes -> {episodes_out}")
+
+    # Seed summary from the source's summary.json so model-label / base /
+    # adapter / tasks fields persist into the new dir.
+    src_summary_path = args.episodes.parent / "summary.json"
+    seed_summary = {}
+    if src_summary_path.exists() and (args.out_dir or not summary_out.exists()):
+        try:
+            seed_summary = json.loads(src_summary_path.read_text())
+        except json.JSONDecodeError:
+            pass
+    if args.out_dir and not summary_out.exists():
+        summary_out.write_text(json.dumps(seed_summary, indent=2))
+
+    summary = _recompute_summary(episodes, summary_out)
+    summary_out.write_text(json.dumps(summary, indent=2))
+    print(f"Wrote summary -> {summary_out}")
     print(f"\nRecovered: {n_recovered}  Still failed: {n_still_failed}")
     print(f"\nNew per-condition pass rates:")
     for cond, stats in summary["per_condition"].items():

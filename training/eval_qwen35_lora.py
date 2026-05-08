@@ -134,8 +134,19 @@ def run_task_pair(
     judge: LLMJudgeEvaluator,
     model_label: str,
     verbose: bool = False,
+    force_llm_judge: bool = False,
 ) -> List[Dict[str, Any]]:
-    """Run baseline + curated for one task; return 2 episode dicts."""
+    """Run baseline + curated for one task; return 2 episode dicts.
+
+    force_llm_judge: when True, route every task through the LLM judge
+    by overriding query_type to FREE_FORM. Useful for pre-SFT base
+    evals where the model reasons correctly but doesn't reliably emit
+    the literal ANSWER: format the deterministic judge requires —
+    bypassing the format-compliance gate lets the LLM judge measure
+    substantive correctness instead. The LLM judge already accepts
+    free-form conclusions; the routing change just bypasses the
+    deterministic-extractor short-circuit for non-FREE_FORM types.
+    """
     base_system = SOLVER_SYSTEM_PROMPT  # match SFT corpus prompt distribution
     user = build_user_prompt(task)
 
@@ -151,13 +162,17 @@ def run_task_pair(
             response = f"[GENERATION ERROR] {e}"
         elapsed = round(time.time() - t0, 2)
 
-        # Judge
+        # Judge — route to LLM judge for everything when force_llm_judge.
+        effective_query_type = (
+            "FREE_FORM" if force_llm_judge
+            else getattr(task, "query_type", "FREE_FORM")
+        )
         verdict = judge.evaluate(
             response=response,
             passage=task.passage,
             challenge=task.challenge,
             acceptance_criteria=task.acceptance_criteria,
-            query_type=getattr(task, "query_type", "FREE_FORM"),
+            query_type=effective_query_type,
         )
 
         ep = {
@@ -214,6 +229,14 @@ def main() -> None:
     parser.add_argument("--limit", type=int, default=0,
                         help="Only evaluate the first N tasks (0 = all)")
     parser.add_argument("--max-new-tokens", type=int, default=1024)
+    parser.add_argument("--force-llm-judge", action="store_true",
+                        help="Route every task through the LLM judge "
+                             "regardless of query_type. Useful for pre-SFT "
+                             "base evals where the model reasons correctly "
+                             "but doesn't reliably emit literal ANSWER: "
+                             "lines (default deterministic judge would "
+                             "score those 0). LLM judge cost: ~$0.05 per "
+                             "episode, ~$20 for a full 400-episode run.")
     parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args()
 
@@ -305,7 +328,8 @@ def main() -> None:
             continue
         print(f"[{i}/{len(tasks)}] {task.task_uid} + {sk_name}")
         eps = run_task_pair(
-            task, skill, model, tokenizer, judge, model_label, verbose=args.verbose,
+            task, skill, model, tokenizer, judge, model_label,
+            verbose=args.verbose, force_llm_judge=args.force_llm_judge,
         )
         all_eps.extend(eps)
 
