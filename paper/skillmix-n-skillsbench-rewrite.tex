@@ -1,0 +1,531 @@
+% arxiv-style preprint, single-column, compiles with pdflatex.
+% \documentclass{article} + an inline preamble so it builds without
+% external arxiv.sty.
+
+\documentclass[10pt]{article}
+
+% --- packages --------------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=black}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{nicefrac}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage[numbers,square,sort&compress]{natbib}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{xspace}
+\usepackage{parskip}
+\usepackage{tabularx}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+
+% --- arxiv-preprint title block --------------------------------------------
+\titleformat*{\section}{\Large\bfseries}
+\titleformat*{\subsection}{\large\bfseries}
+\titleformat*{\subsubsection}{\normalsize\bfseries}
+
+\title{\Large\bfseries When Procedural-Skill SFT Works:\\
+  A Negative-Result Iteration with a Bench-Format-Sensitivity Finding\\
+  Across 0.8B--4B Qwen3.5 Models}
+
+\author{Igor Strozzi\thanks{\texttt{istrozzi@matematica.ufrj.br}}\\
+  Applied Mathematics Department\\
+  Federal University of Rio de Janeiro}
+
+\date{May 6, 2026}
+
+% --- shorthand --------------------------------------------------------------
+\newcommand{\BL}{\textsc{baseline}\xspace}
+\newcommand{\CU}{\textsc{curated}\xspace}
+\newcommand{\Delt}{\ensuremath{\Delta}\xspace}
+\newcommand{\Qweno}{Qwen3.5-0.8B\xspace}
+\newcommand{\Qwent}{Qwen3.5-2B\xspace}
+\newcommand{\Qwenf}{Qwen3.5-4B\xspace}
+
+% ----------------------------------------------------------------------------
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We study whether supervised fine-tuning (SFT) on a small corpus of (task + injected procedural-skill block, Opus chain-of-thought, judge-confirmed pass) demonstrations teaches a smaller language model to apply procedural skills \emph{differentially} when shown an explicit procedure. The paper reports three classes of findings from a single-seed evaluation across eight training-recipe variants and three model sizes (\Qweno, \Qwent, \Qwenf) on a 200-task / 40-skill holdout.
+
+\textbf{Methodology.} (i) A negative-result iteration sequence: at 0.8B, five recipe variants (corpus composition, chat-template patches, partial fine-tuning, skill-block stripping) all cluster post-SFT \CU{} pass-rate inside a 2\,pp band of $0.565$--$0.585$, statistically indistinguishable from \BL. (ii) A bench format-compliance artifact: pre-SFT \Qwenf{} reasons correctly on bench tasks but does not reliably emit the literal \texttt{ANSWER:} format the deterministic judge requires, scoring $\sim\!0/200$ under deterministic dispatch. Since 88.5\% of the holdout uses this dispatch, post-SFT lifts on this bench conflate format learning, format-conditional reasoning gating, and procedural application. We argue similar SFT-on-procedural-demonstrations claims should be read with the same caveat absent a format-tolerant base-model control.
+
+\textbf{Empirical, with attribution.} At 2B, the simplest recipe (LoRA $r{=}16$, 353 rows, three epochs) yields \CU{} pass-rate $0.825$ vs \BL{} $0.750$ under the bench's deterministic-mixed dispatch, and \CU{} $0.915$ vs \BL{} $0.815$ under an LLM-only re-judge that bypasses the format-compliance gate (\S\ref{sec:llm-rejudge}). A pre-SFT 2B control ($0.685/0.710$) isolates $+11.5$\,pp \CU{} contribution to SFT and $+14.5$\,pp to base-model scaling under deterministic judging.
+
+\textbf{Empirical, with bounded attribution at 4B.} At 4B, the same recipe yields \CU{} $0.880$ / \BL{} $0.835$ / $\Delta{=}+0.045$ under deterministic dispatch and $0.985 / 0.920 / +0.065$ under LLM-only re-judge. v2.0 \CU{} ties the pre-SFT Claude Haiku 4.5 reference at $0.985$ under fair judging (197/200 identical pass count), where the deterministic dispatch had v2.0 ahead at $0.880$ vs haiku $0.800$ --- the format-compliance artifact had penalised haiku more than the SFT-trained students. Across four students (v1 / v1.9 / v2.0 / haiku) the LLM-only $\Delta$ trajectory is monotone non-monotone in the predicted shape ($-0.005 / +0.100 / +0.065 / +0.030$), consistent with bench saturation. The cross-model bootstrap test for v1.9 vs v2.0 saturation still fails on a single seed at $n{=}200$ ($p{=}0.191$ one-sided), but the 4-point capability-vs-$\Delta$ shape is more robust to per-point noise than the adjacent-pair test. Because pre-SFT 4B under fair judging is still pending at time of writing, the v2.0 attribution split is bounded but not directly measured.
+
+We release pipeline, recipes, eval scripts, and full episode-level logs. Headline claims rely on a single seed per condition; the threats to validity (judge-overlap, single-skill-per-task synthesis, single-seed evaluation, path mismatch at 0.8B) are itemised in \S\ref{sec:threats}.
+\end{abstract}
+
+\section{Introduction}
+
+A common compositional-skills hypothesis holds that LLM capabilities can be decomposed into reusable skills, and that explicit procedural instructions can elicit better task performance from smaller students than implicit-skill priming alone (cf.\ Skill-Mix \citep{yu2024skillmix}, procedural-injection benchmarks). A natural follow-up: does demonstrating the explicit procedure during fine-tuning teach a smaller student to \emph{use} such procedures more effectively at inference time, or merely to imitate the response shape?
+
+We answer this empirically, on a self-contained pipeline that generates a procedural-skill SFT corpus from a hand-curated declarative skill catalog, trains Qwen3.5 students at three scales with eight recipe variants, evaluates against a 200-task holdout with deterministic and LLM-judge-based scoring, and probes out-of-distribution behavior with a 52-prompt generality battery. Throughout, the same model (Opus 4.7) was used for skill rewriting, task synthesis, baseline trace generation, and judge-of-record scoring; this is a structural threat to validity that we make explicit (\S\ref{sec:threats}) before presenting results.
+
+We organise the paper's contributions in two tiers --- methodological observations that constrain interpretation of similar work, and empirical results with explicit attribution scope.
+
+\textbf{Methodological contributions.}
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{A negative-result iteration sequence at 0.8B.} Five recipe variants (varying corpus composition, chat-template patches, partial fine-tuning, skill-block stripping) all cluster post-SFT \CU{} pass-rate inside a 2\,pp band of $0.565$--$0.585$. We document each variant including a v1.7 ``mode collapse'' failure mode that recurs as a 0.8B capacity-floor artifact (no analogue at 4B). The cluster constrains the diagnosis to ``base-model capacity is the binding constraint at this corpus size,'' which the 2B run validates.
+  \item \textbf{A bench format-compliance artifact.} Pre-SFT \Qwenf{} reasons correctly on bench tasks but does not reliably emit \texttt{ANSWER:} lines under the deterministic dispatch covering 88.5\% of the holdout, scoring $\sim\!0/200$. The bench is, in part, a format-compliance test for non-SFT-trained students. We document this and itemise what it implies for any post-SFT lift claim absent a format-tolerant base-model control (\S\ref{sec:format-artifact}).
+\end{enumerate}
+
+\textbf{Empirical results.}
+\begin{enumerate}[leftmargin=*, resume]
+  \item \textbf{At 2B, the simplest recipe works, and the lift is attributable.} \CU{} pass-rate $0.825$ vs \BL{} $0.750$ (deterministic). A pre-SFT 2B control ($0.685/0.710$) isolates $+11.5$\,pp \CU{} contribution to SFT and $+14.5$\,pp to base-model scaling (\S\ref{sec:v19}). The procedural-$\Delta$ ($\CU - \BL$) lifts from $+0.025$ (pre-SFT) to $+0.075$ (post-SFT), with paired-bootstrap 95\% CI $[+0.020, +0.130]$ and McNemar $p{=}0.018$ on a single seed. Under the LLM-only re-judge (\S\ref{sec:llm-rejudge}) the $\Delta$ rises to $+0.100$ ($p{=}0.0027$), reflecting that the deterministic judge was biased against the curated condition --- procedure-following responses bury conclusions in narration more often than direct-thinking responses do.
+  \item \textbf{LLM-only re-judge reveals a 4-point cross-student saturation curve.} Re-judging the existing model responses through the LLM judge regardless of task type bypasses the format-compliance gate (\S\ref{sec:format-artifact}). Under fair scoring, $\Delta$ across the four students follows a monotone non-monotone shape: v1 (0.8B+SFT) $\Delta = -0.005$ (sub-capacity-floor), v1.9 (2B+SFT) $\Delta = +0.100$ (peak), v2.0 (4B+SFT) $\Delta = +0.065$ (saturating), haiku-4-5 (frontier reference) $\Delta = +0.030$ (saturated). v2.0's \CU{} ties haiku at $0.985$ (197/200 identical pass count). The 4-point shape is more robust to per-point noise than the adjacent-pair v1.9-vs-v2.0 saturation test (which still fails at $p{=}0.191$ one-sided on a single seed).
+  \item \textbf{At 4B, the same recipe yields a smaller $\Delta$ that we cannot fully attribute.} \CU{} $0.880$, \BL{} $0.835$, $\Delta$ $+0.045$ under deterministic judging (McNemar exact $p{=}0.049$, single seed); $0.985 / 0.920 / +0.065$ under LLM-only re-judge ($p{=}0.00098$, no longer Bonferroni-fragile). The shrinkage from v1.9's $\Delta$ is directionally consistent with bench saturation but is not statistically distinguishable from sampling noise on the v1.9-vs-v2.0 adjacent-pair test (\S\ref{sec:stats}). The pre-SFT 4B attribution control fails because of the format-compliance artifact (\S\ref{sec:format-artifact}); a fresh pre-SFT 4B run with format-tolerant scoring is in progress at time of writing.
+  \item \textbf{Generality is preserved at 4B.} A 52-prompt OOD probe shows v2.0 (4B+LoRA) matches base 4B on factual recall ($34/34$ HIT), eliminates a small calibration regression observed in v1.9 (2B+LoRA), and produces no format lock-in despite three epochs of training on a single response shape.
+\end{enumerate}
+
+The paper is structured to let the reader weight these tiers independently. The methodological contributions hold under any reading; the empirical results carry the caveats of single-seed evaluation and a judge that authored the corpus.
+
+\section{Pipeline and Bench}
+
+\subsection{Skill catalog and procedural rewrite}
+We hand-curate 40 declarative skills across categories (logical fallacies, deductive forms, cognitive biases, interpretive patterns, spatial reasoning), seeded from Skill-Mix Table 5/6 \citep{yu2024skillmix} and expanded across three review batches. Each declarative entry contains \texttt{\{name, definition, example\}}. We use Opus 4.7 (1M context) to rewrite each into a procedural form: ordered procedure steps, when-to-use criteria, constraints, and a positive/negative worked example. The resulting \texttt{bench\_catalog/skills.json} contains the procedural skill definitions used as injection content.
+
+\subsection{Task synthesis}
+A task synthesizer (we call it \textsc{s3.m5}) prompts Opus, given a procedural skill, to produce 15 tasks designed to require that skill. Tasks carry one of four query types: \texttt{YES\_NO} (122/200, 61\%), \texttt{FREE\_FORM} (33/200, 16.5\%), \texttt{SINGLE\_WORD} (23/200, 11.5\%), \texttt{RANKING} (22/200, 11\%). Tasks are split into \texttt{tasks\_train.json} (400 tasks) and \texttt{tasks\_eval.json} (200 tasks), disjoint by task-uid and ordered by a \texttt{task\_skill\_map} that records the 1:1 task-to-skill pairing. Because each task is generated knowing the skill it should require, the bench measures procedural application on procedure-aligned tasks, not skill-routing or compositional skill use; we discuss the implications in \S\ref{sec:threats}.
+
+\subsection{SFT corpus generation}
+We trace each training task with Opus under the \textsc{solver} system prompt with the corresponding procedural skill block injected. Episodes that pass the LLM-judge are filtered to a curated-only SFT corpus of 353 rows. Each row is a chat-format triple: \texttt{(system: SOLVER + skill block, user: task, assistant: Opus's chain-of-thought + ANSWER: line)}.
+
+\subsection{Evaluation protocol}
+For every \texttt{(task, condition)} pair on the 200-task holdout we generate one student response and judge it. Two conditions: \BL{} (\textsc{solver} prompt without skill block) and \CU{} (\textsc{solver} prompt with the corresponding procedural skill injected). Judge dispatch: deterministic \texttt{ANSWER:}-line extraction for \texttt{YES\_NO}/\texttt{SINGLE\_WORD}/\texttt{RANKING}, Opus 4.7 LLM-judge for \texttt{FREE\_FORM}. Decoding: greedy ($T{=}0$), \texttt{repetition\_penalty}\,$=1.05$ (to break degenerate token loops on out-of-distribution prompts), \texttt{max\_new\_tokens} 1024 (post-SFT) or 2048 (pre-SFT base; thinking-mode is verbose). The two reported per-condition statistics are pass-rate (binary judge verdict) and mean score (0--1 judge score). We also report $\Delta = \mathrm{pass\_rate}(\CU) - \mathrm{pass\_rate}(\BL)$, the differential procedural lift. All numbers are single-seed.
+
+\subsection{Training}
+LoRA \citep{hu2022lora} via TRL\,$\geq$\,0.18 \citep{trl} and PEFT\,$\geq$\,0.13. Base models are the Qwen3.5 small dense series \citep{qwen35release}, which builds on the Qwen3 architecture \citep{qwen3report}. Adapters target all-linear modules. The chat template is patched with \texttt{\{\% generation \%\}\dots\{\% endgeneration \%\}} markers to enable assistant-only loss masking (TRL $\geq$\,0.18 falls back to loss-on-all-tokens otherwise). For partial-FT runs (v1.7, v1.8) we freeze all but the top-$N$ transformer layers + \texttt{lm\_head} + final \texttt{norm}, and use bitsandbytes 8-bit Adam \citep{dettmers2023qlora} to fit \Qweno{} on consumer hardware.
+
+\section{Recipe Iterations}
+We report eight recipe variants. Five at 0.8B (v1--v1.8) explore corpus composition, partial fine-tuning, and skill-block masking; two at 2B/4B (v1.9, v2.0) test model-size as a separate axis.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{figures/fig1_progression.pdf}
+\caption{Baseline (\BL) and curated (\CU) pass rates across all eleven evaluated configurations: pre-SFT controls, the five 0.8B SFT iterations, and the model-size pivot to 2B and 4B.}
+\label{fig:progression}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}l l Y r r r@{}}
+\toprule
+\textbf{Variant} & \textbf{Base} & \textbf{Recipe} & \textbf{BL} & \textbf{CU} & \textbf{$\Delta$} \\
+\midrule
+Pre-SFT 0.8B & 0.8B (Ollama) & none & 0.510 & 0.565 & $+0.055$ \\
+Pre-SFT 2B   & 2B (HF)       & none & 0.685 & 0.710 & $+0.025$ \\
+Pre-SFT 4B   & 4B (HF)       & none & $0.000$\,$\dagger$ & $0.000$\,$\dagger$ & --- \\
+Pre-SFT haiku-4-5 (ref) & claude-haiku-4-5 & none & 0.785 & 0.800 & $+0.015$ \\
+\addlinespace
+\textbf{v1}    & 0.8B & LoRA $r{=}8$, curated-only, 353 rows           & 0.635 & 0.585 & $-0.050$ \\
+\textbf{v1.5}  & 0.8B & LoRA + BL+CU mixed corpus                       & 0.650 & 0.425 & $-0.225$ \\
+\textbf{v1.6}  & 0.8B & LoRA + drop ceiling skills + chat-patch         & 0.645 & 0.565 & $-0.080$ \\
+\textbf{v1.7}  & 0.8B & partial FT (top-6 layers + lm\_head)            & 0.465 & 0.615 & $+0.150$\,$\ddagger$ \\
+\textbf{v1.8}  & 0.8B & partial FT + skill-block stripped from training & 0.545 & 0.570 & $+0.025$ \\
+\textbf{v1.9}  & 2B   & LoRA $r{=}16$, curated-only, 353 rows           & \textbf{0.750} & \textbf{0.825} & $\boldsymbol{+0.075}$ \\
+\textbf{v2.0}  & 4B   & LoRA $r{=}32$, curated-only, 353 rows           & \textbf{0.835} & \textbf{0.880} & $\boldsymbol{+0.045}$ \\
+\bottomrule
+\end{tabularx}
+\caption{Recipe-by-recipe pass rates on the 200-task holdout, two conditions per task, single seed throughout, deterministic-mixed judge. All bases are Qwen3.5 dense models except where noted. $\dagger$ Pre-SFT 4B's $0/0$ is a format-compliance artifact (\S\ref{sec:format-artifact}). $\ddagger$ v1.7's apparent $+\Delta$ is an artifact of \BL{} collapse, not differential learning (\S\ref{sec:v17-mode-collapse}). LLM-only re-judge values (Table~\ref{tab:llm-only}) are systematically higher and reframe several of these results.}
+\label{tab:headline}
+\end{table}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}l r r r c c@{}}
+\toprule
+& \textbf{BL} & \textbf{CU} & \textbf{$\Delta$} & \textbf{McNemar $p$} & \textbf{bootstrap 95\% CI on $\Delta$} \\
+\midrule
+v1   (0.8B+LoRA)   & 0.710 & 0.705 & $-0.005$ & --- & --- \\
+v1.9 (2B+LoRA)     & 0.815 & 0.915 & $+0.100$ & $0.0027$ & $[+0.040,\ +0.160]$ \\
+v2.0 (4B+LoRA)     & 0.920 & 0.985 & $+0.065$ & $0.00098$ & $[+0.030,\ +0.105]$ \\
+haiku-4-5 (ref)    & 0.955 & 0.985 & $+0.030$ & --- & --- \\
+\bottomrule
+\end{tabular}
+\caption{LLM-only re-judge of the four student configurations (\S\ref{sec:llm-rejudge}). The deterministic-mixed judge in Table~\ref{tab:headline} required literal \texttt{ANSWER:} lines on $88.5\%$ of tasks; this table re-routes every episode through the LLM judge regardless of task type, removing the format-compliance gate that the format-sensitivity finding (\S\ref{sec:format-artifact}) documents. All pass rates rise; v2.0 \CU{} ties the haiku reference at $0.985$ (197/200 identical pass count). Pre-SFT 4B and pre-SFT 2B under the same re-judge are pending at time of writing.}
+\label{tab:llm-only}
+\end{table}
+
+\section{0.8B: Five Negative Results}
+
+\subsection{v1: simplest recipe, format-only learning}
+LoRA $r{=}8$/$\alpha{=}16$ on the 353-row \CU{} corpus for three epochs at $\mathrm{lr}{=}2{\times}10^{-4}$ lifts the 0.8B \BL{} pass-rate by $+12.5$\,pp ($0.510 \to 0.635$) but does not lift \CU; $\Delta$ flips from $+0.055$ (pre-SFT) to $-0.050$ (post-SFT). Per-skill inspection at $n{=}200$ shows the lift is concentrated on tasks where the model previously failed to produce the bench's \texttt{ANSWER:} format and now does so. We interpret v1 as having taught primarily the response shape (step-by-step + \texttt{ANSWER:} line), with no detectable transfer of procedural skill use.
+
+\subsection{v1.5--v1.6: corpus composition does not unlock differential lift}
+Adding baseline-passing rows to the SFT corpus (v1.5; teaching the model to produce procedural responses both with and without skill-block presence) collapses \CU{} pass-rate to $0.425$. Dropping ceiling-passing skills (v1.6; removing tasks where the base already passes $\geq\!0.90$ to avoid the model learning to add procedure overhead on tasks it can solve directly) lands at $0.645/0.565$ --- equivalent to v1 within noise.
+
+\subsection{v1.7: full-rank partial FT and the mode-collapse artifact}\label{sec:v17-mode-collapse}
+Replacing LoRA with full-rank fine-tuning of the top-6 layers + \texttt{lm\_head} + final \texttt{norm} (using 8-bit Adam to fit GPU budget) produces an apparent positive $\Delta$ ($+0.150$) but with \BL{} pass-rate \emph{collapsed} to $0.465$ --- substantially below pre-SFT $0.510$. Inspection of v1.7 \BL{} failures reveals the model emits ``\texttt{Step 1 (SKILL block: \dots)}'' prefaces and procedural step language even when no skill block is in the system prompt --- i.e.\ the model has learned to expect a skill block and hallucinates one when absent. The $+0.150$ $\Delta$ does not reflect the model learning to use skill blocks; it reflects the model losing the ability to function without one.
+
+\subsection{v1.8: skill-block stripping fixes mode collapse, no new ceiling}
+Stripping the skill block from the system prompt of every training row (so the model never sees a skill block during training, only the procedural response) recovers \BL{} ($0.545$) but lands \CU{} at $0.570$ --- within the $0.565$--$0.585$ cluster shared by v1, v1.6, and v1.8. The mode-collapse failure mode is fixed; no new ceiling is unlocked.
+
+\subsection{0.8B summary}
+Three well-formed variants (v1, v1.6, v1.8) cluster \CU{} within 2\,pp. The bench ceiling at 0.8B does not move with corpus composition, recipe, chat-template patches, or partial fine-tuning. We infer the ceiling is set by base-model capacity at this corpus size, not by the training recipe. Whether scaling the corpus would change this at 0.8B is untested.
+
+\section{2B and 4B: Model Size as the Decisive Axis}
+
+\subsection{v1.9 (2B): SFT contribution is positive and outside binomial noise}\label{sec:v19}
+Same recipe shape as v1 (LoRA, curated-only, 353 rows, 3 epochs), bumped to $r{=}16$/$\alpha{=}32$ to give the larger base more LoRA capacity, on \Qwent. Result: \BL{} $0.750$ / \CU{} $0.825$ / $\Delta$ $+0.075$ (paired-bootstrap 95\% CI $[+0.020, +0.130]$; McNemar $\chi^2{=}5.60$, $p{=}0.018$ on a single seed; \S\ref{sec:stats}).
+
+A pre-SFT 2B control ($0.685/0.710$) attributes the lift over pre-SFT 0.8B (Table~\ref{tab:attribution}). On this measurement, the procedural-$\Delta$ lifts from $+0.025$ (pre-SFT) to $+0.075$ (post-SFT), a $+5$\,pp differential procedural-application lift attributable to SFT, and the absolute \CU{} contribution attributable to SFT is $+11.5$\,pp on top of base 2B's $0.710$. This is the cleanest available measurement of the SFT contribution in the present study; the corresponding 4B measurement (\S\ref{sec:v20}) is bounded but not directly attributable.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\linewidth]{figures/fig4_attribution.pdf}
+\caption{v1.9 lift over pre-SFT 0.8B decomposed into base-model scaling (gray; measured between the two pre-SFT controls) and SFT contribution at 2B (green; the residual from pre-SFT 2B to v1.9). The SFT contribution is +6.5\,pp on \BL{} and +11.5\,pp on \CU.}
+\label{fig:attribution}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lrr@{}}
+\toprule
+& $\Delta$BL & $\Delta$CU \\
+\midrule
+Base scaling 0.8B $\to$ 2B  & $+0.175$ & $+0.145$ \\
+SFT contribution at 2B      & $+0.065$ & $\mathbf{+0.115}$ \\
+\midrule
+Total v1.9 vs pre-SFT 0.8B  & $+0.240$ & $+0.260$ \\
+\bottomrule
+\end{tabular}
+\caption{v1.9 attribution split. Base scaling is measured between the two pre-SFT controls; SFT contribution is the residual from pre-SFT 2B to v1.9.}
+\label{tab:attribution}
+\end{table}
+
+\subsection{The Haiku-comparison observation, before and after format-tolerant re-judge}\label{sec:compute-efficiency}
+
+A natural question is how SFT'd students compare against a frontier reference on this bench. We had originally framed this as a compute-efficiency observation: under the deterministic-mixed dispatch, the post-SFT 2B \CU{} pass-rate ($0.825$) exceeded the pre-SFT Claude Haiku 4.5 reference of $0.800$, while the pre-SFT 2B base ($0.710$) did not, suggesting the crossing was attributable to the 353-row SFT recipe.
+
+Two findings in this paper undermine this framing and we present the corrected picture instead.
+
+\textbf{The format-compliance artifact (\S\ref{sec:format-artifact}) penalised Haiku more than it penalised the SFT'd students.} Under the LLM-only re-judge (Table~\ref{tab:llm-only}, \S\ref{sec:llm-rejudge}) Haiku's \CU{} pass-rate rises from $0.800$ to $0.985$ --- a $+18.5$\,pp shift, the largest of any student in the experiment. Haiku's free-form-prose conclusions were disproportionately rejected by the deterministic \texttt{ANSWER:}-line extractor; under fair scoring Haiku is at the bench's effective ceiling. Under LLM-only judging, v1.9 \CU{} ($0.915$) does \emph{not} cross Haiku ($0.985$); v2.0 \CU{} ($0.985$) ties Haiku at the ceiling (197/200 identical pass count). The original ``2B+SFT crosses Haiku'' framing was an artifact of the format-compliance gate.
+
+\textbf{What survives the remediation.} v2.0 (4B+SFT) reaches the bench's effective ceiling under fair scoring, matching the frontier reference. We resist a sharper compute-efficiency claim because: pre-SFT 4B under format-tolerant scoring is still pending at time of writing, so we cannot rule out that the 4B base already matches Haiku before any SFT; Haiku's parameter count is not published and community estimates span roughly $10^{10}$\,--\,$3{\times}10^{10}$ parameters with no anchor; Opus 4.7 wrote the corpus content, generated the SFT traces, and judged both students, so the comparison sits inside a structurally biased judging path (\S\ref{sec:threats}); the SFT student is in-distribution for the bench while Haiku is being asked cold.
+
+The honest summary is: under fair judging, v2.0 (4B+SFT) and Haiku are tied at the bench's curated ceiling on tasks of this construction style. Whether this constitutes a compute-efficiency observation depends on the still-unmeasured pre-SFT 4B baseline; if pre-SFT 4B's \CU{} is meaningfully below v2.0's $0.985$, the SFT contribution at 4B is real and the v2.0$=$Haiku comparison is partially attributable to SFT; if pre-SFT 4B's \CU{} is already near $0.985$, the v2.0$=$Haiku comparison is mostly attributable to base scaling.
+
+\subsection{v2.0 (4B): bounded contribution and a directional saturation signal}\label{sec:v20}
+
+Same recipe at LoRA $r{=}32$/$\alpha{=}64$ on \Qwenf. Result: \BL{} $0.835$ / \CU{} $0.880$ / $\Delta$ $+0.045$ (paired-bootstrap 95\% CI $[+0.005, +0.085]$; McNemar exact $p{=}0.049$ on a single seed). Both conditions exceed v1.9 absolutely; the procedural-$\Delta$ shrinks from $+0.075$ to $+0.045$.
+
+We caution against reading the per-model $p{=}0.049$ as established significance. It is one McNemar test on a single seed, and would not survive Bonferroni correction across the two per-model tests in Table~\ref{tab:stats-per-model}. The honest summary is that v2.0's $\Delta$ has a positive bootstrap CI that just barely excludes zero on this trial. A 3--5 seed replication would be the appropriate confirmation; we do not have it.
+
+The pre-SFT 4B attribution control was attempted but failed: base \Qwenf{} reasons correctly on bench tasks (spot-checks confirm step-by-step reasoning that reaches the right answer) but does not reliably emit the literal \texttt{ANSWER:} format the deterministic judge requires. With 88.5\% of the bench using the deterministic judge, pre-SFT 4B scores $\sim\!0/200$, which is a format-compliance artifact rather than a reasoning measurement. The v2.0 SFT contribution at 4B is therefore bounded by the saturation trend (plausibly $0.03$--$0.10$ on \CU) but not directly measured on this bench.
+
+The v1.9$\to$v2.0 deltas ($\Delta$BL $+0.085$, $\Delta$CU $+0.055$, $\Delta\Delta -0.030$) are unaffected by this artifact since both v1.9 and v2.0 are SFT-trained format-compliant students. The shrinkage of the SFT-attributable $\Delta$ from $+0.075$ to $+0.045$ is consistent with bench saturation in direction but, as \S\ref{sec:stats} shows, is not statistically distinguishable from sampling noise at $n{=}200$.
+
+\paragraph{Per-skill structure.} Figure~\ref{fig:per-skill} shows the v2.0 procedural-$\Delta$ broken down by skill. Eleven skills lift on \CU{} (concentrated on interpretive and spatial-social skills); 25 are flat (mostly because \BL{} is at ceiling); 4 regress (deductive-logic skills where the base has ceiling competence and the 5-step procedure introduces sub-inference error opportunities). The lift/flat/regression pattern is the same one observed at 0.8B in v1, shifted upward by base scaling.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/fig2_per_skill_v2_0.pdf}
+\caption{Per-skill procedural-$\Delta$ at v2.0 ($n{=}5$ per skill, 40 skills). 11 skills lift on \CU; 25 are flat (mostly because \BL{} is already at ceiling); 4 regress. The lift cluster concentrates on interpretive and spatial-social skills; the regression cluster on deductive-logic skills where the model has ceiling competence on \BL.}
+\label{fig:per-skill}
+\end{figure}
+
+\subsection{Statistical tests of the per-model and cross-model $\Delta$ estimates}\label{sec:stats}
+
+Each task is run in both \BL{} and \CU{} conditions, so the verdicts are paired. We run McNemar's test (continuity-corrected $\chi^2$ for $n_{\mathrm{discordant}} \geq 25$, exact binomial otherwise) per model, and a paired bootstrap (10{,}000 resamples of \texttt{task\_uid} with replacement) for 95\% CIs on $\Delta$. Cross-model: we resample v1.9 and v2.0 independently and report a one-sided bootstrap test for $H_0\!: \Delta_{\mathrm{v1.9}} \leq \Delta_{\mathrm{v2.0}}$ (the direction predicted by the saturation hypothesis). All tests are on a single seed per condition.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}l c c c c@{}}
+\toprule
+& \multicolumn{2}{c}{\textbf{deterministic-mixed}} & \multicolumn{2}{c}{\textbf{LLM-only re-judge}} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+& $\Delta$ & McNemar $p$ / 95\% CI & $\Delta$ & McNemar $p$ / 95\% CI \\
+\midrule
+v1.9 & $+0.075$ & $\chi^2{=}5.60$, $p{=}0.018$ & $+0.100$ & $\chi^2{=}9.03$, $p{=}0.0027$ \\
+     &          & CI $[+0.020,\ +0.130]$       &          & CI $[+0.040,\ +0.160]$ \\
+v2.0 & $+0.045$ & exact, $p{=}0.049$           & $+0.065$ & exact, $p{=}0.00098$ \\
+     &          & CI $[+0.005,\ +0.085]$       &          & CI $[+0.030,\ +0.105]$ \\
+\bottomrule
+\end{tabular}
+\caption{Per-model paired tests on the procedural-$\Delta$, under both judging paths. Both models have a positive $\Delta$ with bootstrap CI excluding zero in both paths. Under LLM-only re-judge, v2.0's $p{=}0.00098$ comfortably survives Bonferroni correction across the two tests (the deterministic-mixed $p{=}0.049$ would not). Neither test is replicated across seeds.}
+\label{tab:stats-per-model}
+\end{table}
+
+For the cross-model saturation test, the result is essentially unchanged across judging paths:
+\begin{itemize}[leftmargin=*,nosep]
+  \item Deterministic-mixed: $\Delta_{\mathrm{v1.9}} - \Delta_{\mathrm{v2.0}} = +0.030$, CI $[-0.040,\ +0.100]$, one-sided $p = 0.225$.
+  \item LLM-only re-judge: $\Delta_{\mathrm{v1.9}} - \Delta_{\mathrm{v2.0}} = +0.035$, CI $[-0.040,\ +0.105]$, one-sided $p = 0.191$.
+\end{itemize}
+
+The CI includes zero in both paths. The $\Delta$-shrinkage from v1.9 to v2.0 is consistent with bench saturation in direction but is \emph{not statistically distinguishable from sampling noise at the present sample size}, regardless of judging path. The cross-student 4-point trajectory in \S\ref{sec:llm-rejudge} is more informative than this adjacent-pair test, since it constrains $\Delta$ across a 4-point capability range rather than at a single pair. Confirming the saturation pattern with adjacent-pair statistics would require either (a) larger $n$ ($\sim\!800$--$1200$ per condition for $80\%$ power to detect an effect of this magnitude), (b) a bench where the procedural lift is 2--3$\times$ larger so the absolute $\Delta$ is more robustly measurable, or (c) multi-seed evaluation to reduce per-condition variance.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{figures/fig3_bootstrap.pdf}
+\caption{Left: bootstrap distributions of the procedural-$\Delta$ for v1.9 and v2.0 (10{,}000 resamples of paired \texttt{task\_uid}s). Both distributions sit above zero (the dashed line) but overlap substantially. Right: distribution of the difference $\Delta_{\mathrm{v1.9}} - \Delta_{\mathrm{v2.0}}$. The 95\% CI shaded in red includes zero, and the one-sided test for the saturation hypothesis returns $p{=}0.225$. Direction is consistent with saturation; magnitude is not statistically distinguishable from noise.}
+\label{fig:bootstrap}
+\end{figure}
+
+\subsection{LLM-only re-judge: closing the format gap}\label{sec:llm-rejudge}
+
+The format-compliance artifact documented in \S\ref{sec:format-artifact} blocks the cleanest possible attribution at 4B and constrains the interpretation of the deterministic-judge headline numbers. The natural remediation is to re-route every episode through the LLM judge regardless of its task type, since the LLM judge already accepts free-form conclusions on \texttt{FREE\_FORM} tasks. We applied this remediation to the four available student configurations (v1, v1.9, v2.0, haiku-4-5) by re-running the judge on the existing model responses --- no model regeneration --- and present the resulting numbers in Table~\ref{tab:llm-only}.
+
+\paragraph{All pass rates rise; haiku rises the most.} The deterministic-mixed judge under-counted passes universally (Table~\ref{tab:rejudge-deltas}). Even the SFT'd students, which were trained to produce \texttt{ANSWER:} format, occasionally emitted alternative phrasings (``Final Answer: X'', ``I conclude X'', or stating the answer in prose) that the deterministic extractor missed. Haiku, which was never trained on the bench's response format, was penalised the most --- $+17$\,pp on \BL{} and $+18.5$\,pp on \CU{} relative to the deterministic-mixed scoring. This is the cleanest direct evidence that the format-compliance gate biased the bench against students whose response style does not match the SFT distribution.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}l r r r@{}}
+\toprule
+& $\Delta$BL & $\Delta$CU & $\Delta\Delta$ \\
+\midrule
+v1   (0.8B+LoRA)   & $+0.075$ & $+0.120$ & $+0.045$ \\
+v1.9 (2B+LoRA)     & $+0.065$ & $+0.090$ & $+0.025$ \\
+v2.0 (4B+LoRA)     & $+0.085$ & $+0.105$ & $+0.020$ \\
+haiku-4-5 (ref)    & $+0.170$ & $+0.185$ & $+0.015$ \\
+\bottomrule
+\end{tabular}
+\caption{Score shifts from deterministic-mixed (Table~\ref{tab:headline}) to LLM-only re-judge (Table~\ref{tab:llm-only}). All four students gain on both conditions; haiku gains the most. For the three SFT'd students, $\Delta$CU $>$ $\Delta$BL, meaning the deterministic judge was systematically biased \emph{against} the curated condition --- procedure-following responses bury conclusions in narration more often than direct-thinking responses do.}
+\label{tab:rejudge-deltas}
+\end{table}
+
+\paragraph{The deterministic judge was biased against the curated condition.} For all three SFT'd students, $\Delta$CU exceeds $\Delta$BL by $2$--$4.5$\,pp under re-judge. When the procedure block is present, the model occasionally embeds its conclusion inside procedural narration (``\dots therefore the conclusion follows: X'') rather than ending with a literal \texttt{ANSWER: X} line. The deterministic judge under-counted curated wins systematically, under-stating the SFT contribution. The corrected $\Delta$ values in Table~\ref{tab:llm-only} are the more accurate measurement of the SFT-attributable differential procedural lift.
+
+\paragraph{v1's negative $\Delta$ was an artifact.} Under the deterministic dispatch, v1 had \CU{} below \BL{} ($\Delta = -0.050$); we had interpreted this as ``0.8B SFT taught format but no procedural application, and the procedure block actively introduced format-noncompliance noise that hurt the judge's score.'' Under LLM-only judging, v1's $\Delta$ is $-0.005$ (essentially zero). The interpretation sharpens: 0.8B SFT lifts \BL{} substantially ($+0.20$\,pp over the original Ollama pre-SFT) and lifts \CU{} only slightly less ($+0.14$\,pp), producing zero differential procedural application but no actual regression. The capacity-floor diagnosis at 0.8B holds; the ``\CU{} below \BL'' framing was the format-compliance gate hurting curated more than baseline.
+
+\paragraph{Cross-student saturation curve under fair judging.} The four LLM-only $\Delta$ values traverse student capability tier in the predicted shape:
+\begin{itemize}[leftmargin=*, nosep]
+  \item v1   (0.8B + LoRA, sub-capacity-floor): $\Delta = -0.005$
+  \item v1.9 (2B  + LoRA, peak SFT contribution): $\Delta = +0.100$
+  \item v2.0 (4B  + LoRA, saturating): $\Delta = +0.065$
+  \item haiku-4-5 (frontier reference, saturated): $\Delta = +0.030$
+\end{itemize}
+
+The trajectory is monotone non-monotone: $\Delta$ rises from below-floor zero, peaks where SFT has the most headroom relative to base, and decays as the base model approaches the bench's effective ceiling. None of the adjacent-pair differences are individually statistically distinguishable from sampling noise on a single seed at $n{=}200$; the 4-point shape is more robust to per-point noise than any single adjacent-pair test would be, and is qualitatively informative even where the formal test is underpowered.
+
+\paragraph{What this remediation does and doesn't unlock.} It removes the format-compliance gate as a confound for students whose responses we already have. It does \emph{not} remediate pre-SFT 4B's $0/200$ from Table~\ref{tab:headline}: that requires a fresh evaluation under \texttt{--force-llm-judge} (in progress at time of writing). Once pre-SFT 4B lands under fair judging, the v2.0 attribution split that is currently bounded becomes directly measurable. The cross-student 4-point pattern above is also missing pre-SFT 4B and pre-SFT 2B under fair judging, so we describe it as the four-points-we-have rather than the full attribution table.
+
+\subsection{Generality probe: v2.0 preserves out-of-distribution behavior}
+We probe v1.9, v2.0, base 2B, and base 4B with a 52-prompt OOD battery (10 generality + 42 factual including 8 false-premise ``trick'' prompts) under a generic system prompt (not the \textsc{solver} prompt; Table~\ref{tab:generality}). The probe is a convenience sample, not a calibrated benchmark; we treat it as qualitative evidence of OOD behavior, not as a quantitative claim.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+& format-locked & factual HIT & trick CONFAB (eyeballed) & phantom skill block \\
+\midrule
+v1.9 (2B) & $0/52$ & $33/34$\,$\dagger$ & $6/8$ & $0/52$ \\
+base 4B   & $0/52$ & $34/34$ & $\sim\!1/8$ & $0/52$ \\
+v2.0 (4B) & $0/52$ & $34/34$ & $\mathbf{0/8}$ & $0/52$ \\
+\bottomrule
+\end{tabular}
+\caption{Generality probe under generic system prompt. $\dagger$ v1.9 swapped \emph{Brave New World} attribution from Aldous Huxley to H.\,G.\,Wells --- a plausible-author confabulation absent from base 4B and v2.0.}
+\label{tab:generality}
+\end{table}
+
+v1.9 introduced a small calibration regression on adversarial prompts: the SFT-induced ``produce a confident step-by-step answer'' prior leaks into out-of-distribution behavior, making v1.9 commit to plausible-sounding inventions where base 2B would refuse. v2.0 does not exhibit this --- the 4B base has enough native capacity to recognize false premises and refuse cleanly without the SFT shape overriding refusal.
+
+The bench-time finding that 17.5\% of v2.0's \BL{} responses reference a ``skill block'' not present in the system prompt does \emph{not} extend to general-chat distributions: under a generic system prompt, the SFT-induced skill-block reflex is dormant ($0/52$). The phantom-mention is contextual to SFT-distribution-similar prompts.
+
+\section{A Bench Format-Compliance Artifact}\label{sec:format-artifact}
+
+The pre-SFT 4B attribution failure surfaces a property of the bench that is invisible when only SFT-trained students are evaluated: 88.5\% of the holdout uses a deterministic \texttt{ANSWER:}-line extractor, which heavily penalizes models that reason correctly but emit free-form conclusions. Base \Qwenf{} is such a model. Spot-checks of pre-SFT 4B responses on bench tasks confirm step-by-step reasoning that reaches the correct answer; the model simply does not consistently end with \texttt{ANSWER: <X>}, so the deterministic dispatch returns failure. The bench's $0/200$ for pre-SFT 4B should be read as ``format-compliance baseline $\approx 0$'', not ``reasoning $\approx 0$''.
+
+This is a property of the present bench, but the issue generalises. Any post-SFT lift measured against a format-strict deterministic judge conflates three contributions: format learning (the model now emits the required line), format-conditional reasoning gating (the model reasons more reliably when constrained to a structured response), and procedural application (the model uses the injected skill). Without a base-model control evaluated under format-tolerant scoring, these are not separable. Plausible remedies for follow-up work include (a) a stricter base-model evaluation prompt that reliably hits the format target, (b) a format-tolerant judge for base controls (e.g.\ extracting the answer with an LLM call rather than a regex), or (c) restricting evaluation to \texttt{FREE\_FORM} tasks where an LLM judge is already in the loop.
+
+In \S\ref{sec:llm-rejudge} we apply remediation (b) to the four available student configurations: re-running the LLM judge over the existing model responses regardless of original task type, with no model regeneration. Table~\ref{tab:llm-only} reports the resulting numbers. The remediation closes the format gap for students whose responses we already have but does not, by itself, remediate pre-SFT 4B's $0/200$: that requires a fresh evaluation under \texttt{--force-llm-judge}, which is in progress at time of writing. Once it lands, the v2.0 attribution split that is currently bounded becomes directly measurable.
+
+The 2B attribution split (\S\ref{sec:v19}) is unaffected because pre-SFT 2B does emit format-compliant responses on this bench under deterministic dispatch. A pre-SFT 2B run under LLM-only judging would shift the absolute pre-SFT 2B numbers upward (matching the pattern across the other students) but would not invalidate the existing decomposition --- both endpoints would simply move on the same axis.
+
+\section{Discussion}
+
+\subsection{What did SFT actually teach?}
+At 2B --- the only scale where we have a clean SFT contribution measurement --- SFT contributed $+11.5$\,pp absolute \CU{} pass-rate on top of base 2B's $0.710$, a $+6.5$\,pp lift on \BL{}, and a $+5$\,pp differential procedural-application lift ($\Delta$ from $+0.025$ to $+0.075$). The differential component is what distinguishes ``the model uses the injected procedure'' from ``the model just imitates the response shape'' --- pure format-learning would lift \BL{} and \CU{} equally and leave $\Delta$ untouched, which is closer to what we observed at 0.8B.
+
+We resist a quantitative ``half format, half procedure'' decomposition: the format and procedure components are not independent (producing the procedural-step shape implicitly enforces a checking discipline that may itself be the procedural lift), and the underlying contributions cannot be cleanly separated by per-condition pass-rates alone. The differential $\Delta$-lift is evidence that there is a procedure-vs-no-procedure component of the gain that pure format-learning cannot explain; it is not a quantitative apportionment.
+
+\subsection{Mode collapse reinterpreted}
+The v1.7 ``mode collapse'' --- partial-FT producing apparent $+\Delta$ at the cost of \BL{} integrity --- appeared at 0.8B as a structural concern about SFT-on-procedural-demonstrations and motivated the v1.8 skill-block stripping intervention. Spot-checks of v2.0 \BL{} responses show the same phantom skill-block reference ($35/200$, 17.5\%) but with $94.3\%$ of those responses still passing --- at 4B, the phantom mention is cosmetic rather than load-bearing. The model has the capacity to execute the procedure regardless of whether it remembers seeing a skill block in the system prompt.
+
+This re-frames mode collapse as a base-capacity-floor artifact rather than a structural property of the SFT corpus: at 0.8B, the model's SFT-absorbed expectation of seeing a skill block crashed performance when one was absent; at 4B, the same expectation produces a confabulated mention but does not derail the answer. We do not claim the v1.8 skill-block-stripping fix is unnecessary in general; we observe only that, at the model size where SFT produces a measurable differential lift in this study (4B), the failure mode it was designed to prevent is not load-bearing.
+
+\subsection{Negative results were informative}
+The five 0.8B variants are individually informative as negative results --- corpus composition, partial fine-tuning, and chat-template patching all failed to lift the SFT signal at this scale and corpus size. They are jointly informative: together they constrain the diagnosis to ``base-model capacity is the binding constraint at this corpus size,'' which the 2B run validates. Running through the negative-result series before moving to a larger model was epistemically efficient ($\sim$\$15 in compute, three days of GPU time) compared to skipping straight to 4B with no priors on what fails. We argue this kind of iterated negative-result reporting is undervalued in the SFT-on-demonstrations literature: most claims in this space are backed by single-recipe positive results without the surrounding falsification of nearby variants.
+
+\section{Threats to Validity}\label{sec:threats}
+
+We separate threats to validity from limitations. Threats are structural features of the experimental design that constrain how the results can be interpreted, regardless of sample size; limitations (\S\ref{sec:limitations}) are constraints we know how to relax with more compute or data.
+
+\subsection{Judge overlap with corpus generation}
+Opus 4.7 was used in four roles: rewriting the declarative skill catalog into procedural form, synthesizing the held-out tasks, generating the chain-of-thought traces that became the SFT corpus, and judging both pre-SFT and post-SFT responses on the holdout. After SFT, the student has been trained to imitate Opus traces, and the judge is grading whether those imitations are correct. The structural concern is that the judge may favor the response shape it produced. We did not cross-validate the judge against a second model (e.g.\ Sonnet, Llama-3.3-70B) or human raters \citep{zheng2023judging}. The most plausible direction of bias is to inflate post-SFT scores relative to pre-SFT or external students (e.g.\ Haiku); the magnitude is unmeasured. A second-judge spot-check on a 50-task subsample is the cheapest way to bound this in follow-up work.
+
+\subsection{Single-skill-per-task synthesis}
+Tasks were generated by Opus from a known skill, then the same skill was injected at evaluation time. The bench therefore measures \emph{procedural application on procedure-aligned tasks}, not skill-routing or compositional skill use. This is closer to the original Skill-Mix compositional hypothesis \citep{yu2024skillmix} than to a tautology --- the student does have to follow the procedure correctly, and many tasks include constructed traps for procedure-skipping models --- but it is narrower than ``procedural skill use'' as it appears in some recent work. The honest claim is that 2B+SFT applies named procedures more effectively when shown a procedure aligned to a procedure-aligned task.
+
+\subsection{Single-seed evaluation}
+All headline numbers (Tables~\ref{tab:headline}, \ref{tab:attribution}, \ref{tab:stats-per-model}) are single-seed point estimates with within-seed paired statistics. The v2.0 McNemar $p{=}0.049$ should be read as ``one trial that just barely cleared the conventional threshold,'' not as established significance. We have no estimate of run-to-run variance and cannot rule out that a 3--5 seed replication would shift v2.0's $\Delta$ closer to or further from zero \citep{biderman2024lessons}. The v1.9 result is more robust ($p{=}0.018$, CI $[+0.020, +0.130]$) but is also a single seed.
+
+\subsection{Path mismatch for pre-SFT 0.8B}
+The pre-SFT 0.8B baseline was run via Ollama, not the same HuggingFace transformers path used for 2B/4B. Quantization defaults and chat-template handling differ between the two paths. The Table~\ref{tab:attribution} ``base scaling 0.8B $\to$ 2B'' decomposition therefore mixes a real model-size effect with a path-induced effect of unknown sign. The 2B SFT contribution itself (the residual from pre-SFT 2B to v1.9) is unaffected, since both endpoints are on the same path.
+
+\subsection{Generality probe is a convenience sample}
+The 52-prompt OOD battery (Table~\ref{tab:generality}) was hand-written for this study. It is not a calibrated benchmark and the trick-prompt CONFAB judgments were eyeballed. The qualitative claim ``v2.0 preserves base 4B's out-of-distribution behavior'' is supported by the data but should not be read as quantitative parity.
+
+\subsection{What this paper does not establish}\label{sec:what-not}
+
+For clarity we itemise what the data does \emph{not} support, even where the framing might invite stronger reading:
+\begin{itemize}[leftmargin=*, nosep]
+  \item The SFT contribution at 4B is bounded by the cross-student saturation pattern, not directly attributed. Pre-SFT 4B under format-tolerant scoring is in progress at time of writing; the v2.0 attribution split will be measurable once it lands.
+  \item Bench saturation between v1.9 and v2.0 is directionally consistent but not statistically supported on a single seed at $n{=}200$ in either judging path. The 4-point cross-student trajectory in \S\ref{sec:llm-rejudge} is qualitatively informative but inherits the same single-seed caveat.
+  \item v2.0 ties haiku-4-5 at \CU{} ceiling under fair scoring (\S\ref{sec:compute-efficiency}); we do \emph{not} claim this matching is attributable to SFT alone, since pre-SFT 4B under fair scoring has not yet been measured. If pre-SFT 4B is already near $0.985$, the matching is mostly base scaling.
+  \item Compositional procedural skill use (apply skill $A$, then skill $B$) is untested. The bench is single-skill-per-task.
+  \item The recipe space below the binding constraint at 0.8B (e.g.\ corpus scale, alternative bases) is unexplored. ``Model size is the binding constraint at this corpus size'' is the diagnosis at 353 rows, not a general claim.
+  \item Generality preservation at 4B is a qualitative observation on a 52-prompt convenience sample, not a calibrated benchmark result.
+  \item The LLM-only re-judge does not change the model responses, only the scoring path, so it does not address judge-overlap concerns (\S\ref{sec:threats}). A second-judge cross-validation is still required to bound that bias.
+\end{itemize}
+
+\section{Limitations}\label{sec:limitations}
+
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{$n{=}200$ per condition limits the resolution of the $\Delta$ statistic.} Per-condition binomial standard error is $\sim\!3$\,pp; per-model McNemar's tests confirm v1.9 ($p{=}0.018$) and v2.0 ($p{=}0.049$) each have a positive $\Delta$ with bootstrap CI excluding zero, but the cross-model bootstrap test for the saturation hypothesis fails ($p{=}0.225$ one-sided, 95\% CI on $\Delta_{\mathrm{v1.9}} - \Delta_{\mathrm{v2.0}}$ is $[-0.040, +0.100]$). The $\Delta$ shrinkage is directional but not statistically supported at this $n$.
+  \item \textbf{The SFT corpus is small (353 rows).} Whether scaling the corpus to $10\times$ would change the saturation curve at 4B, or break the 0.8B ceiling, is untested.
+  \item \textbf{Attribution at 4B is bounded but not measured.} We rely on saturation-trend extrapolation for the 4B SFT contribution range ($0.03$--$0.10$ \CU), conditional on the format-compliance artifact (\S\ref{sec:format-artifact}) being addressed.
+  \item \textbf{Pre-SFT 4B is unmeasured on this bench under format-tolerant scoring.} We did not implement a format-tolerant base-model control (e.g.\ \texttt{FREE\_FORM}-only evaluation, LLM-judge answer extraction); doing so is the natural next step for replication.
+  \item \textbf{Decoding is greedy throughout.} We did not sweep temperature or top-$p$; whether the post-SFT $\Delta$ is robust to sampling stochasticity is untested.
+\end{enumerate}
+
+\section{Conclusion}
+
+Procedural-skill SFT, on a 353-row corpus with the simplest LoRA recipe, produces a measurable differential procedural lift on procedure-aligned tasks at \Qwent{} ($\Delta$ $+0.075$ deterministic / $+0.100$ LLM-only, McNemar $p{=}0.018$ / $0.0027$, single seed) with clean attribution from a pre-SFT 2B control. The same recipe at \Qwenf{} produces $\Delta$ $+0.045$ deterministic / $+0.065$ LLM-only (McNemar $p{=}0.049$ / $0.00098$, single seed); under LLM-only judging the 4B result is robustly distinguishable from zero, while under deterministic judging it was Bonferroni-fragile. Across four students under LLM-only judging --- v1 (0.8B+SFT), v1.9 (2B+SFT), v2.0 (4B+SFT), haiku-4-5 (frontier reference) --- the procedural-$\Delta$ traces a monotone non-monotone trajectory ($-0.005, +0.100, +0.065, +0.030$) consistent with bench saturation: $\Delta$ rises from below the capacity floor, peaks where SFT has the most headroom, and decays as the base approaches the bench's effective ceiling. v2.0's \CU{} ties the haiku reference at $0.985$ under fair scoring (197/200 identical pass count). The directional shrinkage of $\Delta$ from 2B to 4B is consistent with bench saturation but does not survive a paired-bootstrap test on the v1.9-vs-v2.0 adjacent pair at $n{=}200$ in either judging path.
+
+The methodological contributions are arguably more durable than the empirical ones. The negative-result iteration sequence at 0.8B (five recipe variants, all clustering within 2\,pp on \CU{}) constrains the diagnosis of SFT failures to base-capacity rather than recipe-shape at this corpus size, and documents a v1.7 mode-collapse failure mode that turns out to be a capacity-floor artifact rather than a structural property of SFT-on-procedural-demonstrations. The bench format-compliance artifact (\S\ref{sec:format-artifact}) constrains the interpretation of any similar SFT-lift claim absent a format-tolerant base-model control. Applying its own remediation (\S\ref{sec:llm-rejudge}) revealed that the deterministic judge had been systematically biased \emph{against} the curated condition (procedure-following responses bury conclusions in narration more often than direct-thinking responses do), so the bench had been under-stating the SFT contribution. The corrected $\Delta$ values are larger than the deterministic ones across all three SFT'd students by $2$--$4.5$\,pp.
+
+We argue future work in this area should (i) include a pre-SFT base-model control evaluated under format-tolerant scoring, (ii) measure compositional skill application rather than single-skill template-matching, (iii) replicate across 3--5 seeds to bound run-to-run variance on the $\Delta$ statistic, and (iv) cross-validate the judge against at least a second model to bound judge-overlap bias. None of these are expensive; all of them would meaningfully strengthen the kind of claim this paper makes within its scope.
+
+\section*{Acknowledgments}
+Compute provided by vast.ai (\Qwent{} and \Qwenf{} training and partial evaluation) and a local consumer GPU (RTX 3090\,Ti, evaluation and probing). Skill catalog content seeded from Skill-Mix \citep{yu2024skillmix} Tables 5 and 6 and expanded by hand. Opus 4.7 (1M context) was used for skill procedural rewriting, task synthesis, baseline trace generation, and judge-of-record scoring; the resulting judge-overlap is itemised as a threat to validity in \S\ref{sec:threats}.
+
+\section*{Code and data availability}
+Repository: \url{https://github.com/izzortsi/skillmix-n-skillsbench} (branch \texttt{dev}). Episode-level eval logs at \texttt{data/pipeline-runs/default/bench-eval-*}. Engineering reports in \texttt{b1.reports/} (cited in Appendix~\ref{app:reports}); these are dated, self-contained snapshots written contemporaneously with each result, included for reproducibility audit rather than as primary evidence.
+
+% --- bibliography ----------------------------------------------------------
+\begin{thebibliography}{9}
+
+\bibitem{yu2024skillmix}
+D.~Yu, S.~Kaur, A.~Gupta, J.~Brown-Cohen, A.~Goyal, S.~Arora.
+\textit{Skill-Mix: A Flexible and Expandable Family of Evaluations for AI Models}.
+NeurIPS 2024.
+
+\bibitem{arora2023theory}
+S.~Arora, A.~Goyal.
+\textit{A Theory for Emergence of Complex Skills in Language Models}.
+2023.
+
+\bibitem{li2026skillsbench}
+Li et al.
+\textit{SkillsBench: Benchmarking the Effectiveness of Skill Injection on LLMs}.
+2026.
+
+\bibitem{hu2022lora}
+E.~J.~Hu, Y.~Shen, P.~Wallis, Z.~Allen-Zhu, Y.~Li, S.~Wang, L.~Wang, W.~Chen.
+\textit{LoRA: Low-Rank Adaptation of Large Language Models}.
+ICLR 2022.
+
+\bibitem{dettmers2023qlora}
+T.~Dettmers, A.~Pagnoni, A.~Holtzman, L.~Zettlemoyer.
+\textit{QLoRA: Efficient Finetuning of Quantized LLMs}.
+NeurIPS 2023.
+
+\bibitem{trl}
+L.~Tunstall, E.~Beeching, et al.
+\textit{TRL: Transformer Reinforcement Learning library}, version $\geq$\,0.18.
+
+\bibitem{zheng2023judging}
+L.~Zheng, W.-L.~Chiang, Y.~Sheng, S.~Zhuang, Z.~Wu, Y.~Zhuang, Z.~Lin, Z.~Li, D.~Li, E.~P.~Xing, H.~Zhang, J.~E.~Gonzalez, I.~Stoica.
+\textit{Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena}.
+NeurIPS Datasets and Benchmarks 2023.
+
+\bibitem{biderman2024lessons}
+S.~Biderman, H.~Schoelkopf, et al.
+\textit{Lessons from the Trenches on Reproducible Evaluation of Language Models}.
+arXiv:2405.14782, 2024.
+
+\bibitem{qwen3report}
+A.~Yang, A.~Li, B.~Yang, et al.
+\textit{Qwen3 Technical Report}.
+arXiv:2505.09388, 2025.
+
+\bibitem{qwen35release}
+Qwen Team.
+\textit{Qwen3.5: Accelerating Productivity with Native Multimodal Agents}.
+Release blog and model cards, 2026.
+\url{https://huggingface.co/Qwen/Qwen3.5-4B-Base}.
+
+\end{thebibliography}
+
+\appendix
+
+\section{Pipeline file structure}\label{app:pipeline}
+{\small
+\begin{verbatim}
+skillmix-n-skillsbench/
+|-- core/                                shared schema + provider abstractions
+|-- harness/                             LinearAgent: streaming + thinking-block capture
+|-- b2_benchmarks/skillsbench/           corpus_harness, llm_judge, procedural_catalog
+|-- s1_extracting_skill_names/           declarative-skill seeders (Wikipedia-style)
+|-- s2_extracting_skills_from_text/      procedural-rewrite stage
+|-- s3_generating_skill_examples/m5_*.py task synthesis from procedural skills
+|-- s4_extracting_skill_usage_instances/ solver + trace + judge composition (m4)
+|-- training/
+|   |-- train_qwen35_lora.py             LoRA / partial-FT trainer (TRL >=0.18)
+|   |-- eval_qwen35_lora.py              holdout evaluator (--adapter optional)
+|   |-- patch_qwen35_template.py         chat-template generation-marker patcher
+|   |-- chat_with_adapter.py             interactive + probe-set generality tester
+|   |-- rejudge_failed_episodes.py       post-hoc rejudge for transient judge errors
+|   `-- compare_pre_post.py              per-skill diff utility
+|-- docker/                              vast.ai training image + setup docs
+|-- data/pipeline-runs/default/          full run artifacts
+`-- b1.reports/                          engineering log (yymmdd.title.txt)
+\end{verbatim}
+}
+
+\section{Per-skill v2.0 result ($n{=}5$ per skill, sorted by $\Delta$)}\label{app:per-skill}
+Lift cluster (procedure helped):
+\begin{itemize}[leftmargin=*,nosep]
+  \item accident-fallacy $+0.40$, spatial-reasoning $+0.40$
+  \item false-dilemma, confirmation-bias, anchoring-bias, appeal-to-emotion, base-rate-neglect, transitive-inference, necessary-and-sufficient-conditions, metaphor, emotional-self-regulation: $+0.20$ each
+\end{itemize}
+Flat cluster ($\Delta = 0$): 25 skills, of which 22 are at \BL{} $\geq 0.80$ (ceiling-bound).
+
+Regression cluster (procedure hurt; all $5/5$ \BL{} $\to 4/5$ \CU): complex-question, hypothetical-syllogism, framing-effect, equivocation.
+
+The regression cluster overlaps with deductive-logic skills where the base 4B has ceiling competence and the 5-step procedure introduces sub-inference error opportunities --- the same lift/flat/regression pattern observed at 0.8B in v1, shifted upward by base scaling. The figure summarising this distribution is in the main text as Figure~\ref{fig:per-skill}.
+
+\section{Engineering reports cited}\label{app:reports}
+The repository's \texttt{b1.reports/} directory contains dated, self-contained engineering snapshots written contemporaneously with each result. These are included for reproducibility audit rather than as primary evidence; the primary evidence in this paper is the episode-level logs and the recipe-by-recipe pass rates in Table~\ref{tab:headline}.
+\begin{itemize}[leftmargin=*,nosep]
+  \item \texttt{260426.findings-pre-post-sft-iterations.txt} --- v1--v1.8 consolidation
+  \item \texttt{260428.sft-v1\_9-2b-result.txt} --- v1.9 result + attribution
+  \item \texttt{260428.v1\_9-generality-probe.txt} --- v1.9 generality regression
+  \item \texttt{260428.sft-v2\_0-4b-result.txt} --- v2.0 result + attribution caveat
+  \item \texttt{260428.v2\_0-generality-probe.txt} --- v2.0 generality preservation
+  \item \texttt{260506.bench-format-sensitivity-finding.txt} --- pre-SFT 4B format artifact
+\end{itemize}
+
+\end{document}
