@@ -3,10 +3,11 @@ REPORT: CROSS-FAMILY JUDGE VALIDATION — GPT-5.4 vs Opus 4.7 ON LLM-ONLY
         RE-JUDGE EPISODES
 ================================================================================
 
-Date:   2026-05-08 (initial); 2026-05-09 (pre-SFT 4B added)
-Status: COMPLETED — all six datasets cross-validated under non-Anthropic-
+Date:   2026-05-08 (initial); 2026-05-09 (pre-SFT 4B + pre-SFT 0.8B HF
+        added)
+Status: COMPLETED — all seven datasets cross-validated under non-Anthropic-
         family second judge. Cumulative cross-family bound across
-        2400 episodes is reported below.
+        2800 episodes is reported below.
 
 ================================================================================
 QUESTION
@@ -73,6 +74,7 @@ v1   (0.8B+LoRA)       0.710 0.705 -0.005          0.700 0.700  0.000
 v1.9 (2B+LoRA)         0.815 0.915 +0.100          0.815 0.915 +0.100
 v2.0 (4B+LoRA)         0.920 0.985 +0.065          0.920 0.980 +0.060
 haiku-4-5 (frontier)   0.955 0.985 +0.030          0.955 0.975 +0.020
+pre-SFT 0.8B (HF)      0.665 0.590 -0.075          0.670 0.585 -0.085   ← NEW 2026-05-09
 pre-SFT 2B             0.755 0.815 +0.060          0.750 0.835 +0.085
 pre-SFT 4B             0.850 0.840 -0.010          0.850 0.805 -0.045
 
@@ -87,16 +89,20 @@ v2.0                   399/400       0.973         -0.005
                        = 99.75%
 haiku                  398/400       0.921         -0.010
                        = 99.50%
+pre-SFT 0.8B (HF)      394/400       0.968         -0.010   ← NEW
+                       = 98.50%
 pre-SFT 2B             393/400       0.948         +0.025
                        = 98.25%
 pre-SFT 4B             373/400       0.754         -0.035
                        = 93.25%      (lowest agreement; widest Δ shift)
 
-CUMULATIVE BOUND ACROSS 6 DATASETS / 2400 EPISODES
+CUMULATIVE BOUND ACROSS 7 DATASETS / 2800 EPISODES
     max |Δ shift|        = 0.035  (pre-SFT 4B)
     min agreement rate   = 93.25% (pre-SFT 4B)
     min Cohen's κ        = 0.754  (pre-SFT 4B)
     max disagreement     = 27 episodes out of 400 (pre-SFT 4B)
+    pre-SFT 0.8B HF agreement: 98.50%, κ=0.968, Δ shift -0.010
+    => the deepest pre-SFT trough (Δ ≈ -0.08) is judge-invariant
 
 ================================================================================
 INTERPRETATION
@@ -138,24 +144,38 @@ small disagreements:
        direction is non-positive (procedure does not help base 4B),
        but GPT is more skeptical of curated quality than Opus.
 
-DIRECTION-CONSISTENCY OF THE PRE-SFT 4B FINDING
+    7. pre-SFT 0.8B HF (NEW 2026-05-09): 394/400 agreement.
+       Six disagreements spread across 5 different skills, in both
+       directions (3 GPT-pass / Opus-fail + 3 Opus-pass / GPT-fail).
+       Δ shifts from -0.075 to -0.085 — both judges agree the
+       direction is strongly negative (procedure hurts base 0.8B),
+       deepest pre-SFT trough confirmed under both judges.
 
-    Both judges agree that pre-SFT 4B has Δ ≤ 0. This is the
-    qualitative finding most worth cross-validating, since it
-    overturns the previous "saturation = SFT contribution shrinks"
-    framing. Under both judges, base 4B is competent on baseline but
-    does NOT benefit from procedure injection (and is mildly hurt by
-    it). The exact magnitude varies (Opus -0.010, GPT -0.045) but
-    the qualitative direction is stable.
+DIRECTION-CONSISTENCY OF THE W-SHAPE
 
-    Implications for the SFT contribution at 4B (under each judge):
-       Opus:  pre-SFT 4B Δ -0.010 → v2.0 Δ +0.065 = SFT Δ-lift +0.075
-       GPT:   pre-SFT 4B Δ -0.045 → v2.0 Δ +0.060 = SFT Δ-lift +0.105
+    Both judges confirm the W-shaped pre-SFT trajectory:
+       pre-SFT 0.8B (HF):     Opus -0.075,  GPT -0.085  ← deepest trough
+       pre-SFT 2B  (HF):      Opus +0.060,  GPT +0.085
+       pre-SFT 4B  (HF):      Opus -0.010,  GPT -0.045  ← shallow trough
+       pre-SFT haiku:         Opus +0.030,  GPT +0.020
 
-    Both judges agree the SFT contribution at 4B is the LARGEST in
-    the experiment (Δ-lift +0.075 to +0.105, vs +0.040 at 2B). The
-    range of +0.075 to +0.105 is the cross-family bound on the
-    headline SFT contribution at 4B.
+    Both troughs (0.8B and 4B) are judge-invariant in direction. GPT
+    is somewhat more pessimistic about curated quality than Opus on
+    base models (deeper troughs at 0.8B and 4B; bigger positive Δ at
+    2B), but the W-shape itself is robust.
+
+    SFT contribution at all three sizes under each judge:
+       0.8B (v1):   Opus  Δ-lift +0.070    GPT  Δ-lift +0.085
+       2B   (v1.9): Opus  Δ-lift +0.040    GPT  Δ-lift +0.015
+       4B   (v2.0): Opus  Δ-lift +0.075    GPT  Δ-lift +0.105
+
+    Under both judges the SFT mechanism delivers comparable Δ-lift
+    at 0.8B and 4B and a smaller Δ-lift at 2B. The "mechanism-
+    uniformity in a 4 pp band" claim under Opus widens slightly
+    under GPT (range +0.015 to +0.105, an 9 pp band) but the
+    regime-asymmetric pattern (more lift in negative-pre-SFT-Δ
+    pockets, less lift where pre-SFT is already positive) is
+    judge-invariant.
 
 DISAGREEMENT PATTERN INTERPRETATION
 

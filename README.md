@@ -371,16 +371,16 @@ largest in the experiment" is overstated — 4B's +0.075 Δ-lift is on
 par with 0.8B's +0.070, not uniquely large. The accurate claim is
 mechanism-uniformity rather than capacity-conditional amplification.
 
-**Cross-family judge validation (added 2026-05-08):** GPT-5.4 via
-OpenRouter graded the same model responses as Opus 4.7 across 6 of
-7 datasets (2400 episodes; pre-SFT 0.8B HF cross-family validation
-left for follow-up). Per-episode agreement ≥93.25%, Cohen's κ ≥ 0.754,
-headline Δ shifts ≤0.035 pp. v1.9 is judge-invariant (100% agreement,
-κ=1.000); v2.0 shifts by 0.005 pp; haiku shifts by 0.010 pp; pre-SFT
-4B (the dataset most worth cross-validating) shifts by 0.035 pp,
-direction preserved. The judge-overlap concern (paper §7.1) is bounded
-quantitatively under a non-Anthropic-family second judge on
-non-Anthropic infrastructure. See
+**Cross-family judge validation (added 2026-05-08, completed 2026-05-09):**
+GPT-5.4 via OpenRouter graded the same model responses as Opus 4.7
+across all 7 configurations (2800 episodes). Per-episode agreement
+≥93.25%, Cohen's κ ≥ 0.754, headline Δ shifts ≤0.035 pp. v1.9 is
+judge-invariant (100% agreement, κ=1.000); v2.0 shifts by 0.005 pp;
+pre-SFT 0.8B HF agreement is 98.50% (κ=0.968), confirming the deepest
+W-shape trough under a non-Anthropic judge. Both negative-Δ pockets
+(0.8B and 4B) are judge-invariant in direction. The judge-overlap
+concern (paper §7.1) is bounded quantitatively under a non-Anthropic-
+family second judge on non-Anthropic infrastructure. See
 [`b1.reports/260508.cross-family-judge-validation.txt`](b1.reports/260508.cross-family-judge-validation.txt).
 
 Findings across v1-v1.8 are consolidated in
