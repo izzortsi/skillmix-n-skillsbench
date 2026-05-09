@@ -29,6 +29,12 @@
 \usepackage{tabularx}
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 
+% Map Unicode Δ (U+0394) used in prose to math-mode \Delta so pdflatex
+% does not need a Greek-supporting text font. Authored prose uses bare
+% "Δ" for readability; this declaration emits $\Delta$ at compile time.
+\usepackage{newunicodechar}
+\newunicodechar{Δ}{\ensuremath{\Delta}}
+
 \setlength{\parskip}{6pt}
 \setlength{\parindent}{0pt}
 
