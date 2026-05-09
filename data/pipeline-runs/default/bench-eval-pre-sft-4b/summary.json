@@ -1,21 +1,21 @@
 {
-  "total_episodes": 10,
+  "total_episodes": 400,
   "model": "base:Qwen/Qwen3.5-4B",
   "base": "Qwen/Qwen3.5-4B",
   "adapter": "None",
   "tasks": "data/pipeline-runs/default/synthesis/tasks_eval.json",
   "per_condition": {
     "baseline": {
-      "n": 5,
-      "passed": 0,
-      "pass_rate": 0.0,
-      "mean_score": 0.0
+      "n": 200,
+      "passed": 170,
+      "pass_rate": 0.85,
+      "mean_score": 0.823
     },
     "curated": {
-      "n": 5,
-      "passed": 0,
-      "pass_rate": 0.0,
-      "mean_score": 0.0
+      "n": 200,
+      "passed": 168,
+      "pass_rate": 0.84,
+      "mean_score": 0.875
     }
   }
 }
