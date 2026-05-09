@@ -1,0 +1,21 @@
+{
+  "total_episodes": 400,
+  "model": "base:Qwen/Qwen3.5-0.8B",
+  "base": "Qwen/Qwen3.5-0.8B",
+  "adapter": "None",
+  "tasks": "data/pipeline-runs/default/synthesis/tasks_eval.json",
+  "per_condition": {
+    "baseline": {
+      "n": 200,
+      "passed": 133,
+      "pass_rate": 0.665,
+      "mean_score": 0.5165
+    },
+    "curated": {
+      "n": 200,
+      "passed": 118,
+      "pass_rate": 0.59,
+      "mean_score": 0.5427
+    }
+  }
+}
