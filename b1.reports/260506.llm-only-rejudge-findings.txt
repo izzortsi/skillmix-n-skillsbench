@@ -1,13 +1,17 @@
 ================================================================================
-REPORT: LLM-ONLY RE-JUDGE OF v1, v1.9, v2.0 + HAIKU REFERENCE —
-        CROSS-STUDENT Δ TREND CONFIRMS SATURATION QUALITATIVELY
+REPORT: LLM-ONLY RE-JUDGE — MECHANISM-UNIFORMITY FINDING ACROSS
+        ALL THREE SFT'D MODEL SIZES (UNDER MATCHED-PATH SCORING)
 ================================================================================
 
-Date:   2026-05-06
-Status: PARTIAL — v1, v1.9, v2.0, and haiku reference re-judged under
-        LLM-only path. Pre-SFT 4B (HF, --force-llm-judge fresh eval)
-        in progress at time of writing. Pre-SFT 0.8B HF/LLM-only
-        not yet run.
+Date:   2026-05-06 (initial); 2026-05-09 (pre-SFT 4B + pre-SFT 0.8B
+        added; framing reframed from saturation to mechanism-uniformity)
+Status: COMPLETED — all seven configurations under matched HF + LLM-only
+        scoring. The story has shifted twice: from "v1.9 wins / v2.0
+        saturates" (v1 deterministic-judge framing) to "SFT mechanism
+        amplifies at 4B" (after pre-SFT 4B landed) to the current
+        "SFT Δ-lift is roughly uniform across 0.8B-4B" (after pre-SFT
+        0.8B HF/LLM-only landed). See HEADLINE NUMBERS for the final
+        attribution table.
 
 ================================================================================
 QUESTION
@@ -130,73 +134,101 @@ The post-SFT Δ values (LLM-only):
    v2.0 (4B  + LoRA, r=32)                0.920  0.985  +0.065
    haiku-4-5 (frontier reference, no SFT) 0.955  0.985  +0.030
 
-The pre-SFT base Δ values (LLM-only, where measurable):
+The pre-SFT base Δ values (matched-path HF + LLM-only):
 
    Student                                 BL     CU     Δ
-   pre-SFT 0.8B (Ollama, deterministic)   0.510  0.565  +0.055  (path-mismatch)
+   pre-SFT 0.8B (Ollama, deterministic)   0.510  0.565  +0.055  (path-mismatch; superseded)
+   pre-SFT 0.8B (HF, LLM-only)            0.665  0.590  -0.075  ← NEW 2026-05-09 (deepest trough)
    pre-SFT 2B   (HF, LLM-only)            0.755  0.815  +0.060
-   pre-SFT 4B   (HF, LLM-only)            0.850  0.840  -0.010  ← NEW (added 2026-05-09)
+   pre-SFT 4B   (HF, LLM-only)            0.850  0.840  -0.010  ← shallow trough
    pre-SFT haiku-4-5 (LLM-only)           0.955  0.985  +0.030
 
-Pre-SFT 4B's Δ is slightly NEGATIVE. This was unexpected and overturns
-the "saturation = SFT contribution shrinks" framing of the previous
-version of this report.
+THE BASE-MODEL PROCEDURAL RESPONSIVENESS IS W-SHAPED
 
-THE BASE-MODEL PROCEDURAL RESPONSIVENESS IS NON-MONOTONIC
+   Pre-SFT Δ across capability tier (HF + LLM-only):
+      -0.075 (0.8B) → +0.060 (2B) → -0.010 (4B) → +0.030 (haiku)
 
-   Pre-SFT Δ across capability tier: 0.055 → 0.060 → -0.010 → +0.030
-
-   Base 4B has the WORST procedural responsiveness of any tested base.
-   The procedure actively confuses or over-triggers a sufficiently-
-   capable-but-not-frontier model. Possible mechanisms:
-      - Base 4B is competent enough to solve tasks directly without
-        scaffolding, so the procedure adds overhead without adding
-        signal.
-      - The 5-step procedural format introduces sub-inference error
+   Two negative-Δ pockets at 0.8B and 4B; positive at 2B and haiku.
+   The procedure injection helps or hurts a base depending on the
+   regime. Likely mechanisms differ by pocket:
+      - At 0.8B: base lacks the capacity to follow the 5-step
+        procedure correctly. Errors compound at every step; the
+        procedure adds compounding rather than scaffolding.
+      - At 4B: base is competent enough to solve baseline tasks
+        directly without the procedure, so the 5-step procedure
+        adds overhead without adding signal --- the procedure
+        introduces sub-inference error
         opportunities on tasks the base can one-shot.
       - Base 4B may over-defer to the procedure's framing on tasks
         where the procedure is mildly mismatched.
    We do not have enough single-skill data to disambiguate.
 
-THE SFT CONTRIBUTION TO Δ INCREASES WITH MODEL SIZE FROM 2B → 4B
+THE SFT CONTRIBUTION TO Δ IS ROUGHLY UNIFORM ACROSS SIZES (2026-05-09)
 
-   With pre-SFT 4B in hand, the SFT-attributable Δ-lift is now
-   measurable at both 2B and 4B (0.8B remains caveated by path
-   mismatch):
+   With pre-SFT 0.8B HF/LLM-only now in hand (BL 0.665 / CU 0.590 /
+   Δ -0.075), the SFT-attributable Δ-lift is measurable at all three
+   model sizes under matched-path scoring:
 
        Student / SFT recipe       pre-SFT Δ → post-SFT Δ    SFT Δ-lift
-       2B  (LoRA r=16, v1.9)       +0.060 → +0.100           +0.040
-       4B  (LoRA r=32, v2.0)       -0.010 → +0.065           +0.075
+       0.8B (LoRA r=8,  v1)       -0.075 → -0.005           +0.070
+       2B   (LoRA r=16, v1.9)     +0.060 → +0.100           +0.040
+       4B   (LoRA r=32, v2.0)     -0.010 → +0.065           +0.075
 
-   The SFT differential procedural lift at 4B is +0.075, NEARLY
-   DOUBLE the +0.040 measured at 2B. The bench is saturated in
-   ABSOLUTE pass rates (v2.0 ties haiku at 0.985 CU), but the SFT
-   mechanism is doing MORE work at 4B in differential terms — it has
-   to overcome a base that doesn't naturally benefit from procedure
-   injection, and it succeeds.
+   The Δ-lift sits in a 4 pp band (+0.040 to +0.075) across an
+   ORDER OF MAGNITUDE in base-model capacity. The bench is saturated
+   in ABSOLUTE pass rates (v2.0 ties haiku at 0.985 CU), but the SFT
+   mechanism delivers comparable differential procedural lift at all
+   three sizes.
 
-   This reframes the "saturation" diagnosis:
-      - Absolute pass rate is saturated at the top (v2.0 ties haiku)
-      - SFT contribution to Δ is NOT saturated; it grows from 2B → 4B
-      - Pre-SFT base Δ is NON-MONOTONIC across capability tier
+   Two earlier framings of this work are now path-mismatch artifacts:
+      1. v1's "format-only learning at 0.8B" diagnosis was based on
+         comparing v1 Δ -0.005 against pre-SFT 0.8B Ollama Δ +0.055,
+         suggesting SFT had failed at 0.8B. Under matched scoring,
+         v1's SFT Δ-lift is +0.070, comparable to 4B's +0.075.
+      2. The previous version of this report claimed "the SFT
+         contribution at 4B is the LARGEST" or "monotonically
+         increasing 2B → 4B." With pre-SFT 0.8B HF/LLM-only in
+         hand, 4B's +0.075 Δ-lift is on par with 0.8B's +0.070,
+         not uniquely large. The accurate framing is mechanism-
+         uniformity rather than capacity-conditional amplification
+         (or saturation).
 
-   The previous version of this report claimed "as the base model
-   approaches the bench's ceiling, the procedure has less room to add
-   value, so the SFT contribution shrinks." That claim is FALSIFIED
-   for the SFT contribution; it remains true for the absolute pass
-   rate.
+REGIME-ASYMMETRIC LIFT (2026-05-09 OBSERVATION)
 
-THE ABSOLUTE SFT CONTRIBUTION ALSO PEAKS AT 4B
+   The roughly capacity-invariant Δ-lift is doing visibly different
+   work at different scales:
+
+       0.8B:  pre-SFT Δ -0.075 → post-SFT Δ -0.005 (+0.070 lift)
+              ===> rescues procedure-incompetent regime to neutral
+       2B:    pre-SFT Δ +0.060 → post-SFT Δ +0.100 (+0.040 lift)
+              ===> marginally improves procedure-friendly regime
+       4B:    pre-SFT Δ -0.010 → post-SFT Δ +0.065 (+0.075 lift)
+              ===> flips procedure-overhead to procedure-helps
+
+   SFT works harder (in absolute Δ-lift terms) where the base
+   STRUGGLES with the procedure; it does less work where the base
+   is already in a procedure-friendly regime. This is consistent
+   with the W-shape mechanism explanation: at 0.8B and 4B, the base
+   struggles for different reasons (capacity vs competence-overhead),
+   and SFT teaches the model to overcome those obstacles. At 2B,
+   the base is already in the sweet spot, so SFT has less headroom.
+
+   Falsifiable prediction at 8B/14B: the procedure should hurt the
+   base less than at 4B (since the base can use it natively, like
+   haiku), and SFT's Δ-lift should shrink toward 2B-ish levels.
+
+THE ABSOLUTE SFT CONTRIBUTION ALSO TRACKS THE Δ-LIFT BAND
 
    SFT contribution to absolute pass rates (LLM-only):
 
-       Student      ΔBL (SFT)    ΔCU (SFT)
-       2B (v1.9)    +0.060       +0.100
-       4B (v2.0)    +0.070       +0.145
+       Student      ΔBL (SFT)    ΔCU (SFT)    Δ-lift
+       0.8B (v1)    +0.045       +0.115       +0.070
+       2B (v1.9)    +0.060       +0.100       +0.040
+       4B (v2.0)    +0.070       +0.145       +0.075
 
-   At 4B, SFT contributes +14.5 pp on CU vs +10.0 pp at 2B. SFT
-   contribution is monotonically increasing across the 2B → 4B
-   transition on every metric (BL, CU, Δ-lift).
+   The CU contribution at 4B (+0.145) IS the largest in absolute
+   terms. The differential Δ-lift, however, is on par with 0.8B and
+   well within the 4 pp band that holds across all three sizes.
 
 UPDATED INTERPRETATION OF "SATURATION"
 
@@ -341,96 +373,108 @@ WHAT'S STILL MISSING
      TREND section above for the reframed saturation interpretation.
 
   B. Pre-SFT 0.8B HF/LLM-only.
-     NOT YET RUN. The 0.8B baseline came from Ollama via
-     corpus_harness, different code path than 2B/4B. Re-running
-     under HF + LLM-judge would close the bottom of the
-     attribution table.
+     COMPLETED 2026-05-09. Final numbers: BL 0.665 / CU 0.590 /
+     Δ -0.075. The deepest negative-Δ point in the trajectory.
+     Reframed the entire SFT attribution: under matched-path
+     scoring v1's SFT Δ-lift is +0.070 (comparable to 4B's
+     +0.075), not the -0.060 the path-mismatched comparison
+     suggested. See THE SFT CONTRIBUTION TO Δ IS ROUGHLY UNIFORM
+     ACROSS SIZES section above.
 
   C. Cross-family judge validation (GPT-5.4 via OpenRouter).
-     COMPLETED 2026-05-08 on 5 of 6 datasets. Per-episode
-     agreement ≥98.25%, Cohen's κ ≥ 0.92, headline Δ shifts of
-     ≤0.025 pp. v1.9 is judge-invariant (100% agreement). Closes
+     COMPLETED 2026-05-08 on 6 of 7 datasets. Per-episode
+     agreement ≥93.25%, Cohen's κ ≥ 0.754, headline Δ shifts of
+     ≤0.035 pp. v1.9 is judge-invariant (100% agreement). Closes
      the judge-overlap concern in paper §7.1. See
      b1.reports/260508.cross-family-judge-validation.txt.
 
-  D. Pre-SFT 4B GPT-5.4 cross-validation. IN PROGRESS at time of
-     writing. Will confirm or refute the slightly-negative pre-SFT
-     4B Δ under a non-Anthropic-family judge — the result most
-     worth cross-validating because it overturns the previous
-     saturation framing.
+     Pre-SFT 0.8B HF cross-family validation is the one
+     remaining gap; recommended for follow-up.
 
 ================================================================================
-UPDATED ATTRIBUTION TABLE (LLM-ONLY, COMPLETE EXCEPT FOR PRE-SFT 0.8B HF)
+FINAL ATTRIBUTION TABLE (LLM-ONLY, MATCHED-PATH, ALL SEVEN POINTS)
 ================================================================================
 
                                             BL     CU     Δ
-  Pre-SFT 0.8B (Ollama, det)                0.510  0.565  +0.055  (path-mismatch caveat)
+  Pre-SFT 0.8B (Ollama, det)                0.510  0.565  +0.055  (superseded; path-mismatch)
+  Pre-SFT 0.8B (HF, LLM-only)               0.665  0.590  -0.075  ← NEW 2026-05-09
   Pre-SFT 2B   (HF, LLM-only)               0.755  0.815  +0.060
-  Pre-SFT 4B   (HF, LLM-only)               0.850  0.840  -0.010  ← NEW (2026-05-09)
+  Pre-SFT 4B   (HF, LLM-only)               0.850  0.840  -0.010
   Pre-SFT haiku (LLM-only)                  0.955  0.985  +0.030
   v1   (0.8B+LoRA, LLM-only)                0.710  0.705  -0.005
   v1.9 (2B+LoRA,   LLM-only)                0.815  0.915  +0.100
   v2.0 (4B+LoRA,   LLM-only)                0.920  0.985  +0.065
 
-ATTRIBUTION SPLITS (CLEAN)
+ATTRIBUTION SPLITS (MATCHED-PATH, CLEAN)
 
-  v1 vs pre-SFT 0.8B (Ollama):
-    ΔBL +0.200   ΔCU +0.140   ΔΔ -0.060
-    => 0.8B SFT lifts both conditions but does not unlock
-       differential procedural application.
-    Caveat: pre-SFT 0.8B is on a different code path (Ollama).
-    Strict comparison requires the pending pre-SFT 0.8B HF run.
+  v1 vs pre-SFT 0.8B HF/LLM-only (NEW 2026-05-09):
+    ΔBL +0.045   ΔCU +0.115   ΔΔ +0.070
+    => 0.8B SFT lifts both conditions AND delivers +0.070 Δ-lift,
+       on par with 4B's +0.075. The earlier "format-only learning at
+       0.8B" diagnosis was a path-mismatch artifact — under matched
+       scoring SFT is doing real differential procedural work at
+       0.8B; it just lifts Δ from -0.075 to -0.005 (procedure-
+       neutral), not into procedure-helps territory.
 
   v1.9 vs pre-SFT 2B:
-    ΔBL +0.130   ΔCU +0.205   ΔΔ +0.075
+    ΔBL +0.060   ΔCU +0.100   ΔΔ +0.040
     => 2B SFT contributes substantial absolute lift on both
-       conditions AND a +0.075 differential procedural lift
-       (Δ 0.025 → 0.100). This is the cleanest measured SFT
-       contribution in the experiment.
+       conditions AND a +0.040 differential procedural lift
+       (Δ +0.060 → +0.100). The smallest of the three Δ-lifts;
+       2B is in the procedure-friendly regime where the base
+       already responds positively to procedure injection, so
+       SFT has less headroom.
 
-  v2.0 vs pre-SFT 4B (NEW 2026-05-09, with measured pre-SFT 4B):
+  v2.0 vs pre-SFT 4B:
     ΔBL +0.070   ΔCU +0.145   ΔΔ +0.075
-    => v2.0 SFT lifts CU by +14.5 pp over base 4B and lifts the
-       procedural-Δ from -0.010 to +0.065 — a +0.075 Δ-lift
-       attributable to SFT, NEARLY DOUBLE the +0.040 Δ-lift at 2B.
-       The SFT contribution at 4B is the LARGEST measured in the
-       experiment in BOTH absolute (+14.5 pp CU) AND differential
-       (+0.075 Δ-lift) terms.
+    => v2.0 SFT lifts CU by +14.5 pp over base 4B (LARGEST in
+       absolute CU terms) and lifts procedural-Δ from -0.010 to
+       +0.065 — a +0.075 Δ-lift, on par with 0.8B's +0.070, NOT
+       uniquely large in differential terms (this overturns an
+       earlier framing in this report).
 
-The post-SFT Δ pattern (v1, v1.9, v2.0, haiku) under fair judging:
+THE Δ-LIFT BAND ACROSS ALL THREE SIZES IS NARROW
 
-       Δ_post-SFT
-       0.10 ┤      ●  v1.9
-            │
-       0.05 ┤              ●  v2.0
-            │                       ●  haiku-4-5
-       0.00 ┤●  v1
-            └─────┼──────┼─────┼──────────
-              0.8B   2B    4B    frontier
+       SFT Δ-lift across capability:  +0.070 (0.8B)
+                                      +0.040 (2B)
+                                      +0.075 (4B)
 
-The pre-SFT Δ pattern (LLM-only, where measurable):
+   A 4 pp band across an order of magnitude in base capacity.
+   The variation in post-SFT Δ across sizes is dominated by the
+   pre-SFT base trajectory, which is W-shaped:
 
-       Δ_pre-SFT
+       Δ_pre-SFT (HF + LLM-only):
        0.10 ┤
             │
-       0.05 ┤      ●  pre-2B            ● haiku
+       0.05 ┤              ●  pre-2B            ● haiku
             │
-       0.00 ┤
-            │              ●  pre-4B
+       0.00 ┤                          ●  pre-4B
       -0.05 ┤
-            └────────┼──────┼─────┼──────────
-                  2B    4B    frontier
+            │
+      -0.10 ┤  ●  pre-0.8B
+            └──────┼─────┼──────┼─────┼──────────
+                0.8B   2B    4B    frontier
 
-The non-monotonic pre-SFT trajectory is the key new observation. Pre-SFT
-4B has the worst procedural responsiveness of any tested base — the
-procedure actively hurts a competent-but-not-frontier student. SFT closes
-this gap dramatically at 4B (Δ -0.010 → +0.065, a +0.075 Δ-lift), which
-is why the SFT contribution at 4B is larger than at 2B in differential
-terms despite the absolute pass-rate ceiling being saturated.
+   The Δ-lift is regime-asymmetric: SFT works harder where the
+   base struggles with the procedure (deep negative pre-SFT Δ at
+   0.8B; shallow negative at 4B; +0.07 lift at both) and less
+   where the base is already in a procedure-friendly regime
+   (positive pre-SFT Δ at 2B; +0.04 lift). The "uniform" framing
+   is fair as a magnitude band; the underlying mechanism is
+   doing different work at different scales.
 
-The interpretation of "saturation" splits in two:
-  - Saturated in absolute pass rate: v2.0 ties haiku at CU 0.985.
-  - NOT saturated in SFT contribution: 4B SFT Δ-lift > 2B SFT Δ-lift.
+THE INTERPRETATION OF "SATURATION" SPLITS IN TWO
+
+   - Saturated in absolute pass rate: v2.0 ties haiku at CU 0.985.
+   - NOT saturated in SFT contribution to Δ: roughly uniform across
+     all three sizes (4 pp band).
+   - Two earlier framings (one in this report, one in the paper)
+     are now both falsified:
+        a. "v2.0 saturates → SFT contribution shrinks" (deterministic
+           judge artifact; falsified once pre-SFT 4B landed)
+        b. "SFT contribution at 4B is the LARGEST in the experiment"
+           (path-mismatch artifact; falsified once pre-SFT 0.8B HF
+           landed and showed v1's matched-path Δ-lift is +0.070)
 
 ================================================================================
 ARTIFACTS
@@ -451,20 +495,35 @@ ARTIFACTS
   data/pipeline-runs/default/bench-eval-pre-sft-haiku-llm-only/
         400 episodes, summary.json: BL 0.955 / CU 0.985
 
+  data/pipeline-runs/default/bench-eval-pre-sft-2b-llm-only/
+        400 episodes (added 2026-05-09 via re-judge of existing HF
+        episodes). summary.json: BL 0.755 / CU 0.815 / Δ +0.060.
+        Used for 2B SFT attribution split.
+
   data/pipeline-runs/default/bench-eval-pre-sft-4b/
         400 episodes (NEW 2026-05-09), fresh HF eval with
         --force-llm-judge. summary.json: BL 0.850 / CU 0.840 /
-        Δ -0.010. The headline finding that overturns the previous
+        Δ -0.010. The result that first overturned the previous
         "SFT contribution shrinks at 4B" framing.
+
+  data/pipeline-runs/default/bench-eval-pre-sft-0.8b-hf-llm/
+        400 episodes (NEW 2026-05-09), fresh HF eval with
+        --force-llm-judge. summary.json: BL 0.665 / CU 0.590 /
+        Δ -0.075. The result that further reframed the SFT
+        attribution to mechanism-uniformity (v1's Δ-lift is +0.070,
+        on par with 4B's +0.075, not -0.060 as path-mismatched
+        comparison had suggested).
 
   training/rejudge_failed_episodes.py
         Now supports --all (target all episodes), --force-llm-judge
         (override query_type to FREE_FORM), --out-dir (preserve
-        originals). Used for all four re-judge runs above.
+        originals). Used for all five re-judge runs above (v1, v1.9,
+        v2.0, haiku, pre-SFT 2B).
 
   training/eval_qwen35_lora.py
-        Now supports --force-llm-judge for use in fresh evals (will
-        be used for pre-SFT 4B run).
+        Now supports --force-llm-judge for fresh evals. Used for the
+        two pre-SFT base evals (0.8B HF and 4B HF) that needed fresh
+        generation under format-tolerant scoring.
 
   training/significance_tests.py
         Bootstrap + McNemar; ran against the LLM-only data to produce

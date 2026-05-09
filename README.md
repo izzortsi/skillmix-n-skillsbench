@@ -340,31 +340,45 @@ bench saturates at 4B+; further model scaling will lift absolutes
 but Δ will keep compressing. The next bottleneck is the bench, not
 the model.
 
-**Attribution split (added 2026-05-06):** pre-SFT 2B controls (BL 0.685
-/ CU 0.710 deterministic; 0.755 / 0.815 LLM-only) revealed that v1.9's
-lift over pre-SFT 0.8B is +14.5 pp CU base-scaling + 11.5 pp CU SFT
-contribution under deterministic judging (range +8 to +12 pp under
-LLM-only). Pre-SFT 4B could not be benched cleanly under deterministic
-judging: the deterministic judge requires literal "ANSWER:" lines that
-base 4B doesn't emit reliably. See
+**Format-sensitivity artifact (added 2026-05-06):** pre-SFT 4B could
+not be benched cleanly under the deterministic judge (which requires
+literal `ANSWER:` lines that base 4B doesn't emit reliably). See
 [`b1.reports/260506.bench-format-sensitivity-finding.txt`](b1.reports/260506.bench-format-sensitivity-finding.txt).
 
-**LLM-only re-judge (added 2026-05-06):** re-routing every episode
-through the LLM judge regardless of task type bypasses the
-format-compliance gate. Under fair scoring across four students:
-v1 Δ −0.005 (sub-floor), v1.9 Δ +0.100 (peak SFT lift), v2.0 Δ +0.065
-(saturating), haiku-4-5 Δ +0.030 (saturated). v2.0's CU ties haiku
-at 0.985 (197/200 identical pass count) — the bench is comprehensively
-saturated at the top under fair scoring. The 4-point trajectory matches
-the predicted saturation shape. See
+**LLM-only re-judge across all 7 configurations (updated 2026-05-09):**
+re-routing every episode through the LLM judge regardless of task type
+bypasses the format-compliance gate. Under matched-path HF + LLM-only
+scoring, the pre-SFT base trajectory is **W-shaped**: 0.8B Δ −0.075,
+2B Δ +0.060, 4B Δ −0.010, haiku Δ +0.030. The post-SFT trajectory rises
+then falls (peak at 2B): v1 Δ −0.005, v1.9 Δ +0.100, v2.0 Δ +0.065. The
+**SFT-attributable Δ-lift is roughly capacity-invariant**: +0.070 (0.8B),
++0.040 (2B), +0.075 (4B) — a 4 pp band across an order of magnitude in
+base capacity. The 4 pp band is regime-asymmetric: SFT works harder
+where the base struggles with the procedure (deep negative pre-SFT Δ
+at 0.8B; shallow negative at 4B; +0.07 lift at both) and less where the
+base is already in a procedure-friendly regime (positive pre-SFT Δ at
+2B; +0.04 lift). v2.0's CU ties haiku at 0.985 (197/200 identical pass
+count) — the bench is saturated in absolute pass rate but the SFT
+mechanism is not. See
 [`b1.reports/260506.llm-only-rejudge-findings.txt`](b1.reports/260506.llm-only-rejudge-findings.txt).
 
+**Two earlier framings are now path-mismatch artifacts.** (a) v1's
+"format-only learning at 0.8B" diagnosis was based on comparing v1's Δ
+−0.005 against pre-SFT 0.8B Ollama Δ +0.055; under matched HF +
+LLM-only scoring (pre-SFT 0.8B Δ −0.075), v1's Δ-lift is +0.070, on par
+with 4B. (b) An earlier framing of "SFT contribution at 4B is the
+largest in the experiment" is overstated — 4B's +0.075 Δ-lift is on
+par with 0.8B's +0.070, not uniquely large. The accurate claim is
+mechanism-uniformity rather than capacity-conditional amplification.
+
 **Cross-family judge validation (added 2026-05-08):** GPT-5.4 via
-OpenRouter graded the same model responses as Opus 4.7 across 5 of
-6 datasets (2000 episodes). Per-episode agreement ≥98.25%, Cohen's
-κ ≥ 0.92, headline Δ shifts ≤0.025 pp. v1.9 is judge-invariant
-(100% agreement, κ=1.000); v2.0 shifts by 0.005 pp; haiku shifts by
-0.010 pp. The judge-overlap concern (paper §7.1) is bounded
+OpenRouter graded the same model responses as Opus 4.7 across 6 of
+7 datasets (2400 episodes; pre-SFT 0.8B HF cross-family validation
+left for follow-up). Per-episode agreement ≥93.25%, Cohen's κ ≥ 0.754,
+headline Δ shifts ≤0.035 pp. v1.9 is judge-invariant (100% agreement,
+κ=1.000); v2.0 shifts by 0.005 pp; haiku shifts by 0.010 pp; pre-SFT
+4B (the dataset most worth cross-validating) shifts by 0.035 pp,
+direction preserved. The judge-overlap concern (paper §7.1) is bounded
 quantitatively under a non-Anthropic-family second judge on
 non-Anthropic infrastructure. See
 [`b1.reports/260508.cross-family-judge-validation.txt`](b1.reports/260508.cross-family-judge-validation.txt).
