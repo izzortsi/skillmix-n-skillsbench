@@ -3,11 +3,10 @@ REPORT: CROSS-FAMILY JUDGE VALIDATION — GPT-5.4 vs Opus 4.7 ON LLM-ONLY
         RE-JUDGE EPISODES
 ================================================================================
 
-Date:   2026-05-08
-Status: PARTIAL — five of six datasets cross-validated under non-Anthropic-
-        family second judge. Pre-SFT 4B Opus LLM-only is still pending; its
-        GPT cross-validation will follow. Cumulative cross-family bound
-        across 5 datasets / 2000 episodes is reported below.
+Date:   2026-05-08 (initial); 2026-05-09 (pre-SFT 4B added)
+Status: COMPLETED — all six datasets cross-validated under non-Anthropic-
+        family second judge. Cumulative cross-family bound across
+        2400 episodes is reported below.
 
 ================================================================================
 QUESTION
@@ -75,7 +74,7 @@ v1.9 (2B+LoRA)         0.815 0.915 +0.100          0.815 0.915 +0.100
 v2.0 (4B+LoRA)         0.920 0.985 +0.065          0.920 0.980 +0.060
 haiku-4-5 (frontier)   0.955 0.985 +0.030          0.955 0.975 +0.020
 pre-SFT 2B             0.755 0.815 +0.060          0.750 0.835 +0.085
-pre-SFT 4B             pending                     pending
+pre-SFT 4B             0.850 0.840 -0.010          0.850 0.805 -0.045
 
 PER-EPISODE AGREEMENT METRICS
 
@@ -90,12 +89,14 @@ haiku                  398/400       0.921         -0.010
                        = 99.50%
 pre-SFT 2B             393/400       0.948         +0.025
                        = 98.25%
+pre-SFT 4B             373/400       0.754         -0.035
+                       = 93.25%      (lowest agreement; widest Δ shift)
 
-CUMULATIVE BOUND ACROSS 5 DATASETS / 2000 EPISODES
-    max |Δ shift|        = 0.025  (pre-SFT 2B)
-    min agreement rate   = 98.25% (pre-SFT 2B)
-    min Cohen's κ        = 0.921  (haiku)
-    max disagreement     = 7 episodes out of 400 (pre-SFT 2B)
+CUMULATIVE BOUND ACROSS 6 DATASETS / 2400 EPISODES
+    max |Δ shift|        = 0.035  (pre-SFT 4B)
+    min agreement rate   = 93.25% (pre-SFT 4B)
+    min Cohen's κ        = 0.754  (pre-SFT 4B)
+    max disagreement     = 27 episodes out of 400 (pre-SFT 4B)
 
 ================================================================================
 INTERPRETATION
@@ -128,8 +129,33 @@ small disagreements:
     5. pre-SFT 2B: 393/400 agreement. Seven disagreements spread
        across seven different skills, in both directions (5 GPT-pass /
        Opus-fail + 2 Opus-pass / GPT-fail). Δ shifts from +0.060 to
-       +0.085 — the largest shift in the experiment, but still within
-       2.5 pp.
+       +0.085 — within 2.5 pp.
+
+    6. pre-SFT 4B: 373/400 agreement (LOWEST in the experiment).
+       Twenty-seven disagreements spread across 19 different skills,
+       mostly Opus-pass / GPT-fail (17 vs 10 the other direction).
+       Δ shifts from -0.010 to -0.045 — both judges agree the
+       direction is non-positive (procedure does not help base 4B),
+       but GPT is more skeptical of curated quality than Opus.
+
+DIRECTION-CONSISTENCY OF THE PRE-SFT 4B FINDING
+
+    Both judges agree that pre-SFT 4B has Δ ≤ 0. This is the
+    qualitative finding most worth cross-validating, since it
+    overturns the previous "saturation = SFT contribution shrinks"
+    framing. Under both judges, base 4B is competent on baseline but
+    does NOT benefit from procedure injection (and is mildly hurt by
+    it). The exact magnitude varies (Opus -0.010, GPT -0.045) but
+    the qualitative direction is stable.
+
+    Implications for the SFT contribution at 4B (under each judge):
+       Opus:  pre-SFT 4B Δ -0.010 → v2.0 Δ +0.065 = SFT Δ-lift +0.075
+       GPT:   pre-SFT 4B Δ -0.045 → v2.0 Δ +0.060 = SFT Δ-lift +0.105
+
+    Both judges agree the SFT contribution at 4B is the LARGEST in
+    the experiment (Δ-lift +0.075 to +0.105, vs +0.040 at 2B). The
+    range of +0.075 to +0.105 is the cross-family bound on the
+    headline SFT contribution at 4B.
 
 DISAGREEMENT PATTERN INTERPRETATION
 
