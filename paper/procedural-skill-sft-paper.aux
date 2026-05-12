@@ -7,6 +7,7 @@
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
 \citation{yu2024skillmix}
 \citation{li2026skillsbench}
+\citation{zheng2023judging}
 \citation{hu2022lora}
 \citation{trl}
 \citation{dettmers2023qlora}
@@ -15,7 +16,7 @@
 \@writefile{toc}{\contentsline {section}{\numberline {2}Pipeline and Bench}{2}{section.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Skill catalog, procedural rewrite, and task synthesis}{2}{subsection.2.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2}SFT corpus and evaluation protocol}{2}{subsection.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Training}{3}{subsection.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Training}{2}{subsection.2.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {3}Cross-Scale SFT Contribution and the W-Shape}{3}{section.3}\protected@file@percent }
 \newlabel{sec:cross-scale}{{3}{3}{Cross-Scale SFT Contribution and the W-Shape}{section.3}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces SFT contribution across all three model sizes under matched HF + LLM-only scoring. The Δ-lift attributable to SFT is in a tight 4\,pp band ($+0.040$ to $+0.075$); the absolute \textsc  {curated}\xspace  {} contribution is in a similar band ($+0.100$ to $+0.145$). Variation in post-SFT Δ across sizes is dominated by the pre-SFT base trajectory, which is W-shaped (negative at 0.8B and 4B, positive at 2B and frontier Haiku-4-5; see Table~\ref {tab:llm-only}).}}{3}{table.caption.1}\protected@file@percent }
@@ -47,7 +48,7 @@
 \newlabel{tab:rejudge-deltas}{{3}{6}{Score shifts from deterministic-mixed to LLM-only re-judge. All four students gain on both conditions; Haiku gains the most. For all three SFT'd students, $\Delta $CU $>$ $\Delta $BL by 2--4.5\,pp, meaning the deterministic judge was systematically biased \emph {against} the curated condition --- procedure-following responses bury conclusions in narration more often than direct-thinking responses do}{table.caption.6}{}}
 \@writefile{toc}{\contentsline {paragraph}{All pass rates rise; Haiku rises the most.}{6}{table.caption.6}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{The deterministic judge was biased against the curated condition.}{6}{table.caption.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{0.8B path-mismatch implication.}{7}{table.caption.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{0.8B path-mismatch implication.}{6}{table.caption.6}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {5}Cross-Family Judge Validation}{7}{section.5}\protected@file@percent }
 \newlabel{sec:cross-family}{{5}{7}{Cross-Family Judge Validation}{section.5}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Cross-family judge cross-validation across all seven configurations / 2800 paired episodes. Per-episode agreement ranges from $93.25\%$ (pre-SFT 4B) to $100.00\%$ (v1.9, 400/400 identical verdicts). Cohen's $\kappa $ ranges from $0.754$ to $1.000$. Pre-SFT 0.8B HF agreement is $98.50\%$ ($\kappa = 0.968$). Headline $\Delta $ shifts $\leq 0.035$\,pp on every dataset; both judges agree on the direction of every per-student finding, including the W-shape's two negative-Δ pockets at 0.8B and 4B.}}{7}{table.caption.7}\protected@file@percent }
@@ -63,24 +64,24 @@
 \@writefile{toc}{\contentsline {paragraph}{What the 0.8B negative results constrain, and what they do not.}{8}{subsection.6.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.2}v1.9 (2B) attribution split}{8}{subsection.6.2}\protected@file@percent }
 \newlabel{sec:v19-split}{{6.2}{8}{v1.9 (2B) attribution split}{subsection.6.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Statistical Tests}{8}{section.7}\protected@file@percent }
+\newlabel{sec:stats}{{7}{8}{Statistical Tests}{section.7}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces v1.9 attribution split under both judging paths. The deterministic-mixed columns use matched-path pre-SFT 0.8B (HF, $0.625/0.510$; Appendix~\ref {sec:appendix-path}) and pre-SFT 2B (HF, $0.685/0.710$); the LLM-only columns use the corresponding LLM-only-judged controls. The SFT-attributable Δ-lift at 2B is $+0.050$ under deterministic-mixed and $+0.040$ under LLM-only --- consistent within 1\,pp across both judging paths even as absolute magnitudes shift.}}{9}{table.caption.9}\protected@file@percent }
 \newlabel{tab:attribution}{{6}{9}{v1.9 attribution split under both judging paths. The deterministic-mixed columns use matched-path pre-SFT 0.8B (HF, $0.625/0.510$; Appendix~\ref {sec:appendix-path}) and pre-SFT 2B (HF, $0.685/0.710$); the LLM-only columns use the corresponding LLM-only-judged controls. The SFT-attributable Δ-lift at 2B is $+0.050$ under deterministic-mixed and $+0.040$ under LLM-only --- consistent within 1\,pp across both judging paths even as absolute magnitudes shift}{table.caption.9}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Statistical Tests}{9}{section.7}\protected@file@percent }
-\newlabel{sec:stats}{{7}{9}{Statistical Tests}{section.7}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Per-model paired tests on the procedural-Δ, under both judging paths. Both models have a positive Δ with bootstrap CI excluding zero in both paths. Under LLM-only re-judge, v2.0's $p{=}0.00098$ comfortably survives Bonferroni correction across the two tests (the deterministic-mixed $p{=}0.049$ would not). Neither test is replicated across seeds.}}{9}{table.caption.11}\protected@file@percent }
 \newlabel{tab:stats-per-model}{{7}{9}{Per-model paired tests on the procedural-Δ, under both judging paths. Both models have a positive Δ with bootstrap CI excluding zero in both paths. Under LLM-only re-judge, v2.0's $p{=}0.00098$ comfortably survives Bonferroni correction across the two tests (the deterministic-mixed $p{=}0.049$ would not). Neither test is replicated across seeds}{table.caption.11}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {8}Generality Probe}{9}{section.8}\protected@file@percent }
 \newlabel{sec:generality}{{8}{9}{Generality Probe}{section.8}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Generality probe under generic system prompt. $\dagger $ v1.9 swapped \emph  {Brave New World} attribution from Aldous Huxley to H.\,G.\,Wells --- a plausible-author confabulation absent from base 4B and v2.0.}}{9}{table.caption.13}\protected@file@percent }
+\newlabel{tab:generality}{{8}{9}{Generality probe under generic system prompt. $\dagger $ v1.9 swapped \emph {Brave New World} attribution from Aldous Huxley to H.\,G.\,Wells --- a plausible-author confabulation absent from base 4B and v2.0}{table.caption.13}{}}
 \citation{biderman2024lessons}
-\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Generality probe under generic system prompt. $\dagger $ v1.9 swapped \emph  {Brave New World} attribution from Aldous Huxley to H.\,G.\,Wells --- a plausible-author confabulation absent from base 4B and v2.0.}}{10}{table.caption.13}\protected@file@percent }
-\newlabel{tab:generality}{{8}{10}{Generality probe under generic system prompt. $\dagger $ v1.9 swapped \emph {Brave New World} attribution from Aldous Huxley to H.\,G.\,Wells --- a plausible-author confabulation absent from base 4B and v2.0}{table.caption.13}{}}
+\citation{yu2024skillmix}
 \@writefile{toc}{\contentsline {section}{\numberline {9}Discussion}{10}{section.9}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {9.1}Mode collapse reinterpreted}{10}{subsection.9.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {9.2}Negative results were informative}{10}{subsection.9.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {9.3}What we did not separately decompose}{10}{subsection.9.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {10}Threats to Validity and Limitations}{10}{section.10}\protected@file@percent }
 \newlabel{sec:threats}{{10}{10}{Threats to Validity and Limitations}{section.10}{}}
-\citation{yu2024skillmix}
 \@writefile{toc}{\contentsline {paragraph}{What this paper does not claim.}{11}{Item.14}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {11}Conclusion}{11}{section.11}\protected@file@percent }
 \citation{yu2024skillmix}
