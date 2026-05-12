@@ -1,0 +1,188 @@
+Pre-SFT 0.8B HF deterministic-mixed re-judge
+============================================
+Date: 2026-05-09
+Author: engineering snapshot, written contemporaneously with the rejudge
+Context: paper Table 1 (`tab:headline`) consistency cleanup
+
+----
+1. Motivation
+----
+
+Paper Table 1 originally carried the Ollama-path pre-SFT 0.8B numbers
+(BL 0.510 / CU 0.565 / Δ +0.055), while every other row in Table 1 used
+HF transformers generation. The Ollama-vs-HF asymmetry was a known
+path mismatch, documented in §7.4 of the paper and partially remediated
+by the LLM-only re-judge (Table 2, `tab:llm-only`), which placed
+pre-SFT 0.8B HF/LLM-only at BL 0.665 / CU 0.590 / Δ -0.075.
+
+The LLM-only re-judge bypassed the format-compliance gate but in doing
+so changed the dispatch path for ALL of Table 2 (LLM judge with
+FREE_FORM verifier on every task, regardless of original query_type).
+Table 1 still used the deterministic-mixed dispatch (deterministic
+extractor for YES_NO / SINGLE_WORD / RANKING; LLM judge with FREE_FORM
+verifier for FREE_FORM). Two kinds of mismatches were therefore present
+in the headline:
+  1. generation backend mismatch (Ollama vs HF) — partially resolved
+     in Table 2;
+  2. dispatch mismatch (deterministic-mixed vs LLM-only) between Table
+     1 and Table 2.
+
+The fix below closes both mismatches by producing a Table 1 row that
+matches the rest of Table 1's dispatch (deterministic-mixed) and the
+rest of Table 1's generation backend (HF).
+
+----
+2. Procedure
+----
+
+Source episodes file:
+  data/pipeline-runs/default/bench-eval-pre-sft-0.8b-hf-llm/episodes.json
+This file was generated under HF transformers + --force-llm-judge,
+which routes every task through the LLM judge with the FREE_FORM
+verifier prompt (overriding deterministic dispatch).
+
+Goal: produce a parallel episodes.json with deterministic-mixed
+dispatch scoring:
+  YES_NO / SINGLE_WORD / RANKING tasks (167/200) -> deterministic
+    extractor, scored by _score_deterministic in
+    b2_benchmarks/skillsbench/llm_judge.py.
+  FREE_FORM tasks (33/200) -> LLM judge with FREE_FORM verifier
+    (same path the source already used).
+
+Implementation: extended training/rejudge_failed_episodes.py with a
+new --judge deterministic mode. When set:
+  - skips provider/judge construction (no LLM API needed);
+  - for each episode, looks up task.query_type from tasks_eval.json;
+  - if query_type == FREE_FORM: leaves episode score untouched (the
+    source --force-llm-judge run already scored these via the LLM/
+    FREE_FORM verifier path, which is what Table 1's deterministic-
+    mixed dispatch uses for FREE_FORM);
+  - else: re-scores via _score_deterministic (no API call);
+  - writes episodes/summary to a new directory.
+
+Mutually exclusive with --force-llm-judge by design.
+
+Run:
+  python3 training/rejudge_failed_episodes.py \
+      --episodes data/pipeline-runs/default/bench-eval-pre-sft-0.8b-hf-llm/episodes.json \
+      --tasks data/pipeline-runs/default/synthesis/tasks_eval.json \
+      --all --judge deterministic \
+      --out-dir data/pipeline-runs/default/bench-eval-pre-sft-0.8b-hf-det
+
+Wall clock: ~2 seconds.
+API cost: $0.
+
+Output:
+  data/pipeline-runs/default/bench-eval-pre-sft-0.8b-hf-det/episodes.json
+  data/pipeline-runs/default/bench-eval-pre-sft-0.8b-hf-det/summary.json
+
+  Re-scored deterministically: 334
+  Kept FREE_FORM (untouched):    66
+  Total:                        400
+
+----
+3. Result
+----
+
+Pre-SFT 0.8B HF, deterministic-mixed dispatch:
+  baseline:  BL  pass_rate = 0.625 (125/200)  mean_score = 0.6165
+  curated:   CU  pass_rate = 0.510 (102/200)  mean_score = 0.5060
+  Delta = -0.115
+
+Comparison across all three pre-SFT 0.8B measurements:
+                                          BL      CU      Delta
+  Ollama, deterministic-mixed (orig)    0.510   0.565   +0.055
+  HF, --force-llm-judge (LLM-only)      0.665   0.590   -0.075
+  HF, deterministic-mixed (matched)     0.625   0.510   -0.115
+
+Implications under matched-path Table 1 (HF, det-mixed):
+  v1 SFT Δ-lift at 0.8B:
+    pre-SFT 0.8B HF det-mixed: Δ = -0.115
+    v1 (det-mixed):            Δ = -0.050
+    Δ-lift:                    +0.065
+
+  Cross-check vs LLM-only Δ-lift at 0.8B:
+    pre-SFT 0.8B HF LLM-only:  Δ = -0.075
+    v1 (LLM-only):             Δ = -0.005
+    Δ-lift:                    +0.070
+
+  Both judging paths agree the SFT Δ-lift is positive at 0.8B and
+  on the order of +0.065 to +0.070, consistent within 5 pp.
+
+----
+4. Why this matters for the paper's narrative
+----
+
+Three things change:
+
+  (a) Table 1 (tab:headline) is now path-internally consistent. Every
+      row uses HF generation; every row uses deterministic-mixed
+      dispatch (with the FREE_FORM-LLM-judge fallback) the way
+      eval_qwen35_lora.py's default flow uses them. The original
+      Ollama numbers are preserved in §7.4 as historical context but
+      no longer present in any headline table.
+
+  (b) The v1 narrative becomes cleaner. Under matched-path Table 1:
+      v1 LoRA delivers +1 pp BL, +7.5 pp CU, +0.065 Δ-lift at 0.8B.
+      Earlier framings of "SFT does no work at 0.8B" / "Δ flipped
+      negative" were path-mismatch artifacts and are now superseded
+      by a positive Δ-lift comparable to the 4B SFT contribution.
+
+  (c) Table 3 (tab:attribution) deterministic-mixed columns are
+      recomputed against the new HF det-mixed pre-SFT 0.8B row:
+        Base scaling 0.8B → 2B (det-mixed): ΔBL +0.060, ΔCU +0.200
+        SFT contribution at 2B (det-mixed): ΔBL +0.065, ΔCU +0.115
+        Total v1.9 vs pre-SFT 0.8B (det-mixed): ΔBL +0.125, ΔCU +0.315
+        SFT Δ-lift at 2B (det-mixed): +0.025 → +0.075 = +0.050
+      The dagger note "deterministic-mixed mixes a real model-size
+      effect with a path-induced effect of unknown sign" is removed
+      because both columns now use matched-path scoring.
+
+  (d) Figure 4 (fig4_attribution.pdf) regenerated with new base-scaling
+      numbers (was 0.175/0.145 under Ollama, now 0.060/0.200 under HF
+      matched-path).
+
+----
+5. What this re-judge does NOT change
+----
+
+  - Table 2 (LLM-only re-judge) is unchanged — those numbers are
+    LLM-only by construction and were already matched-path.
+  - The W-shape across pre-SFT base Δ is preserved (and slightly
+    deepened at 0.8B): the deterministic-mixed pre-SFT trajectory
+    is now -0.115 (0.8B), +0.025 (2B), 0/0 [format artifact] (4B),
+    +0.015 (haiku); the LLM-only pre-SFT trajectory is -0.075,
+    +0.060, -0.010, +0.030.
+  - The mechanism-uniformity finding (SFT Δ-lift roughly uniform
+    across the three sizes, +0.04 to +0.075 LLM-only) is unchanged.
+  - The cross-family judge validation (paper §sec:cross-family) is
+    unchanged because it compared LLM-only Opus vs LLM-only GPT-5.4,
+    not deterministic-mixed scores. A pre-SFT 0.8B HF det-mixed
+    cross-family validation is now POSSIBLE (we have an episodes.json
+    in the new directory) but was not run; the LLM-only cross-family
+    bound at 0.8B (Opus -0.075 vs GPT -0.085) already covers the
+    direction-consistency question.
+
+----
+6. Reproducibility
+----
+
+The deterministic-mixed re-judge can be reproduced with no API key:
+
+  python3 training/rejudge_failed_episodes.py \
+      --episodes data/pipeline-runs/default/bench-eval-pre-sft-0.8b-hf-llm/episodes.json \
+      --tasks data/pipeline-runs/default/synthesis/tasks_eval.json \
+      --all --judge deterministic \
+      --out-dir data/pipeline-runs/default/bench-eval-pre-sft-0.8b-hf-det
+
+The summary.json in the output directory contains the BL/CU/Δ
+numbers reported above.
+
+The original HF --force-llm-judge episodes file (the source) was
+produced by:
+  python3 training/eval_qwen35_lora.py \
+      --base Qwen/Qwen3.5-0.8B \
+      --tasks data/pipeline-runs/default/synthesis/tasks_eval.json \
+      --force-llm-judge \
+      --out-dir data/pipeline-runs/default/bench-eval-pre-sft-0.8b-hf-llm
+(this requires HF model weights and ANTHROPIC_API_KEY).

@@ -1,6 +1,6 @@
 """
 rejudge_failed_episodes.py — Re-run the judge over an existing
-episodes.json. Two modes:
+episodes.json. Three modes:
 
   (1) DEFAULT: target only episodes whose original judge call errored
       (rationale starts with "judge evaluation failed:"). Recovers from
@@ -13,10 +13,22 @@ episodes.json. Two modes:
       (because the deterministic judge requires literal ANSWER: lines
       that base models don't reliably emit).
 
+  (3) --judge deterministic: re-score every non-FREE_FORM episode using
+      the deterministic extractor (_score_deterministic in llm_judge.py).
+      No LLM calls. FREE_FORM episodes are LEFT UNCHANGED — assumes the
+      source file already has valid LLM-judged FREE_FORM scores (true
+      whenever the source was generated with --force-llm-judge, since
+      FREE_FORM tasks under that flag are routed to the same LLM/FREE_FORM
+      verifier path Table 1's deterministic-mixed dispatch uses).
+      Use case: take an --force-llm-judge episodes file and produce
+      matched-path Table 1 scoring (deterministic for YES_NO / SINGLE_WORD
+      / RANKING, LLM for FREE_FORM) without spending any API budget.
+
   --force-llm-judge routes every targeted episode through the LLM
       judge by overriding query_type to FREE_FORM, regardless of the
       task's original query_type. Use this when the model under test
       doesn't follow the deterministic-judge format reliably.
+      Mutually exclusive with --judge deterministic.
 
   --out-dir writes the rejudged episodes/summary to a NEW directory
       instead of overwriting the source. Recommended whenever you're
@@ -37,6 +49,14 @@ USAGE
         --tasks data/pipeline-runs/default/synthesis/tasks_eval.json \\
         --all --force-llm-judge \\
         --out-dir data/pipeline-runs/default/bench-eval-post-sft-v2_0-llm-only
+
+    # mode (3): produce matched-path Table 1 scoring for a pre-SFT 0.8B
+    # HF run originally captured under --force-llm-judge. Zero API cost.
+    python training/rejudge_failed_episodes.py \\
+        --episodes data/pipeline-runs/default/bench-eval-pre-sft-0.8b-hf-llm/episodes.json \\
+        --tasks data/pipeline-runs/default/synthesis/tasks_eval.json \\
+        --all --judge deterministic \\
+        --out-dir data/pipeline-runs/default/bench-eval-pre-sft-0.8b-hf-det
 """
 
 from __future__ import annotations
@@ -52,7 +72,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from b2_benchmarks.skillsbench.llm_judge import LLMJudgeEvaluator
+from b2_benchmarks.skillsbench.llm_judge import (
+    LLMJudgeEvaluator,
+    _score_deterministic,
+)
 from core.providers import create_provider
 from core.schemas import load_extracted_tasks
 
@@ -152,8 +175,15 @@ def main() -> None:
         print("Nothing to do.")
         return
 
+    deterministic_mode = args.judge.strip().lower() == "deterministic"
+    if deterministic_mode and args.force_llm_judge:
+        print("ERROR: --judge deterministic and --force-llm-judge are mutually exclusive.")
+        sys.exit(2)
+
     if args.force_llm_judge:
         print("Force LLM judge: ON  (every episode routed through LLM judge)")
+    if deterministic_mode:
+        print("Mode: --judge deterministic  (no LLM calls; FREE_FORM episodes left untouched)")
 
     if args.dry_run:
         for i in target_idx[:5]:
@@ -168,26 +198,53 @@ def main() -> None:
     tasks_by_uid = {t.task_uid: t for t in load_extracted_tasks(args.tasks)}
     print(f"Tasks loaded: {len(tasks_by_uid)}")
 
-    # ---- Build judge ----
-    # provider spec is "<name>:<model>" e.g. "anthropic:claude-opus-4-7";
-    # split into the two args create_provider expects.
-    print(f"Building judge: {args.judge}")
-    if ":" in args.judge:
-        p_name, p_model = args.judge.split(":", 1)
-    else:
-        p_name, p_model = args.judge, ""
-    provider = create_provider(p_name, p_model)
-    judge = LLMJudgeEvaluator(provider)
+    # ---- Build judge (skipped in deterministic mode — no LLM calls) ----
+    judge = None
+    if not deterministic_mode:
+        # provider spec is "<name>:<model>" e.g. "anthropic:claude-opus-4-7";
+        # split into the two args create_provider expects.
+        print(f"Building judge: {args.judge}")
+        if ":" in args.judge:
+            p_name, p_model = args.judge.split(":", 1)
+        else:
+            p_name, p_model = args.judge, ""
+        provider = create_provider(p_name, p_model)
+        judge = LLMJudgeEvaluator(provider)
 
     # ---- Re-judge ----
     todo = target_idx if not args.limit else target_idx[:args.limit]
     n_recovered = 0
     n_still_failed = 0
+    n_kept_freeform = 0
     for k, idx in enumerate(todo, 1):
         ep = episodes[idx]
         task = tasks_by_uid.get(ep["task_uid"])
         if task is None:
             print(f"  [{k}/{len(todo)}] task {ep['task_uid']} not found in tasks file; skipping")
+            continue
+
+        if deterministic_mode:
+            # Skip FREE_FORM — leave existing score (assumed already
+            # LLM-judged with the FREE_FORM verifier in the source file).
+            qt = getattr(task, "query_type", "FREE_FORM")
+            if qt == "FREE_FORM":
+                n_kept_freeform += 1
+                continue
+
+            t0 = time.time()
+            verdict = _score_deterministic(
+                response=ep["response"],
+                acceptance_criteria=task.acceptance_criteria,
+                query_type=qt,
+            )
+            elapsed = time.time() - t0
+            n_recovered += 1
+            tag = "PASS" if verdict.passed else "FAIL"
+            ep["passed"] = bool(verdict.passed)
+            ep["score"] = float(verdict.score)
+            ep["judge_rationale"] = verdict.rationale
+            print(f"  [{k}/{len(todo)}] {tag} score={verdict.score:.2f} "
+                  f"({elapsed*1000:.1f}ms) [det] {ep['task_uid']} / {ep['condition']}")
             continue
 
         # If --force-llm-judge, override query_type to FREE_FORM so the
@@ -256,7 +313,11 @@ def main() -> None:
     summary = _recompute_summary(episodes, summary_out)
     summary_out.write_text(json.dumps(summary, indent=2))
     print(f"Wrote summary -> {summary_out}")
-    print(f"\nRecovered: {n_recovered}  Still failed: {n_still_failed}")
+    if deterministic_mode:
+        print(f"\nRe-scored deterministically: {n_recovered}  "
+              f"Kept FREE_FORM (untouched): {n_kept_freeform}")
+    else:
+        print(f"\nRecovered: {n_recovered}  Still failed: {n_still_failed}")
     print(f"\nNew per-condition pass rates:")
     for cond, stats in summary["per_condition"].items():
         print(f"  {cond}: pass_rate={stats['pass_rate']} ({stats['passed']}/{stats['n']})")

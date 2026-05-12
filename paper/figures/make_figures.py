@@ -88,7 +88,7 @@ def fig1_progression():
     larger models."""
     rows = [
         # (label, BL, CU, group)  group: "pre", "0.8b", "scale"
-        ("pre 0.8B",     0.510, 0.565, "pre"),
+        ("pre 0.8B",     0.625, 0.510, "pre"),
         ("pre 2B",       0.685, 0.710, "pre"),
         ("pre haiku-4-5",0.785, 0.800, "pre"),
         ("v1 (0.8B)",    0.635, 0.585, "0.8b"),
@@ -296,9 +296,11 @@ def fig4_attribution():
     """Stacked bar showing v1.9's lift over pre-SFT 0.8B decomposed
     into base-scaling and SFT contribution. Two side-by-side stacks
     for ΔBL and ΔCU."""
-    # numbers from v1.9 attribution split
+    # numbers from v1.9 attribution split (matched-path HF, det-mixed scoring)
+    # see Table 3 (tab:attribution): base scaling uses pre-SFT 0.8B HF (0.625/0.510)
+    # and pre-SFT 2B HF (0.685/0.710); SFT contribution = v1.9 - pre-SFT 2B
     metrics = ["ΔBL", "ΔCU"]
-    base_scaling = [0.175, 0.145]
+    base_scaling = [0.060, 0.200]
     sft_contrib  = [0.065, 0.115]
 
     fig, ax = plt.subplots(figsize=(4.6, 3.4))

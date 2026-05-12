@@ -371,6 +371,32 @@ largest in the experiment" is overstated — 4B's +0.075 Δ-lift is on
 par with 0.8B's +0.070, not uniquely large. The accurate claim is
 mechanism-uniformity rather than capacity-conditional amplification.
 
+**Pre-SFT 0.8B Table 1 row replaced with matched-path HF det-mixed
+(updated 2026-05-09):** the paper's headline Table 1 originally carried
+the Ollama-path pre-SFT 0.8B numbers (BL 0.510 / CU 0.565 / Δ +0.055).
+Under matched-path scoring (HF generation, deterministic-mixed
+dispatch — same code path as v1 and the 2B/4B post-SFT students), the
+row is **BL 0.625 / CU 0.510 / Δ −0.115**. Procedure: 334 deterministic-
+type episodes from the existing HF `--force-llm-judge` run were re-scored
+locally via the deterministic extractor; the 33 FREE_FORM tasks (66
+episodes) carry their LLM-judged scores from the source, since under
+`--force-llm-judge` the FREE_FORM dispatch matches Table 1's FREE_FORM
+dispatch. Zero new API calls. Reproducer:
+
+```
+python3 training/rejudge_failed_episodes.py \
+    --episodes data/pipeline-runs/default/bench-eval-pre-sft-0.8b-hf-llm/episodes.json \
+    --tasks data/pipeline-runs/default/synthesis/tasks_eval.json \
+    --all --judge deterministic \
+    --out-dir data/pipeline-runs/default/bench-eval-pre-sft-0.8b-hf-det
+```
+
+Under matched-path Table 1 (HF, det-mixed), the v1 SFT Δ-lift at 0.8B
+becomes +0.065 — consistent within 5 pp of the LLM-only Δ-lift (+0.070).
+The earlier Ollama-vs-HF Table 1 path mismatch is now closed; the
+original Ollama numbers are preserved in paper §7.4 as historical
+context. See paper §7.4 (`sec:path-mismatch`) for the full resolution.
+
 **Cross-family judge validation (added 2026-05-08, completed 2026-05-09):**
 GPT-5.4 via OpenRouter graded the same model responses as Opus 4.7
 across all 7 configurations (2800 episodes). Per-episode agreement

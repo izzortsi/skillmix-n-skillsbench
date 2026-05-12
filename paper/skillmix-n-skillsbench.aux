@@ -1,0 +1,69 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{yu2024skillmix}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\citation{yu2024skillmix}
+\citation{trl}
+\citation{dettmers2023qlora}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Pipeline and Bench}{2}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Skill catalog and procedural rewrite}{2}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Task synthesis}{2}{subsection.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}SFT corpus generation}{2}{subsection.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Evaluation protocol}{2}{subsection.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Training}{2}{subsection.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Recipe Iterations}{3}{section.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Baseline (\textsc  {baseline}\xspace  ) and curated (\textsc  {curated}\xspace  ) pass rates across all eleven evaluated configurations: pre-SFT controls, the five 0.8B SFT iterations, and the model-size pivot to 2B and 4B.}}{3}{figure.caption.1}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:progression}{{1}{3}{Baseline (\BL ) and curated (\CU ) pass rates across all eleven evaluated configurations: pre-SFT controls, the five 0.8B SFT iterations, and the model-size pivot to 2B and 4B}{figure.caption.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Recipe-by-recipe pass rates on the 200-task holdout, two conditions per task. $\dagger $ Pre-SFT 4B's $0/0$ is a format-compliance artifact (\S  \ref {sec:format-sensitivity}). $\ddagger $ v1.7's apparent $+\Delta $ is an artifact of \textsc  {baseline}\xspace  {} collapse, not differential learning (\S  \ref {sec:v17-mode-collapse}).}}{3}{table.caption.2}\protected@file@percent }
+\newlabel{tab:headline}{{1}{3}{Recipe-by-recipe pass rates on the 200-task holdout, two conditions per task. $\dagger $ Pre-SFT 4B's $0/0$ is a format-compliance artifact (\S \ref {sec:format-sensitivity}). $\ddagger $ v1.7's apparent $+\Delta $ is an artifact of \BL {} collapse, not differential learning (\S \ref {sec:v17-mode-collapse})}{table.caption.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}0.8B: Five Negative Results}{3}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}v1: simplest recipe, format-only learning}{3}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}v1.5--v1.6: corpus composition does not unlock differential lift}{4}{subsection.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}v1.7: full-rank partial FT and the mode-collapse artifact}{4}{subsection.4.3}\protected@file@percent }
+\newlabel{sec:v17-mode-collapse}{{4.3}{4}{v1.7: full-rank partial FT and the mode-collapse artifact}{subsection.4.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}v1.8: skill-block stripping fixes mode collapse, no new ceiling}{4}{subsection.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}0.8B summary}{4}{subsection.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}2B and 4B: Model Size as the Decisive Axis}{4}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}v1.9 (2B): SFT works}{4}{subsection.5.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces v1.9 attribution split. Base scaling is measured between the two pre-SFT controls; SFT contribution is the residual from pre-SFT 2B to v1.9.}}{4}{table.caption.4}\protected@file@percent }
+\newlabel{tab:attribution}{{2}{4}{v1.9 attribution split. Base scaling is measured between the two pre-SFT controls; SFT contribution is the residual from pre-SFT 2B to v1.9}{table.caption.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces v1.9 lift over pre-SFT 0.8B decomposed into base-model scaling (gray; measured between the two pre-SFT controls) and SFT contribution at 2B (green; the residual from pre-SFT 2B to v1.9). The SFT contribution is +6.5\,pp on \textsc  {baseline}\xspace  {} and +11.5\,pp on \textsc  {curated}\xspace  .}}{5}{figure.caption.3}\protected@file@percent }
+\newlabel{fig:attribution}{{2}{5}{v1.9 lift over pre-SFT 0.8B decomposed into base-model scaling (gray; measured between the two pre-SFT controls) and SFT contribution at 2B (green; the residual from pre-SFT 2B to v1.9). The SFT contribution is +6.5\,pp on \BL {} and +11.5\,pp on \CU }{figure.caption.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}v2.0 (4B): bench saturation and the format-sensitivity artifact}{5}{subsection.5.2}\protected@file@percent }
+\newlabel{sec:format-sensitivity}{{5.2}{5}{v2.0 (4B): bench saturation and the format-sensitivity artifact}{subsection.5.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Statistical tests of the per-model and cross-model $\Delta $ estimates}{5}{subsection.5.3}\protected@file@percent }
+\newlabel{sec:stats}{{5.3}{5}{Statistical tests of the per-model and cross-model $\Delta $ estimates}{subsection.5.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Per-model paired tests on the procedural-$\Delta $. Both models have a positive $\Delta $ that is individually distinguishable from zero at $\alpha {=}0.05$ ($^{*}$), although v2.0's $p{=}0.049$ would not survive Bonferroni correction across the two tests.}}{5}{table.caption.5}\protected@file@percent }
+\newlabel{tab:stats-per-model}{{3}{5}{Per-model paired tests on the procedural-$\Delta $. Both models have a positive $\Delta $ that is individually distinguishable from zero at $\alpha {=}0.05$ ($^{*}$), although v2.0's $p{=}0.049$ would not survive Bonferroni correction across the two tests}{table.caption.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Left: bootstrap distributions of the procedural-$\Delta $ for v1.9 and v2.0 (10{,}000 resamples of paired \texttt  {task\_uid}s). Both distributions sit above zero (the dashed line) but overlap substantially. Right: distribution of the difference $\Delta _{\mathrm  {v1.9}} - \Delta _{\mathrm  {v2.0}}$. The 95\% CI shaded in red includes zero, and the one-sided test for the saturation hypothesis returns $p{=}0.225$. Direction is consistent with saturation; magnitude is not statistically distinguishable from noise.}}{6}{figure.caption.6}\protected@file@percent }
+\newlabel{fig:bootstrap}{{3}{6}{Left: bootstrap distributions of the procedural-$\Delta $ for v1.9 and v2.0 (10{,}000 resamples of paired \texttt {task\_uid}s). Both distributions sit above zero (the dashed line) but overlap substantially. Right: distribution of the difference $\Delta _{\mathrm {v1.9}} - \Delta _{\mathrm {v2.0}}$. The 95\% CI shaded in red includes zero, and the one-sided test for the saturation hypothesis returns $p{=}0.225$. Direction is consistent with saturation; magnitude is not statistically distinguishable from noise}{figure.caption.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Generality probe: v2.0 preserves out-of-distribution behavior}{6}{subsection.5.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Generality probe under generic system prompt. $\dagger $ v1.9 swapped \emph  {Brave New World} attribution from Aldous Huxley to H. G. Wells --- a plausible-author confabulation absent from base 4B and v2.0.}}{6}{table.caption.7}\protected@file@percent }
+\newlabel{tab:generality}{{4}{6}{Generality probe under generic system prompt. $\dagger $ v1.9 swapped \emph {Brave New World} attribution from Aldous Huxley to H. G. Wells --- a plausible-author confabulation absent from base 4B and v2.0}{table.caption.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Discussion}{7}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}What did SFT actually teach?}{7}{subsection.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Bench format-sensitivity is itself a methodological finding}{7}{subsection.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Mode collapse reinterpreted}{7}{subsection.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Negative results were informative}{7}{subsection.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Limitations}{7}{section.7}\protected@file@percent }
+\citation{yu2024skillmix}
+\bibcite{yu2024skillmix}{{1}{}{{}}{{}}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion}{8}{section.8}\protected@file@percent }
+\bibcite{arora2023theory}{{2}{}{{}}{{}}}
+\bibcite{li2026skillsbench}{{3}{}{{}}{{}}}
+\bibcite{hu2022lora}{{4}{}{{}}{{}}}
+\bibcite{dettmers2023qlora}{{5}{}{{}}{{}}}
+\bibcite{trl}{{6}{}{{}}{{}}}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Pipeline file structure}{9}{appendix.A}\protected@file@percent }
+\newlabel{app:pipeline}{{A}{9}{Pipeline file structure}{appendix.A}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {B}Per-skill v2.0 result ($n{=}5$ per skill, sorted by $\Delta $)}{9}{appendix.B}\protected@file@percent }
+\newlabel{app:per-skill}{{B}{9}{Per-skill v2.0 result ($n{=}5$ per skill, sorted by $\Delta $)}{appendix.B}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {C}Engineering reports cited}{9}{appendix.C}\protected@file@percent }
+\newlabel{app:reports}{{C}{9}{Engineering reports cited}{appendix.C}{}}
+\providecommand\NAT@force@numbers{}\NAT@force@numbers
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Per-skill procedural-$\Delta $ at v2.0 ($n{=}5$ per skill, 40 skills). 11 skills lift on \textsc  {curated}\xspace  ; 25 are flat (mostly because \textsc  {baseline}\xspace  {} is already at ceiling); 4 regress. The lift cluster concentrates on interpretive and spatial-social skills; the regression cluster on deductive-logic skills where the model has ceiling competence on \textsc  {baseline}\xspace  .}}{11}{figure.caption.8}\protected@file@percent }
+\newlabel{fig:per-skill}{{4}{11}{Per-skill procedural-$\Delta $ at v2.0 ($n{=}5$ per skill, 40 skills). 11 skills lift on \CU ; 25 are flat (mostly because \BL {} is already at ceiling); 4 regress. The lift cluster concentrates on interpretive and spatial-social skills; the regression cluster on deductive-logic skills where the model has ceiling competence on \BL }{figure.caption.8}{}}
+\gdef \@abspage@last{11}

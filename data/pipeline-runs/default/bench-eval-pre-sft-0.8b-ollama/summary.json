@@ -1,0 +1,6 @@
+{
+  "model": "qwen3.5:0.8b",
+  "base": "qwen3.5:0.8b",
+  "adapter": null,
+  "tasks": "data/pipeline-runs/default/synthesis/tasks_eval.json"
+}
