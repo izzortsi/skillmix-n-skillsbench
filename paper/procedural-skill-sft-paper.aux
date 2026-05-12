@@ -1,0 +1,118 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{yu2024skillmix,arora2023theory}
+\citation{li2026skillsbench}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\citation{yu2024skillmix}
+\citation{li2026skillsbench}
+\citation{hu2022lora}
+\citation{trl}
+\citation{dettmers2023qlora}
+\citation{qwen35release}
+\citation{qwen3report}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Pipeline and Bench}{2}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Skill catalog, procedural rewrite, and task synthesis}{2}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}SFT corpus and evaluation protocol}{2}{subsection.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Training}{3}{subsection.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Cross-Scale SFT Contribution and the W-Shape}{3}{section.3}\protected@file@percent }
+\newlabel{sec:cross-scale}{{3}{3}{Cross-Scale SFT Contribution and the W-Shape}{section.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces SFT contribution across all three model sizes under matched HF + LLM-only scoring. The Δ-lift attributable to SFT is in a tight 4\,pp band ($+0.040$ to $+0.075$); the absolute \textsc  {curated}\xspace  {} contribution is in a similar band ($+0.100$ to $+0.145$). Variation in post-SFT Δ across sizes is dominated by the pre-SFT base trajectory, which is W-shaped (negative at 0.8B and 4B, positive at 2B and frontier Haiku-4-5; see Table~\ref {tab:llm-only}).}}{3}{table.caption.1}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{tab:sft-contribution}{{1}{3}{SFT contribution across all three model sizes under matched HF + LLM-only scoring. The Δ-lift attributable to SFT is in a tight 4\,pp band ($+0.040$ to $+0.075$); the absolute \CU {} contribution is in a similar band ($+0.100$ to $+0.145$). Variation in post-SFT Δ across sizes is dominated by the pre-SFT base trajectory, which is W-shaped (negative at 0.8B and 4B, positive at 2B and frontier Haiku-4-5; see Table~\ref {tab:llm-only})}{table.caption.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Pass rates for all seven configurations under matched HF + LLM-only scoring. Haiku-4-5 was evaluated via the Anthropic API; all Qwen3.5 configurations were evaluated via HF transformers locally. Three load-bearing observations: (i) v2.0 \textsc  {curated}\xspace  {} ties the Haiku reference at $0.985$ (197/200 identical pass count); (ii) pre-SFT base Δ is W-shaped --- $-0.075, +0.060, -0.010, +0.030$ --- with negative pockets at 0.8B and 4B; (iii) the SFT contribution to Δ-lift is roughly uniform across all three sizes (Table~\ref {tab:sft-contribution}).}}{3}{table.caption.2}\protected@file@percent }
+\newlabel{tab:llm-only}{{2}{3}{Pass rates for all seven configurations under matched HF + LLM-only scoring. Haiku-4-5 was evaluated via the Anthropic API; all Qwen3.5 configurations were evaluated via HF transformers locally. Three load-bearing observations: (i) v2.0 \CU {} ties the Haiku reference at $0.985$ (197/200 identical pass count); (ii) pre-SFT base Δ is W-shaped --- $-0.075, +0.060, -0.010, +0.030$ --- with negative pockets at 0.8B and 4B; (iii) the SFT contribution to Δ-lift is roughly uniform across all three sizes (Table~\ref {tab:sft-contribution})}{table.caption.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}The SFT contribution is roughly capacity-invariant in differential terms}{3}{subsection.3.1}\protected@file@percent }
+\newlabel{sec:uniformity}{{3.1}{3}{The SFT contribution is roughly capacity-invariant in differential terms}{subsection.3.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Baseline (\textsc  {baseline}\xspace  ) and curated (\textsc  {curated}\xspace  ) pass rates across all eleven evaluated configurations: pre-SFT controls, the five 0.8B SFT iterations (\S  \ref {sec:0.8b-iteration}), and the model-size pivot to 2B and 4B.}}{4}{figure.caption.3}\protected@file@percent }
+\newlabel{fig:progression}{{1}{4}{Baseline (\BL ) and curated (\CU ) pass rates across all eleven evaluated configurations: pre-SFT controls, the five 0.8B SFT iterations (\S \ref {sec:0.8b-iteration}), and the model-size pivot to 2B and 4B}{figure.caption.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}W-shaped pre-SFT base trajectory}{4}{subsection.3.2}\protected@file@percent }
+\newlabel{sec:wshape}{{3.2}{4}{W-shaped pre-SFT base trajectory}{subsection.3.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Regime-asymmetric SFT mechanism}{4}{subsection.3.3}\protected@file@percent }
+\newlabel{sec:mechanism}{{3.3}{4}{Regime-asymmetric SFT mechanism}{subsection.3.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{Falsifiable prediction at 8B/14B.}{5}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Per-skill evidence supports the mechanism}{5}{subsection.3.4}\protected@file@percent }
+\newlabel{sec:per-skill}{{3.4}{5}{Per-skill evidence supports the mechanism}{subsection.3.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}v2.0 ties Haiku at the bench's effective ceiling}{5}{subsection.3.5}\protected@file@percent }
+\newlabel{sec:haiku}{{3.5}{5}{v2.0 ties Haiku at the bench's effective ceiling}{subsection.3.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}The bench saturation diagnosis splits in two}{5}{subsection.3.6}\protected@file@percent }
+\newlabel{sec:saturation}{{3.6}{5}{The bench saturation diagnosis splits in two}{subsection.3.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Format-Compliance Artifact and LLM-Only Remediation}{6}{section.4}\protected@file@percent }
+\newlabel{sec:format-artifact}{{4}{6}{Format-Compliance Artifact and LLM-Only Remediation}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}The artifact}{6}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}LLM-only re-judge: closing the format gap}{6}{subsection.4.2}\protected@file@percent }
+\newlabel{sec:llm-rejudge}{{4.2}{6}{LLM-only re-judge: closing the format gap}{subsection.4.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Score shifts from deterministic-mixed to LLM-only re-judge. All four students gain on both conditions; Haiku gains the most. For all three SFT'd students, $\Delta $CU $>$ $\Delta $BL by 2--4.5\,pp, meaning the deterministic judge was systematically biased \emph  {against} the curated condition --- procedure-following responses bury conclusions in narration more often than direct-thinking responses do.}}{6}{table.caption.6}\protected@file@percent }
+\newlabel{tab:rejudge-deltas}{{3}{6}{Score shifts from deterministic-mixed to LLM-only re-judge. All four students gain on both conditions; Haiku gains the most. For all three SFT'd students, $\Delta $CU $>$ $\Delta $BL by 2--4.5\,pp, meaning the deterministic judge was systematically biased \emph {against} the curated condition --- procedure-following responses bury conclusions in narration more often than direct-thinking responses do}{table.caption.6}{}}
+\@writefile{toc}{\contentsline {paragraph}{All pass rates rise; Haiku rises the most.}{6}{table.caption.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{The deterministic judge was biased against the curated condition.}{6}{table.caption.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{0.8B path-mismatch implication.}{7}{table.caption.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Cross-Family Judge Validation}{7}{section.5}\protected@file@percent }
+\newlabel{sec:cross-family}{{5}{7}{Cross-Family Judge Validation}{section.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Cross-family judge cross-validation across all seven configurations / 2800 paired episodes. Per-episode agreement ranges from $93.25\%$ (pre-SFT 4B) to $100.00\%$ (v1.9, 400/400 identical verdicts). Cohen's $\kappa $ ranges from $0.754$ to $1.000$. Pre-SFT 0.8B HF agreement is $98.50\%$ ($\kappa = 0.968$). Headline $\Delta $ shifts $\leq 0.035$\,pp on every dataset; both judges agree on the direction of every per-student finding, including the W-shape's two negative-Δ pockets at 0.8B and 4B.}}{7}{table.caption.7}\protected@file@percent }
+\newlabel{tab:cross-family}{{4}{7}{Cross-family judge cross-validation across all seven configurations / 2800 paired episodes. Per-episode agreement ranges from $93.25\%$ (pre-SFT 4B) to $100.00\%$ (v1.9, 400/400 identical verdicts). Cohen's $\kappa $ ranges from $0.754$ to $1.000$. Pre-SFT 0.8B HF agreement is $98.50\%$ ($\kappa = 0.968$). Headline $\Delta $ shifts $\leq 0.035$\,pp on every dataset; both judges agree on the direction of every per-student finding, including the W-shape's two negative-Δ pockets at 0.8B and 4B}{table.caption.7}{}}
+\@writefile{toc}{\contentsline {paragraph}{What this validation does not close.}{7}{table.caption.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Recipe Iteration at 0.8B}{7}{section.6}\protected@file@percent }
+\newlabel{sec:0.8b-iteration}{{6}{7}{Recipe Iteration at 0.8B}{section.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Recipe variation does not move the 0.8B ceiling}{7}{subsection.6.1}\protected@file@percent }
+\newlabel{sec:0.8b-recipe-variants}{{6.1}{7}{Recipe variation does not move the 0.8B ceiling}{subsection.6.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Recipe-by-recipe pass rates on the 200-task holdout under deterministic-mixed scoring (the bench's native dispatch). All bases are Qwen3.5 dense models except where noted. All evaluations use HF transformers generation; the original Ollama-path pre-SFT 0.8B numbers ($0.510 / 0.565 / +0.055$) are documented in Appendix~\ref {sec:appendix-path}. $\dagger $ Pre-SFT 4B's $0/0$ is a format-compliance artifact (\S  \ref {sec:format-artifact}). $\ddagger $ v1.7's apparent $+\Delta $ is an artifact of \textsc  {baseline}\xspace  {} collapse, not differential learning. $\S  $ The matched-path methodology for pre-SFT 0.8B is in Appendix~\ref {sec:appendix-path}. LLM-only re-judge values (Table~\ref {tab:llm-only}) reframe the SFT attribution at 0.8B; Δ-lift is $+0.070$ matched-path LLM-only, $+0.065$ deterministic-mixed.}}{8}{table.caption.8}\protected@file@percent }
+\newlabel{tab:headline}{{5}{8}{Recipe-by-recipe pass rates on the 200-task holdout under deterministic-mixed scoring (the bench's native dispatch). All bases are Qwen3.5 dense models except where noted. All evaluations use HF transformers generation; the original Ollama-path pre-SFT 0.8B numbers ($0.510 / 0.565 / +0.055$) are documented in Appendix~\ref {sec:appendix-path}. $\dagger $ Pre-SFT 4B's $0/0$ is a format-compliance artifact (\S \ref {sec:format-artifact}). $\ddagger $ v1.7's apparent $+\Delta $ is an artifact of \BL {} collapse, not differential learning. $\S $ The matched-path methodology for pre-SFT 0.8B is in Appendix~\ref {sec:appendix-path}. LLM-only re-judge values (Table~\ref {tab:llm-only}) reframe the SFT attribution at 0.8B; Δ-lift is $+0.070$ matched-path LLM-only, $+0.065$ deterministic-mixed}{table.caption.8}{}}
+\@writefile{toc}{\contentsline {paragraph}{v1.7's apparent Δ is a mode-collapse artifact.}{8}{subsection.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{What the 0.8B negative results constrain, and what they do not.}{8}{subsection.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}v1.9 (2B) attribution split}{8}{subsection.6.2}\protected@file@percent }
+\newlabel{sec:v19-split}{{6.2}{8}{v1.9 (2B) attribution split}{subsection.6.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces v1.9 attribution split under both judging paths. The deterministic-mixed columns use matched-path pre-SFT 0.8B (HF, $0.625/0.510$; Appendix~\ref {sec:appendix-path}) and pre-SFT 2B (HF, $0.685/0.710$); the LLM-only columns use the corresponding LLM-only-judged controls. The SFT-attributable Δ-lift at 2B is $+0.050$ under deterministic-mixed and $+0.040$ under LLM-only --- consistent within 1\,pp across both judging paths even as absolute magnitudes shift.}}{9}{table.caption.9}\protected@file@percent }
+\newlabel{tab:attribution}{{6}{9}{v1.9 attribution split under both judging paths. The deterministic-mixed columns use matched-path pre-SFT 0.8B (HF, $0.625/0.510$; Appendix~\ref {sec:appendix-path}) and pre-SFT 2B (HF, $0.685/0.710$); the LLM-only columns use the corresponding LLM-only-judged controls. The SFT-attributable Δ-lift at 2B is $+0.050$ under deterministic-mixed and $+0.040$ under LLM-only --- consistent within 1\,pp across both judging paths even as absolute magnitudes shift}{table.caption.9}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Statistical Tests}{9}{section.7}\protected@file@percent }
+\newlabel{sec:stats}{{7}{9}{Statistical Tests}{section.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Per-model paired tests on the procedural-Δ, under both judging paths. Both models have a positive Δ with bootstrap CI excluding zero in both paths. Under LLM-only re-judge, v2.0's $p{=}0.00098$ comfortably survives Bonferroni correction across the two tests (the deterministic-mixed $p{=}0.049$ would not). Neither test is replicated across seeds.}}{9}{table.caption.11}\protected@file@percent }
+\newlabel{tab:stats-per-model}{{7}{9}{Per-model paired tests on the procedural-Δ, under both judging paths. Both models have a positive Δ with bootstrap CI excluding zero in both paths. Under LLM-only re-judge, v2.0's $p{=}0.00098$ comfortably survives Bonferroni correction across the two tests (the deterministic-mixed $p{=}0.049$ would not). Neither test is replicated across seeds}{table.caption.11}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Generality Probe}{9}{section.8}\protected@file@percent }
+\newlabel{sec:generality}{{8}{9}{Generality Probe}{section.8}{}}
+\citation{biderman2024lessons}
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Generality probe under generic system prompt. $\dagger $ v1.9 swapped \emph  {Brave New World} attribution from Aldous Huxley to H.\,G.\,Wells --- a plausible-author confabulation absent from base 4B and v2.0.}}{10}{table.caption.13}\protected@file@percent }
+\newlabel{tab:generality}{{8}{10}{Generality probe under generic system prompt. $\dagger $ v1.9 swapped \emph {Brave New World} attribution from Aldous Huxley to H.\,G.\,Wells --- a plausible-author confabulation absent from base 4B and v2.0}{table.caption.13}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {9}Discussion}{10}{section.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1}Mode collapse reinterpreted}{10}{subsection.9.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.2}Negative results were informative}{10}{subsection.9.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.3}What we did not separately decompose}{10}{subsection.9.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {10}Threats to Validity and Limitations}{10}{section.10}\protected@file@percent }
+\newlabel{sec:threats}{{10}{10}{Threats to Validity and Limitations}{section.10}{}}
+\citation{yu2024skillmix}
+\@writefile{toc}{\contentsline {paragraph}{What this paper does not claim.}{11}{Item.14}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {11}Conclusion}{11}{section.11}\protected@file@percent }
+\citation{yu2024skillmix}
+\bibcite{yu2024skillmix}{{1}{}{{}}{{}}}
+\bibcite{arora2023theory}{{2}{}{{}}{{}}}
+\bibcite{li2026skillsbench}{{3}{}{{}}{{}}}
+\bibcite{hu2022lora}{{4}{}{{}}{{}}}
+\bibcite{dettmers2023qlora}{{5}{}{{}}{{}}}
+\bibcite{trl}{{6}{}{{}}{{}}}
+\bibcite{zheng2023judging}{{7}{}{{}}{{}}}
+\bibcite{biderman2024lessons}{{8}{}{{}}{{}}}
+\bibcite{qwen3report}{{9}{}{{}}{{}}}
+\bibcite{qwen35release}{{10}{}{{}}{{}}}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Path-mismatch resolution for pre-SFT 0.8B}{13}{appendix.A}\protected@file@percent }
+\newlabel{sec:appendix-path}{{A}{13}{Path-mismatch resolution for pre-SFT 0.8B}{appendix.A}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.1}Methodology}{13}{subsection.A.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{LLM-only path.}{13}{subsection.A.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Deterministic-mixed path (Table~\ref {tab:headline}'s native dispatch).}{13}{subsection.A.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.2}Consequence for v1 attribution}{13}{subsection.A.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {B}Pipeline file structure}{13}{appendix.B}\protected@file@percent }
+\newlabel{app:pipeline}{{B}{13}{Pipeline file structure}{appendix.B}{}}
+\providecommand\NAT@force@numbers{}\NAT@force@numbers
+\@writefile{toc}{\contentsline {section}{\numberline {C}Per-skill v2.0 result ($n{=}5$ per skill, sorted by $\Delta $)}{14}{appendix.C}\protected@file@percent }
+\newlabel{app:per-skill}{{C}{14}{Per-skill v2.0 result ($n{=}5$ per skill, sorted by $\Delta $)}{appendix.C}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {D}Engineering reports cited}{14}{appendix.D}\protected@file@percent }
+\newlabel{app:reports}{{D}{14}{Engineering reports cited}{appendix.D}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Per-skill procedural-Δ at v2.0 ($n{=}5$ per skill, 40 skills). 11 skills lift on \textsc  {curated}\xspace  ; 25 are flat (mostly because \textsc  {baseline}\xspace  {} is already at ceiling); 4 regress. The lift cluster concentrates on interpretive and spatial-social skills; the regression cluster on deductive-logic skills where the model has ceiling competence on \textsc  {baseline}\xspace  .}}{15}{figure.caption.4}\protected@file@percent }
+\newlabel{fig:per-skill}{{2}{15}{Per-skill procedural-Δ at v2.0 ($n{=}5$ per skill, 40 skills). 11 skills lift on \CU ; 25 are flat (mostly because \BL {} is already at ceiling); 4 regress. The lift cluster concentrates on interpretive and spatial-social skills; the regression cluster on deductive-logic skills where the model has ceiling competence on \BL }{figure.caption.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Per-skill procedural-Δ at v2.0 versus per-skill baseline pass rate (LLM-only judging, $n{=}5$ tasks per skill, 40 skills). Spearman $\rho = -0.227$. Skills where the base is already at ceiling on baseline cannot benefit from procedure injection (flat cluster); skills with lower baseline have the most Δ headroom (lift cluster). The negative slope is qualitative evidence that SFT's distinctive value is in scaffolding skills the base struggles with, not in lifting already-saturated skills.}}{16}{figure.caption.5}\protected@file@percent }
+\newlabel{fig:per-skill-bl-vs-delta}{{3}{16}{Per-skill procedural-Δ at v2.0 versus per-skill baseline pass rate (LLM-only judging, $n{=}5$ tasks per skill, 40 skills). Spearman $\rho = -0.227$. Skills where the base is already at ceiling on baseline cannot benefit from procedure injection (flat cluster); skills with lower baseline have the most Δ headroom (lift cluster). The negative slope is qualitative evidence that SFT's distinctive value is in scaffolding skills the base struggles with, not in lifting already-saturated skills}{figure.caption.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces v1.9 lift over pre-SFT 0.8B decomposed into base-model scaling (gray; measured between the two pre-SFT controls) and SFT contribution at 2B (green; the residual from pre-SFT 2B to v1.9). The SFT contribution is $+6.5$\,pp on \textsc  {baseline}\xspace  {} and $+11.5$\,pp on \textsc  {curated}\xspace  .}}{16}{figure.caption.10}\protected@file@percent }
+\newlabel{fig:attribution}{{4}{16}{v1.9 lift over pre-SFT 0.8B decomposed into base-model scaling (gray; measured between the two pre-SFT controls) and SFT contribution at 2B (green; the residual from pre-SFT 2B to v1.9). The SFT contribution is $+6.5$\,pp on \BL {} and $+11.5$\,pp on \CU }{figure.caption.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Left: bootstrap distributions of the procedural-Δ for v1.9 and v2.0 (10{,}000 resamples of paired \texttt  {task\_uid}s). Both distributions sit above zero (dashed line) but overlap substantially. Right: distribution of $\Delta _{\mathrm  {v1.9}} - \Delta _{\mathrm  {v2.0}}$; the 95\% CI (red shading) includes zero, and the one-sided test for the saturation hypothesis returns $p{=}0.225$. Direction consistent with saturation; magnitude not statistically distinguishable from noise.}}{17}{figure.caption.12}\protected@file@percent }
+\newlabel{fig:bootstrap}{{5}{17}{Left: bootstrap distributions of the procedural-Δ for v1.9 and v2.0 (10{,}000 resamples of paired \texttt {task\_uid}s). Both distributions sit above zero (dashed line) but overlap substantially. Right: distribution of $\Delta _{\mathrm {v1.9}} - \Delta _{\mathrm {v2.0}}$; the 95\% CI (red shading) includes zero, and the one-sided test for the saturation hypothesis returns $p{=}0.225$. Direction consistent with saturation; magnitude not statistically distinguishable from noise}{figure.caption.12}{}}
+\gdef \@abspage@last{17}
